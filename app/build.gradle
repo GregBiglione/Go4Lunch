@@ -10,17 +10,22 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
     }
     buildTypes {
-        debug {
-            buildConfigField 'String', "ApiKey", GO4LUNCH_API_KEY
-            resValue 'string', "ApiKey", GO4LUNCH_API_KEY
-        }
+        //debug {
+        //    buildConfigField 'String', "ApiKey", GO4LUNCH_API_KEY
+        //    resValue 'string', "ApiKey", GO4LUNCH_API_KEY
+        //}
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField 'String', "ApiKey", GO4LUNCH_API_KEY
-            resValue 'string', "ApiKey", GO4LUNCH_API_KEY
+            //buildConfigField 'String', "ApiKey", GO4LUNCH_API_KEY
+            //resValue 'string', "ApiKey", GO4LUNCH_API_KEY
         }
     }
 }
@@ -38,4 +43,8 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+
+    // ---------------------------- ButterKnife ----------------------------------------------------
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 }

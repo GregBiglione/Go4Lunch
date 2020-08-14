@@ -17,7 +17,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="GO4LUNCH_API_KEY">
+            android:value="@string/ApiKey">
         </meta-data>
 
         <activity

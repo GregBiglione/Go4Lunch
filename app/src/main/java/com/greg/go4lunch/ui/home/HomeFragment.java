@@ -9,10 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.greg.go4lunch.R;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
@@ -46,5 +49,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         MapsInitializer.initialize(getContext());
         mMap = googleMap;
+        locationAccuracy();
+    }
+
+    // ---------------------------- Location accuracy ----------------------------------------------
+    public void locationAccuracy(){
+        LatLng santaMonica = new LatLng(34.017382, -118.492615);
+        mMap.addMarker(new MarkerOptions().position(santaMonica).title("I'm here and I'm hungry !"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(santaMonica));
     }
 }

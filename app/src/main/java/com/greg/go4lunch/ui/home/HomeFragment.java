@@ -50,12 +50,18 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         mMap = googleMap;
         locationAccuracy();
+        zoomOnLocation();
     }
 
     // ---------------------------- Location accuracy ----------------------------------------------
-    public void locationAccuracy(){
-        LatLng santaMonica = new LatLng(34.017382, -118.492615);
+    private void locationAccuracy(){
+        LatLng santaMonica = new LatLng(34.017434, -118.491768);
         mMap.addMarker(new MarkerOptions().position(santaMonica).title("I'm here and I'm hungry !"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(santaMonica));
+    }
+
+    // ---------------------------- Zoom level -----------------------------------------------------
+    private void zoomOnLocation(){
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
     }
 }

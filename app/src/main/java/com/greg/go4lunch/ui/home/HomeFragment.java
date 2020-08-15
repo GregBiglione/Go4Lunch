@@ -1,5 +1,6 @@
 package com.greg.go4lunch.ui.home;
 
+import android.Manifest;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +22,19 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.greg.go4lunch.R;
 
+import es.dmoral.toasty.Toasty;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    public static final float DEFAULT_ZOOM = 17.0f;
-    public static final String TAG = "HomeFragment";
+    private static final float DEFAULT_ZOOM = 17.0f;
+    private static final String TAG = "HomeFragment";
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String INTERNET = Manifest.permission.INTERNET;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 8;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         locationAccuracy();
         zoomOnLocation();
         noLandMarksFilter(googleMap);
+        checkPermissions();
     }
 
     // ---------------------------- Location accuracy ----------------------------------------------
@@ -83,6 +93,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         } catch (Resources.NotFoundException e) {
             Log.e(TAG, "Can't find style. Error: ", e);
+        }
+    }
+
+    // ---------------------------- Check permissions ----------------------------------------------
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @AfterPermissionGranted(LOCATION_PERMISSION_REQUEST_CODE)
+    private void checkPermissions(){
+        String[] perms = {FINE_LOCATION, INTERNET};
+        if (EasyPermissions.hasPermissions(getContext(), perms)){
+            Toasty.success(getContext(), "Location granted", Toasty.LENGTH_SHORT).show();
+        }
+        else {
+            EasyPermissions.requestPermissions(this,"We need your permission to locate you",
+                    LOCATION_PERMISSION_REQUEST_CODE, perms);
         }
     }
 }

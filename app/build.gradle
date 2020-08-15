@@ -50,4 +50,10 @@ dependencies {
 
     // ---------------------------- Google play maps -----------------------------------------------
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+
+    // ---------------------------- Easy Permissions -----------------------------------------------
+    implementation 'pub.devrel:easypermissions:3.0.0'
+
+    // ---------------------------- Toasty ---------------------------------------------------------
+    implementation 'com.github.GrenderG:Toasty:1.4.2'
 }

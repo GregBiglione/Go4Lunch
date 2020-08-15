@@ -1,6 +1,8 @@
 package com.greg.go4lunch.ui.home;
 
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,15 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.greg.go4lunch.R;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    public static final float DEFAULT_ZOOM = 17.0f;
+    public static final String TAG = "HomeFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         locationAccuracy();
         zoomOnLocation();
+        noLandMarksFilter(googleMap);
     }
 
     // ---------------------------- Location accuracy ----------------------------------------------
@@ -62,6 +68,21 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     // ---------------------------- Zoom level -----------------------------------------------------
     private void zoomOnLocation(){
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17.0f));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
+    }
+
+    // ---------------------------- No Landmarks on Maps -------------------------------------------
+    private void noLandMarksFilter(GoogleMap googleMap){
+        try {
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            getContext(), R.raw.mapstyle));
+
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
     }
 }

@@ -20,8 +20,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.greg.go4lunch.R;
 
+import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -34,6 +36,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String INTERNET = Manifest.permission.INTERNET;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 8;
+    @BindView(R.id.gps) FloatingActionButton mGps;
 
 
     @Override
@@ -109,10 +112,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         String[] perms = {FINE_LOCATION, INTERNET};
         if (EasyPermissions.hasPermissions(getContext(), perms)){
             Toasty.success(getContext(), "Location granted", Toasty.LENGTH_SHORT).show();
+            customFocus();
         }
         else {
             EasyPermissions.requestPermissions(this,"We need your permission to locate you",
                     LOCATION_PERMISSION_REQUEST_CODE, perms);
         }
+    }
+
+    // ---------------------------- Custom position enabled ----------------------------------------
+    private void customFocus(){
+        mGps = getView().findViewById(R.id.gps);
+        mGps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                locationAccuracy();
+            }
+        });
     }
 }

@@ -1,6 +1,5 @@
 package com.greg.go4lunch;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -27,6 +26,10 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public BottomNavigationView mBottomNavigationView;
+   // public static final String API_KEY = BuildConfig.ApiKey;
+   // PlacesClient mPlacesClient;
+
+    //public static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationBottomMenu();
+        //initPlaces();
+        //autocompleteSupportFragInit();
     }
 
     @Override
@@ -92,4 +97,33 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
+    // ---------------------------- Get places -----------------------------------------------------
+    //public void initPlaces(){
+    //    if (!Places.isInitialized()){
+    //        Places.initialize(getApplicationContext(), API_KEY);
+    //    }
+    //    mPlacesClient = Places.createClient(this);
+    //}
+//
+    //// ---------------------------- Autocomplete support fragment initialization -------------------
+    //public void autocompleteSupportFragInit(){
+    //    AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager()
+    //            .findFragmentById(R.id.autocomplete_fragment);
+//
+    //    autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS));
+//
+    //    autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    //        @Override
+    //        public void onPlaceSelected(@NonNull Place place) {
+    //            LatLng latLng = place.getLatLng();
+    //            Log.i(TAG, "Place: " + latLng.latitude+ "\n" + latLng.longitude);
+    //        }
+//
+    //        @Override
+    //        public void onError(@NonNull Status status) {
+    //            Log.i(TAG, "An error occurred: " + status);
+    //        }
+    //    });
+    //}
 }

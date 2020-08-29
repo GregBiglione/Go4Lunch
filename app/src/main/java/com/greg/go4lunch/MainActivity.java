@@ -73,19 +73,21 @@ public class MainActivity extends AppCompatActivity {
         autocompleteSupportFragInit();
     }
 
-    //@Override
-    //public boolean onCreateOptionsMenu(Menu menu) {
-    //    // Inflate the menu; this adds items to the action bar if it is present.
-    //    getMenuInflater().inflate(R.menu.search_menu, menu);
-    //    return true;
-    //}
-//
-    //// ---------------------------- Search Menu ----------------------------------------------------
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    // ---------------------------- Search Menu ----------------------------------------------------
     //@Override
     //public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    //    View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
     //    if (item.getItemId() == R.id.search) {
-    //        View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
     //        autocompleteBar.setVisibility(View.VISIBLE);
+    //    } else {
+    //        autocompleteBar.setVisibility(View.GONE);
     //    }
     //    return super.onOptionsItemSelected(item);
     //}

@@ -19,4 +19,11 @@
     <string name="list_view">List View</string>
     <string name="workmates">Workmates</string>
     <string name="search">Search</string>
+
+    <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
+    <string name="error_no_internet">Aucune connexion internet !</string>
+    <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
+    <string name="connection_succeed">Authentification réussie !</string>
+    <string name="login_message">Find a nice restaurant and invite your co-workers for lunch</string>
+    <string name="login_title">Go4Lunch</string>
 </resources>

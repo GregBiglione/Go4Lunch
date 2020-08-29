@@ -2,10 +2,19 @@ package com.greg.go4lunch;
 
 import android.os.Bundle;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import android.util.Log;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -14,6 +23,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -21,15 +31,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.view.View;
+import android.widget.LinearLayout;
+
+import java.util.Arrays;
+
+import butterknife.BindView;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     public BottomNavigationView mBottomNavigationView;
-   // public static final String API_KEY = BuildConfig.ApiKey;
-   // PlacesClient mPlacesClient;
+    public static final String API_KEY = BuildConfig.ApiKey;
+    PlacesClient mPlacesClient;
 
-    //public static final String TAG = "MainActivity";
+    public static final String TAG = "MainActivity";
+    //@BindView(R.id.search) MenuItem mSearch;
+    public Menu mSearchMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +69,26 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navigationView, navController);
 
         navigationBottomMenu();
-        //initPlaces();
-        //autocompleteSupportFragInit();
+        initPlaces();
+        autocompleteSupportFragInit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
+    //@Override
+    //public boolean onCreateOptionsMenu(Menu menu) {
+    //    // Inflate the menu; this adds items to the action bar if it is present.
+    //    getMenuInflater().inflate(R.menu.search_menu, menu);
+    //    return true;
+    //}
+//
+    //// ---------------------------- Search Menu ----------------------------------------------------
+    //@Override
+    //public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    //    if (item.getItemId() == R.id.search) {
+    //        View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
+    //        autocompleteBar.setVisibility(View.VISIBLE);
+    //    }
+    //    return super.onOptionsItemSelected(item);
+    //}
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -99,31 +127,32 @@ public class MainActivity extends AppCompatActivity {
     };
 
     // ---------------------------- Get places -----------------------------------------------------
-    //public void initPlaces(){
-    //    if (!Places.isInitialized()){
-    //        Places.initialize(getApplicationContext(), API_KEY);
-    //    }
-    //    mPlacesClient = Places.createClient(this);
-    //}
-//
-    //// ---------------------------- Autocomplete support fragment initialization -------------------
-    //public void autocompleteSupportFragInit(){
-    //    AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager()
-    //            .findFragmentById(R.id.autocomplete_fragment);
-//
-    //    autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS));
-//
-    //    autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-    //        @Override
-    //        public void onPlaceSelected(@NonNull Place place) {
-    //            LatLng latLng = place.getLatLng();
-    //            Log.i(TAG, "Place: " + latLng.latitude+ "\n" + latLng.longitude);
-    //        }
-//
-    //        @Override
-    //        public void onError(@NonNull Status status) {
-    //            Log.i(TAG, "An error occurred: " + status);
-    //        }
-    //    });
-    //}
+    public void initPlaces(){
+        if (!Places.isInitialized()){
+            Places.initialize(getApplicationContext(), API_KEY);
+        }
+        mPlacesClient = Places.createClient(this);
+    }
+
+    // ---------------------------- Autocomplete support fragment initialization -------------------
+    public void autocompleteSupportFragInit(){
+        AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.autocomplete_fragment);
+
+        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS));
+
+        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(@NonNull Place place) {
+                LatLng latLng = place.getLatLng();
+                //Log.i(TAG, "Place: " + latLng.latitude+ "\n" + latLng.longitude);
+                Log.i(TAG, "Places" + place.getId() + ", " + place.getLatLng() + ", " + place.getName() + ", " + place.getAddress());
+            }
+
+            @Override
+            public void onError(@NonNull Status status) {
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+    }
 }

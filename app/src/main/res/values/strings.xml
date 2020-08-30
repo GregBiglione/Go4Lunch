@@ -26,4 +26,8 @@
     <string name="connection_succeed">Authentification réussie !</string>
     <string name="login_message">Find a nice restaurant and invite your co-workers for lunch</string>
     <string name="login_title">Go4Lunch</string>
+
+    <string name="facebook_app_id">358071792256008</string>
+    <string name="fb_login_protocol_scheme">fb358071792256008</string>
+
 </resources>

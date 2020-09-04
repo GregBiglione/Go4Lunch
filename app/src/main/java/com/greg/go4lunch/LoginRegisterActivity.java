@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.ProgressBar;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -31,6 +33,17 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.TwitterAuthProvider;
+import com.greg.go4lunch.ui.home.HomeFragment;
+import com.twitter.sdk.android.core.Callback;
+import com.twitter.sdk.android.core.DefaultLogger;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterConfig;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
@@ -47,6 +60,10 @@ public class LoginRegisterActivity extends AppCompatActivity {
     private CallbackManager mCallbackManager;
     @BindView(R.id.facebook_login_button) LoginButton mFacebookLoginButton;
 
+    @BindView(R.id.twitter_login_button) TwitterLoginButton mTwitterLoginButton;
+    private ProgressBar mProgressBar;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +74,11 @@ public class LoginRegisterActivity extends AppCompatActivity {
         googleSignInConfigure();
 
         initFacebook();
-        initFacebookLoginButton();
+        clickFacebookLoginButton();
+
+        initTwitter();
+        handleTwitterAccess();
+        goToHomeFragment();
     }
 
     // ---------------------------- Initialize Firebase authentication -----------------------------
@@ -109,6 +130,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
             handleSignInResult(task);
         }
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        mTwitterLoginButton.onActivityResult(requestCode, resultCode, data);
     }
 
     // ---------------------------- Handle Google result  ------------------------------------------
@@ -143,14 +165,14 @@ public class LoginRegisterActivity extends AppCompatActivity {
         });
     }
 
-    // ---------------------------- Get Google user information ------------------------------------
+    // ---------------------------- Get Google/FB/Twitter user information -------------------------
     private void updateUI(FirebaseUser user) {
         if (user != null){
             startActivity(new Intent(this, MainActivity.class));
         }
     }
 
-    // ---------------------------- Check if user is already logged with Google -----------------------------
+    // ---------------------------- Check if user is already logged with Google/FB/Twitter ---------
     @Override
     protected void onStart() {
         super.onStart();
@@ -166,7 +188,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
     }
 
     // ---------------------------- Initialize Facebook login button -------------------------------
-    private void initFacebookLoginButton(){
+    private void clickFacebookLoginButton(){
        mFacebookLoginButton = findViewById(R.id.facebook_login_button);
        mFacebookLoginButton.setReadPermissions("email", "public_profile");
        mFacebookLoginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -213,5 +235,77 @@ public class LoginRegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    // ---------------------------- TWITTER AUTHENTICATION ------------------------------------------------------------------------------------------------------------
+
+    // ---------------------------- Initialize Twitter ---------------------------------------------
+    private void initTwitter(){
+        TwitterAuthConfig mTwitterAuthConfig = new TwitterAuthConfig(getString(R.string.consumer_key), getString(R.string.consumer_secret));
+        TwitterConfig twitterConfig = new TwitterConfig.Builder(this)
+                .twitterAuthConfig(mTwitterAuthConfig)
+                .build();
+        Twitter.initialize(twitterConfig);
+        showTwitterButton();
+    }
+
+    // ---------------------------- Show Twitter Login button --------------------------------------
+    private void showTwitterButton(){
+        setContentView(R.layout.activity_login_register);
+    }
+
+    // ---------------------------- 3) Handle Twitter result ---------------------------------------
+    private void handleTwitterAccess(){
+        mTwitterLoginButton = findViewById(R.id.twitter_login_button);
+        mProgressBar = findViewById(R.id.indeterminateProgressBar);
+
+        mTwitterLoginButton.setCallback(new Callback<TwitterSession>() {
+            @Override
+            public void success(Result<TwitterSession> result) {
+                Toasty.success(LoginRegisterActivity.this, "Login Twitter successful", Toasty.LENGTH_SHORT).show();
+                signToFireBaseWithTwitterSession(result.data);
+                mProgressBar.setVisibility(View.VISIBLE);
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE, WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                FirebaseUser user = mAuth.getCurrentUser();
+                updateUI(user);
+            }
+
+            @Override
+            public void failure(TwitterException exception) {
+                Toasty.error(LoginRegisterActivity.this, "Login with Twitter failed", Toasty.LENGTH_SHORT).show();
+                mProgressBar.setVisibility(View.GONE);
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                updateUI(null);
+            }
+        });
+    }
+
+    // ---------------------------- Connection to Firebase with Twitter ----------------------------
+    private void signToFireBaseWithTwitterSession(TwitterSession data) {
+        AuthCredential credential = TwitterAuthProvider.getCredential(data.getAuthToken().token, data.getAuthToken().secret);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Toasty.success(LoginRegisterActivity.this, "Sign in with Twitter successfully", Toasty.LENGTH_SHORT).show();
+                        if (!task.isSuccessful()){
+                            Toasty.error(LoginRegisterActivity.this, "Sign in with Twitter failed", Toasty.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    // ---------------------------- Redirection to Home Fragment -----------------------
+    private void goToHomeFragment(){
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if (firebaseAuth.getCurrentUser() != null){
+                    Intent twitterIntent = new Intent(LoginRegisterActivity.this, HomeFragment.class);
+                    startActivity(twitterIntent);
+                }
+            }
+        };
     }
 }

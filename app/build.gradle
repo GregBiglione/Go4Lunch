@@ -71,6 +71,9 @@ dependencies {
     // ---------------------------- Firebase Facebook ----------------------------------------------
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
+    // ---------------------------- Firebase Twitter -----------------------------------------------
+    implementation 'com.twitter.sdk.android:twitter:3.1.1'
+
     // ---------------------------- Multi Dex  -----------------------------------------------------
     implementation 'com.android.support:multidex:1.0.3'
 }

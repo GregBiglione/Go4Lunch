@@ -30,12 +30,25 @@
             android:textStyle="bold"
             android:text="@string/login_message"/>
 
+        <Button
+            android:id="@+id/email_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:cornerRadius="20dp"
+            android:hint="@string/sign_in_with_email"
+            android:backgroundTint="@color/black"
+            android:textColorHint="@color/white"
+            android:drawableStart="@drawable/ic_email_white_24dp"
+            android:drawablePadding="5dp"
+            style="@style/button_margin_top"/>
+
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_google_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"/>
+            style="@style/button_margin_top"/>
 
 
         <com.facebook.login.widget.LoginButton
@@ -43,14 +56,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"/>
+            style="@style/button_margin_top"/>
 
         <com.twitter.sdk.android.core.identity.TwitterLoginButton
             android:id="@+id/twitter_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="30dp"/>
+            style="@style/button_margin_top"/>
 
         <ProgressBar
             android:id="@+id/indeterminateProgressBar"

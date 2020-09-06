@@ -1,5 +1,6 @@
 package com.greg.go4lunch;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -230,7 +231,10 @@ public class MainActivity extends AppCompatActivity {
                     Toasty.success(MainActivity.this, "Click on settings icon", Toasty.LENGTH_SHORT).show();
                     break;
                 case R.id.nav_logout:
-                    Toasty.success(MainActivity.this, "Click on logout icon", Toasty.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    Intent backToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
+                    startActivity(backToLogin);
+                    Toasty.success(MainActivity.this, "Logout with success", Toasty.LENGTH_SHORT).show();
                     break;
 
             }

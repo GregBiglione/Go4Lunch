@@ -17,10 +17,22 @@
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:background="@color/lateral_menu"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/white">
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_logo_go4lunch"
+            style="@style/logo_drawer_style"/>
+
+    </com.google.android.material.navigation.NavigationView>
 
     <LinearLayout
         android:id="@+id/autocomplete_linear_layout"

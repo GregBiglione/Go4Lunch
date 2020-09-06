@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/dinner_dark"
     tools:context=".LoginRegisterActivity">
 
     <LinearLayout
@@ -12,22 +13,25 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center">
 
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:src="@drawable/ic_logo_go4lunch"
+            android:layout_gravity="center"/>
+
         <TextView
             android:id="@+id/login_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="68dp"
-            android:textStyle="bold"
+            style="@style/login_title_style"
             android:text="@string/login_title"/>
 
         <TextView
             android:id="@+id/login_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="11dp"
-            android:textStyle="bold"
+            style="@style/login_subtitle_style"
             android:text="@string/login_message"/>
 
         <Button

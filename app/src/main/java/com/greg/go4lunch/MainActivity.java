@@ -1,7 +1,11 @@
 package com.greg.go4lunch;
 
+import android.net.Uri;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.BaseRequestOptions;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.Places;
@@ -24,6 +28,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -32,7 +38,9 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.Arrays;
 
@@ -48,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     //@BindView(R.id.search) MenuItem mSearch;
     public Menu mSearchMenu;
+
+    private FirebaseAuth mAuth;
+    @BindView(R.id.user_name) TextView mName;
+    @BindView(R.id.user_mail) TextView mMail;
+    @BindView(R.id.user_photo) ImageView mPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +84,9 @@ public class MainActivity extends AppCompatActivity {
         navigationBottomMenu();
         initPlaces();
         autocompleteSupportFragInit();
+
+        currentLoggedUserInformation();
+
     }
 
     @Override
@@ -156,5 +172,41 @@ public class MainActivity extends AppCompatActivity {
                 Log.i(TAG, "An error occurred: " + status);
             }
         });
+    }
+
+    // ---------------------------- Get user information -------------------------------------------
+    private void currentLoggedUserInformation(){
+        FirebaseUser user = mAuth.getInstance().getCurrentUser(); //Check if no matters with mAuth instead of FirebaseUser
+        //mMail = findViewById(R.id.user_mail);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        View headerView = navigationView.getHeaderView(0);
+        mName = headerView.findViewById(R.id.user_name);
+        mMail = headerView.findViewById(R.id.user_mail);
+        mPhoto = headerView.findViewById(R.id.user_photo);
+
+
+        if (user != null) {
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            Uri photoUrl = user.getPhotoUrl();
+
+            String testPhoto = "https://i.redd.it/wuaak297y4a21.jpg";
+
+            if (name != null){
+                mName.setText(name);
+            }
+            if (email != null){
+                mMail.setText(email);
+            }
+            if (photoUrl == null){
+
+                Glide.with(this)
+                        .load(testPhoto)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(mPhoto);
+            }
+        }
+
+
     }
 }

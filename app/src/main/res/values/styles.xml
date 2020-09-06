@@ -21,4 +21,18 @@
         <item name="android:layout_marginTop">10dp</item>
     </style>
 
+    <style name="nav_header_title">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="name_style">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">7sp</item>
+    </style>
+
+    <style name="mail_style">
+        <item name="android:layout_marginLeft">5sp</item>
+    </style>
+
 </resources>

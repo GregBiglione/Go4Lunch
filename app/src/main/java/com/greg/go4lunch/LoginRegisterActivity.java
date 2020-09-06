@@ -188,6 +188,12 @@ public class LoginRegisterActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        //FirebaseUser user = mAuth.getCurrentUser();
+        //updateUI(user);
+        loggedUser();
+    }
+
+    private void loggedUser(){
         FirebaseUser user = mAuth.getCurrentUser();
         updateUI(user);
     }

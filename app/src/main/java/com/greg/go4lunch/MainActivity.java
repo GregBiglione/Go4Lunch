@@ -45,6 +45,7 @@ import android.widget.TextView;
 import java.util.Arrays;
 
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.user_name) TextView mName;
     @BindView(R.id.user_mail) TextView mMail;
     @BindView(R.id.user_photo) ImageView mPhoto;
+
+    public NavigationView mNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
         currentLoggedUserInformation();
 
+        navigationViewMenu();
     }
 
     @Override
@@ -208,4 +212,29 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    // ---------------------------- Lateral navigation menu ----------------------------------------
+    public void navigationViewMenu(){
+        mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView.setNavigationItemSelectedListener(lateralNavListener);
+    }
+
+    public NavigationView.OnNavigationItemSelectedListener lateralNavListener = new NavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()){
+                case R.id.nav_lunch:
+                    Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
+                    break;
+                case R.id.nav_settings:
+                    Toasty.success(MainActivity.this, "Click on settings icon", Toasty.LENGTH_SHORT).show();
+                    break;
+                case R.id.nav_logout:
+                    Toasty.success(MainActivity.this, "Click on logout icon", Toasty.LENGTH_SHORT).show();
+                    break;
+
+            }
+            return false;
+        }
+    };
 }

@@ -24,4 +24,10 @@
     <string name="your_lunch">ВАШ МЕАЛ</string>
     <string name="settings">НАСТРОЙКИ</string>
     <string name="logout">ДЕКОННЕКСИЯ</string>
+    <string name="select_language">Sélectionner la lague</string>
+    <string name="error_occurred">Произошла ошибка: </string>
+    <string name="language_changed">Язык изменен</string>
+    <string name="logout_with_success">успешный Выход из системы</string>
+    <string name="location_granted">Местоположение предоставлено</string>
+    <string name="places">Места: </string>
 </resources>

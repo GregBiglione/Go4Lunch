@@ -115,7 +115,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private void checkPermissions(){
         String[] perms = {FINE_LOCATION, INTERNET};
         if (EasyPermissions.hasPermissions(getContext(), perms)){
-            Toasty.success(getContext(), "Location granted", Toasty.LENGTH_SHORT).show();
+            Toasty.success(getContext(), getString(R.string.location_granted), Toasty.LENGTH_SHORT).show();
             customFocus();
         }
         else {

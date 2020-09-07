@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -40,7 +41,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
 import com.greg.go4lunch.ui.home.HomeFragment;
 import com.twitter.sdk.android.core.Callback;
-import com.twitter.sdk.android.core.DefaultLogger;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -53,6 +53,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
 public class LoginRegisterActivity extends AppCompatActivity {
@@ -72,6 +73,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthStateListener;
 
     @BindView(R.id.email_login_button) Button mEmailLoginButton;
+
+    @BindView(R.id.language_button) Button mLangaugeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -394,5 +397,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
     //        }
     //    }
     //}
-    
+
+    // ---------------------------- MULTI LANGUAGES ----------------------------------------------------------------------------------------------------------
+
+
 }

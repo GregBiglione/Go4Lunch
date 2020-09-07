@@ -42,6 +42,23 @@
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>
+    <string name="select_language">Select language</string>
+    <string name="error_occurred">An error occurred:</string>
+    <string name="language_changed">Language changed</string>
+    <string name="logout_with_success">Logout with success</string>
+    <string name="location_granted">Location granted</string>
+    <string name="places">Places: </string>
+
+    <string-array name="country_array">
+        <item>Français</item>
+        <item>English</item>
+        <item>Italiano</item>
+        <item>Español</item>
+        <item>Português</item>
+        <item>русский</item>
+    </string-array>
+
+    <!--///////////////////////////////// Permission ////////////////////////////////////////////-->
 
 
     <!--///////////////////////////////// Email /////////////////////////////////////////////////-->

@@ -24,4 +24,10 @@
     <string name="your_lunch">SU ALMUERZO</string>
     <string name="settings">AJUSTES</string>
     <string name="logout">DESCONEXIÓN</string>
+    <string name="select_language">Sélectionner la lague</string>
+    <string name="error_occurred">Se ha producido un error: </string>
+    <string name="language_changed">Idioma modificada</string>
+    <string name="logout_with_success">Desconexión exitosa</string>
+    <string name="location_granted">Ubicación concedida</string>
+    <string name="places">Lugares: </string>
 </resources>

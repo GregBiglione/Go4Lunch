@@ -166,12 +166,12 @@ public class MainActivity extends AppCompatActivity {
             public void onPlaceSelected(@NonNull Place place) {
                 LatLng latLng = place.getLatLng();
                 //Log.i(TAG, "Place: " + latLng.latitude+ "\n" + latLng.longitude);
-                Log.i(TAG, "Places" + place.getId() + ", " + place.getLatLng() + ", " + place.getName() + ", " + place.getAddress());
+                Log.i(TAG, getString(R.string.places) + place.getId() + ", " + place.getLatLng() + ", " + place.getName() + ", " + place.getAddress());
             }
 
             @Override
             public void onError(@NonNull Status status) {
-                Log.i(TAG, "An error occurred: " + status);
+                Log.i(TAG, getString(R.string.error_occurred) + status);
             }
         });
     }
@@ -179,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------- Get user information --------------------------------------------------------------------------------------------
     private void currentLoggedUserInformation(){
         FirebaseUser user = mAuth.getInstance().getCurrentUser(); //Check if no matters with mAuth instead of FirebaseUser
-        //mMail = findViewById(R.id.user_mail);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         mName = headerView.findViewById(R.id.user_name);
@@ -226,16 +225,24 @@ public class MainActivity extends AppCompatActivity {
                     Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
                     break;
                 case R.id.nav_settings:
-                    Toasty.success(MainActivity.this, "Click on settings icon", Toasty.LENGTH_SHORT).show();
+                    Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
+                    openLanguagesDialog();
                     break;
                 case R.id.nav_logout:
                     FirebaseAuth.getInstance().signOut();
                     Intent backToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
                     startActivity(backToLogin);
-                    Toasty.success(MainActivity.this, "Logout with success", Toasty.LENGTH_SHORT).show();
+                    Toasty.success(MainActivity.this, getString(R.string.logout_with_success), Toasty.LENGTH_SHORT).show();
                     break;
             }
             return false;
         }
     };
+
+    // ---------------------------- Language selection ---------------------------------------------
+    private void openLanguagesDialog() {
+        LanguagesDialog languagesDialog = new LanguagesDialog();
+        languagesDialog.show(getSupportFragmentManager(),"languages dialog");
+    }
+
 }

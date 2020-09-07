@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+
+    <!--////////////////////////////////// Menu /////////////////////////////////////////////////-->
+    <string name="menu_home">Главная страница</string>
+    <string name="map_view">Просмотр карты</string>
+    <string name="list_view">Просмотр списка</string>
+    <string name="workmates">коллеги </string>
+    <string name="search">Поиск</string>
+
+    <!--////////////////////////////////// Messages login ///////////////////////////////////////-->
+    <string name="error_authentication_canceled">Аутентификация отменена&#8230;</string>
+    <string name="error_no_internet">Нет подключения к интернету!</string>
+    <string name="error_unknown_error">Произошла неизвестная ошибка&#8230;</string>
+    <string name="connection_succeed" translatable="false">Успешная аутентификация!</string>
+
+    <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
+    <string name="login_message">Найдите хороший ресторан и пригласите своих коллег на обед.</string>
+    <string name="login_title">Go4Lunch</string>
+    <string name="sign_in_with_email">Войти в систему по электронной почте</string>
+
+    <!--////////////////////////////////// Navigation ///////////////////////////////////////////-->
+    <string name="your_lunch">ВАШ МЕАЛ</string>
+    <string name="settings">НАСТРОЙКИ</string>
+    <string name="logout">ДЕКОННЕКСИЯ</string>
+</resources>

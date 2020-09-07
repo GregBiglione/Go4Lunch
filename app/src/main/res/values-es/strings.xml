@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+
+    <!--////////////////////////////////// Menu /////////////////////////////////////////////////-->
+    <string name="menu_home">Inicio</string>
+    <string name="map_view">Vista del mapa</string>
+    <string name="list_view">Vista de lista</string>
+    <string name="workmates">Compañeros de trabajo</string>
+    <string name="search">Buscar</string>
+
+    <!--////////////////////////////////// Messages login ///////////////////////////////////////-->
+    <string name="error_authentication_canceled">Autenticación cancelada... 8230;</string>
+    <string name="error_no_internet">¡No hay conexión a Internet!</string>
+    <string name="error_unknown_error">Ha ocurrido un error desconocido&#8230;</string>
+    <string name="connection_succeed" translatable="false">¡Autentificación exitosa!</string>
+
+    <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
+    <string name="login_message">Encuentra un buen restaurante e invita a tus compañeros de trabajo a almorzar.</string>
+    <string name="login_title">Go4Lunch</string>
+    <string name="sign_in_with_email">Iniciar sesión con el email</string>
+
+    <!--////////////////////////////////// Navigation ///////////////////////////////////////////-->
+    <string name="your_lunch">SU ALMUERZO</string>
+    <string name="settings">AJUSTES</string>
+    <string name="logout">DESCONEXIÓN</string>
+</resources>

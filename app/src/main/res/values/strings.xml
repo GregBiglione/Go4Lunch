@@ -1,42 +1,44 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="title_activity_main" translatable="false">MainActivity</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
 
+    <!--////////////////////////////////// Menu /////////////////////////////////////////////////-->
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
-    <string name="menu_tools">Tools</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_send">Send</string>
+    <string name="menu_gallery" translatable="false">Gallery</string>
+    <string name="menu_slideshow" translatable="false">Slideshow</string>
     <string name="map_view">Map View</string>
     <string name="list_view">List View</string>
     <string name="workmates">Workmates</string>
     <string name="search">Search</string>
 
-    <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
-    <string name="error_no_internet">Aucune connexion internet !</string>
-    <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
-    <string name="connection_succeed">Authentification réussie !</string>
+    <!--////////////////////////////////// Messages login ///////////////////////////////////////-->
+    <string name="error_authentication_canceled">Authentication canceled&#8230;</string>
+    <string name="error_no_internet">No internet connection!</string>
+    <string name="error_unknown_error">An unknown error has occurred&#8230;</string>
+    <string name="connection_succeed" translatable="false">Successful authentication!</string>
+
+    <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
     <string name="login_message">Find a nice restaurant and invite your co-workers for lunch</string>
     <string name="login_title">Go4Lunch</string>
+    <string name="sign_in_with_email">Sign in with email</string>
 
-    <string name="facebook_app_id">358071792256008</string>
-    <string name="fb_login_protocol_scheme">fb358071792256008</string>
+    <string name="facebook_app_id" translatable="false">358071792256008</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb358071792256008</string>
 
     <string name="consumer_key" translatable="false">1UqLX7ewH1FRT4GzxJ8fWoRoQ</string>
     <string name="consumer_secret" translatable="false">7fowh8J5Hek50Z2BuzE6XXniDg0zaAv6kF099gyzrRpefvTpLP</string>
-    <string name="bearer_token">AAAAAAAAAAAAAAAAAAAAAM0SHQEAAAAAB2DNEXLNY5FP4tIP9LDZUCTg0WY%3DJ9815jSZRp7zhi2iTNxkfCbXtern9ycZpbkXE5dpdU2IWtR8tZ</string>
-    <string name="access_token">1300138449018724352-hl48VNXeU8tWB0au41YUZucDOLccMH</string>
-    <string name="access_token_secret">SVdHfA0qYTE8mnwJyPmGULalRbtjaJdia0Pc6eWUP1GQG</string>
+    <string name="bearer_token" translatable="false">AAAAAAAAAAAAAAAAAAAAAM0SHQEAAAAAB2DNEXLNY5FP4tIP9LDZUCTg0WY%3DJ9815jSZRp7zhi2iTNxkfCbXtern9ycZpbkXE5dpdU2IWtR8tZ</string>
+    <string name="access_token" translatable="false">1300138449018724352-hl48VNXeU8tWB0au41YUZucDOLccMH</string>
+    <string name="access_token_secret" translatable="false">SVdHfA0qYTE8mnwJyPmGULalRbtjaJdia0Pc6eWUP1GQG</string>
 
-    <string name="sign_in_with_email">Sign in with email</string>
+    <!--////////////////////////////////// Navigation ///////////////////////////////////////////-->
     <string name="your_lunch">YOUR LUNCH</string>
     <string name="settings">SETTINGS</string>
     <string name="logout">LOGOUT</string>

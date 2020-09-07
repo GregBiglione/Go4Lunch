@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.BaseRequestOptions;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
@@ -28,7 +27,6 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -101,16 +99,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // ---------------------------- Search Menu ----------------------------------------------------
-    //@Override
-    //public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    //    View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
-    //    if (item.getItemId() == R.id.search) {
-    //        autocompleteBar.setVisibility(View.VISIBLE);
-    //    } else {
-    //        autocompleteBar.setVisibility(View.GONE);
-    //    }
-    //    return super.onOptionsItemSelected(item);
-    //}
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
+        if (item.getItemId() == R.id.search) {
+            autocompleteBar.setVisibility(View.VISIBLE);
+        } else {
+            autocompleteBar.setVisibility(View.GONE);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -148,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // ---------------------------- Get places -----------------------------------------------------
+    // ---------------------------- Get places ------------------------------------------------------------------------------------------------------
     public void initPlaces(){
         if (!Places.isInitialized()){
             Places.initialize(getApplicationContext(), API_KEY);
@@ -178,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ---------------------------- Get user information -------------------------------------------
+    // ---------------------------- Get user information --------------------------------------------------------------------------------------------
     private void currentLoggedUserInformation(){
         FirebaseUser user = mAuth.getInstance().getCurrentUser(); //Check if no matters with mAuth instead of FirebaseUser
         //mMail = findViewById(R.id.user_mail);
@@ -236,7 +234,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(backToLogin);
                     Toasty.success(MainActivity.this, "Logout with success", Toasty.LENGTH_SHORT).show();
                     break;
-
             }
             return false;
         }

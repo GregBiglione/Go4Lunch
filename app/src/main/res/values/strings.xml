@@ -48,6 +48,7 @@
     <string name="logout_with_success">Logout with success</string>
     <string name="location_granted">Location granted</string>
     <string name="places">Places: </string>
+    <string name="wait_message">Please wait</string>
 
     <string-array name="country_array">
         <item>Français</item>

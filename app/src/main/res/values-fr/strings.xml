@@ -31,4 +31,5 @@
     <string name="logout_with_success">Déconnexion réussie</string>
     <string name="location_granted">Localisation accordée</string>
     <string name="places">Lieux: </string>
+    <string name="wait_message">Patientez s\'il vous plaît</string>
 </resources>

@@ -38,7 +38,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Arrays;
@@ -178,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
 
     // ---------------------------- Get user information --------------------------------------------------------------------------------------------
     private void currentLoggedUserInformation(){
-        FirebaseUser user = mAuth.getInstance().getCurrentUser(); //Check if no matters with mAuth instead of FirebaseUser
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerView = navigationView.getHeaderView(0);
         mName = headerView.findViewById(R.id.user_name);
@@ -225,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
                     Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
                     break;
                 case R.id.nav_settings:
-                    Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
+                    //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
                     openLanguagesDialog();
                     break;
                 case R.id.nav_logout:

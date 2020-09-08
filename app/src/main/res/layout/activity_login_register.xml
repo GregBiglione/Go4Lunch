@@ -22,8 +22,10 @@
             android:hint="@string/select_language"
             android:backgroundTint="@color/black"
             android:textColorHint="@color/white"
+            android:drawableStart="@drawable/ic_language_white_24dp"
             android:drawablePadding="5dp"
-            style="@style/button_margin_top"/>
+            style="@style/button_margin_top"
+            />
 
         <ImageView
             android:id="@+id/logo"

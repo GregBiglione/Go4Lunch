@@ -25,10 +25,11 @@
     <string name="your_lunch">IL VOSTRO PRANZO</string>
     <string name="settings">IMPOSTAZIONI</string>
     <string name="logout">DECONNESSIONE</string>
-    <string name="select_language">Sélectionner la lague</string>
+    <string name="select_language">Selezionare la lingua</string>
     <string name="error_occurred">Si è verificato un errore: </string>
     <string name="language_changed">Lingua cambiata</string>
     <string name="logout_with_success">Disconnessione riuscita</string>
     <string name="location_granted">Posizione accordata</string>
     <string name="places">Luoghi: </string>
+    <string name="wait_message">Attenda, prego</string>
 </resources>

@@ -74,7 +74,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
     @BindView(R.id.email_login_button) Button mEmailLoginButton;
 
-    @BindView(R.id.language_button) Button mLangaugeButton;
+    @BindView(R.id.language_button) Button mLanguageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +93,8 @@ public class LoginRegisterActivity extends AppCompatActivity {
         goToHomeFragment();
 
         clickEmailLogInButton();
+
+        clickChangeLanguageButton();
     }
 
     // ---------------------------- Initialize Firebase authentication -----------------------------
@@ -126,7 +128,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
     // ---------------------------- Progress dialog bar --------------------------------------------
     private void progressDialog(){
         mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage("Please wait...");
+        mProgressDialog.setMessage(getString(R.string.wait_message));
     }
 
     // ---------------------------- Sign In with Google --------------------------------------------
@@ -399,6 +401,18 @@ public class LoginRegisterActivity extends AppCompatActivity {
     //}
 
     // ---------------------------- MULTI LANGUAGES ----------------------------------------------------------------------------------------------------------
+    public void clickChangeLanguageButton(){
+        mLanguageButton = findViewById(R.id.language_button);
+        mLanguageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLanguagesDialog();
+            }
+        });
+    }
 
-
+    private void openLanguagesDialog() {
+        LanguagesDialog languagesDialog = new LanguagesDialog();
+        languagesDialog.show(getSupportFragmentManager(), "languages dialog");
+    }
 }

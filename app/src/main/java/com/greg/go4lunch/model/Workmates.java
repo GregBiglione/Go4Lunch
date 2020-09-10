@@ -5,12 +5,14 @@ public class Workmates {
     public String picture;
     public String name;
     public String email;
+    public boolean pickedRestaurant;
 
-    public Workmates(String uid, String picture, String name, String email) {
+    public Workmates(String uid, String picture, String name, String email, boolean pickedRestaurant) {
         this.uid = uid;
         this.picture = picture;
         this.name = name;
         this.email = email;
+        this.pickedRestaurant = pickedRestaurant;
     }
 
     public String getUid() {
@@ -43,5 +45,13 @@ public class Workmates {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public boolean isPickedRestaurant() {
+        return pickedRestaurant;
+    }
+
+    public void setPickedRestaurant(boolean pickedRestaurant) {
+        this.pickedRestaurant = pickedRestaurant;
     }
 }

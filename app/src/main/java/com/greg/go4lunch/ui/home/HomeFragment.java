@@ -1,6 +1,7 @@
 package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +11,10 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -20,32 +23,45 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.greg.go4lunch.BuildConfig;
+
 import com.greg.go4lunch.R;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private static final float DEFAULT_ZOOM = 17.0f;
     private static final String TAG = "HomeFragment";
-    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String INTERNET = Manifest.permission.INTERNET;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 8;
     @BindView(R.id.gps) FloatingActionButton mGps;
+    private PlacesClient mPlacesClient;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mPlacesClient = Places.createClient(getContext());
     }
 
     @Override
@@ -74,6 +90,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         zoomOnLocation();
         noLandMarksFilter(googleMap);
         checkPermissions();
+        //getNearbyPlaces();
     }
 
     // ---------------------------- Location accuracy ----------------------------------------------
@@ -113,10 +130,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     @AfterPermissionGranted(LOCATION_PERMISSION_REQUEST_CODE)
     private void checkPermissions(){
-        String[] perms = {FINE_LOCATION, INTERNET};
+        String[] perms = {ACCESS_FINE_LOCATION, INTERNET};
         if (EasyPermissions.hasPermissions(getContext(), perms)){
             Toasty.success(getContext(), getString(R.string.location_granted), Toasty.LENGTH_SHORT).show();
             customFocus();
+            getNearbyPlaces();
         }
         else {
             EasyPermissions.requestPermissions(this,"We need your permission to locate you",
@@ -133,5 +151,40 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 locationAccuracy();
             }
         });
+    }
+
+    // ---------------------------- Places information type initialization -------------------------
+    public void getNearbyPlaces(){
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.TYPES, Place.Field.LAT_LNG);
+        FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+
+        if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION )== PackageManager.PERMISSION_GRANTED){
+            Task<FindCurrentPlaceResponse> placeResponse = mPlacesClient.findCurrentPlace(request);
+            placeResponse.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
+                @Override
+                public void onComplete(@NonNull Task<FindCurrentPlaceResponse> task) {
+                    if (task.isSuccessful()){
+                        FindCurrentPlaceResponse response = task.getResult();
+                        assert response != null;
+                        for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                            Log.i(TAG, String.format("Place '%s' has likelihood: '%f' ",
+                                    placeLikelihood.getPlace().getName(),
+                                    placeLikelihood.getLikelihood()));
+                        }
+
+                    }
+                    else{
+                        Exception exception = task.getException();
+                        if (exception instanceof ApiException){
+                            ApiException apiException = (ApiException) exception;
+                            Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+                        }
+                    }
+                }
+            });
+        }
+        else{
+            checkPermissions();
+        }
     }
 }

@@ -170,6 +170,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                             Log.i(TAG, String.format("Place '%s' has likelihood: '%f' ",
                                     placeLikelihood.getPlace().getName(),
                                     placeLikelihood.getLikelihood()));
+
+                            if (placeLikelihood.getPlace().getTypes().contains(Place.Type.RESTAURANT)){
+                                mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
+                                        .title(placeLikelihood.getPlace().getName()));
+                            }
+
                         }
 
                     }

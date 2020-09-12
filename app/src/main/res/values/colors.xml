@@ -6,4 +6,5 @@
     <color name="white">#fff</color>
     <color name="black">#000</color>
     <color name="lateral_menu">#FE8A4F</color>
+    <color name="isJoiningColor">#807E7D</color>
 </resources>

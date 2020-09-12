@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -20,15 +21,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
@@ -37,7 +43,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.greg.go4lunch.R;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -153,12 +158,12 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    // ---------------------------- Places information type initialization -------------------------
+    //---------------------------- Places information type initialization -------------------------
     public void getNearbyPlaces(){
         List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.TYPES, Place.Field.LAT_LNG);
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
 
-        if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION )== PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED){
             Task<FindCurrentPlaceResponse> placeResponse = mPlacesClient.findCurrentPlace(request);
             placeResponse.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
                 @Override
@@ -166,6 +171,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     if (task.isSuccessful()){
                         FindCurrentPlaceResponse response = task.getResult();
                         assert response != null;
+
+                        final String placeId = response.getPlaceLikelihoods().get(0).getPlace().getId();
                         for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
                             Log.i(TAG, String.format("Place '%s' has likelihood: '%f' ",
                                     placeLikelihood.getPlace().getName(),
@@ -173,6 +180,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
                             if (placeLikelihood.getPlace().getTypes().contains(Place.Type.RESTAURANT)){
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                                         .title(placeLikelihood.getPlace().getName()));
                             }
 
@@ -193,4 +201,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             checkPermissions();
         }
     }
+
+    // ---------------------------- Places details -------------------------------------------------
+    //private void restaurantDetails(){
+    //    //final String placeId = "";
+    //    final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,
+    //            Place.Field.NAME,
+    //            Place.Field.ADDRESS,
+    //            Place.Field.PHONE_NUMBER,
+    //            Place.Field.OPENING_HOURS,
+    //            Place.Field.RATING);
+//
+    //    final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
+    //    mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+    //        @Override
+    //        public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+    //            Place place = fetchPlaceResponse.getPlace();
+    //            Log.i(TAG, "Place found : ")
+    //        }
+    //    });
+//
+    //}
+
 }

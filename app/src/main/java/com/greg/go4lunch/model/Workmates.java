@@ -5,14 +5,16 @@ public class Workmates {
     public String picture;
     public String name;
     public String email;
-    public boolean pickedRestaurant;
+    public String pickedRestaurant;
+    public boolean isJoining;
 
-    public Workmates(String uid, String picture, String name, String email, boolean pickedRestaurant) {
+    public Workmates(String uid, String picture, String name, String email, String pickedRestaurant, boolean isJoining) {
         this.uid = uid;
         this.picture = picture;
         this.name = name;
         this.email = email;
         this.pickedRestaurant = pickedRestaurant;
+        this.isJoining = isJoining;
     }
 
     public String getUid() {
@@ -47,11 +49,19 @@ public class Workmates {
         this.email = email;
     }
 
-    public boolean isPickedRestaurant() {
+    public String getPickedRestaurant() {
         return pickedRestaurant;
     }
 
-    public void setPickedRestaurant(boolean pickedRestaurant) {
+    public void setPickedRestaurant(String pickedRestaurant) {
         this.pickedRestaurant = pickedRestaurant;
+    }
+
+    public boolean isJoining() {
+        return isJoining;
+    }
+
+    public void setJoining(boolean joining) {
+        isJoining = joining;
     }
 }

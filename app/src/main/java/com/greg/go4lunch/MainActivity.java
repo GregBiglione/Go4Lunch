@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
 
         navigationViewMenu();
 
-        //getNearbyPlaces();
     }
 
     @Override

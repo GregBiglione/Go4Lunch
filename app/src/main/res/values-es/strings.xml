@@ -31,4 +31,5 @@
     <string name="location_granted">Ubicación concedida</string>
     <string name="places">Lugares: </string>
     <string name="wait_message">Por favor, espera</string>
+    <string name="is_joining_text">Bradley no ha decidido todavía</string>
 </resources>

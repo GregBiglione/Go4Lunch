@@ -31,4 +31,5 @@
     <string name="location_granted">Местоположение предоставлено</string>
     <string name="places">Места: </string>
     <string name="wait_message">Пожалуйста, подождите</string>
+    <string name="is_joining_text">Брэдли ещё не решил</string>
 </resources>

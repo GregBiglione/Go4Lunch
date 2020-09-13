@@ -6,8 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import butterknife.BindView;
 
 public class WorkmatesFragment extends Fragment {
+
+    @BindView(R.id.workmates_recycler_view) RecyclerView mWorkmateRecyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

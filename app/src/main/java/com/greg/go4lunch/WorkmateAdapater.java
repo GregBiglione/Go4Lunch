@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.greg.go4lunch.model.Workmates;
+import com.greg.go4lunch.model.Workmate;
 
 import java.util.List;
 
@@ -19,9 +19,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class WorkmateAdapater extends RecyclerView.Adapter<WorkmateAdapater.ViewHolder> {
 
-    private List<Workmates> mWorkmates;
+    private List<Workmate> mWorkmates;
 
-    public WorkmateAdapater(List<Workmates> mWorkmates) {
+    public WorkmateAdapater(List<Workmate> mWorkmates) {
         this.mWorkmates = mWorkmates;
     }
 

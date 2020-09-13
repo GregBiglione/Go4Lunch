@@ -1,6 +1,6 @@
 package com.greg.go4lunch.model;
 
-public class Workmates {
+public class Workmate {
     public String uid;
     public String picture;
     public String name;
@@ -8,7 +8,7 @@ public class Workmates {
     public String pickedRestaurant;
     public boolean isJoining;
 
-    public Workmates(String uid, String picture, String name, String email, String pickedRestaurant, boolean isJoining) {
+    public Workmate(String uid, String picture, String name, String email, String pickedRestaurant, boolean isJoining) {
         this.uid = uid;
         this.picture = picture;
         this.name = name;

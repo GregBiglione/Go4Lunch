@@ -1,14 +1,16 @@
 package com.greg.go4lunch.model;
 
-public class Workmate {
-    public String uid;
-    public String picture;
-    public String name;
-    public String email;
-    public String pickedRestaurant;
-    public boolean isJoining;
+import androidx.annotation.Nullable;
 
-    public Workmate(String uid, String picture, String name, String email, String pickedRestaurant, boolean isJoining) {
+public class Workmate {
+    private String uid;
+    @Nullable private String picture;
+    private String name;
+    private String email;
+    private String pickedRestaurant;
+    private boolean isJoining;
+
+    public Workmate(String uid, @Nullable String picture, String name, String email, String pickedRestaurant, boolean isJoining) {
         this.uid = uid;
         this.picture = picture;
         this.name = name;
@@ -25,11 +27,12 @@ public class Workmate {
         this.uid = uid;
     }
 
+    @Nullable
     public String getPicture() {
         return picture;
     }
 
-    public void setPicture(String picture) {
+    public void setPicture(@Nullable String picture) {
         this.picture = picture;
     }
 

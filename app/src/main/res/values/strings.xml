@@ -32,8 +32,8 @@
     <string name="facebook_app_id" translatable="false">358071792256008</string>
     <string name="fb_login_protocol_scheme" translatable="false">fb358071792256008</string>
 
-    <string name="consumer_key" translatable="false">1UqLX7ewH1FRT4GzxJ8fWoRoQ</string>
-    <string name="consumer_secret" translatable="false">7fowh8J5Hek50Z2BuzE6XXniDg0zaAv6kF099gyzrRpefvTpLP</string>
+    <string name="twitter_consumer_key" translatable="false">1UqLX7ewH1FRT4GzxJ8fWoRoQ</string>
+    <string name="twitter_consumer_secret" translatable="false">7fowh8J5Hek50Z2BuzE6XXniDg0zaAv6kF099gyzrRpefvTpLP</string>
     <string name="bearer_token" translatable="false">AAAAAAAAAAAAAAAAAAAAAM0SHQEAAAAAB2DNEXLNY5FP4tIP9LDZUCTg0WY%3DJ9815jSZRp7zhi2iTNxkfCbXtern9ycZpbkXE5dpdU2IWtR8tZ</string>
     <string name="access_token" translatable="false">1300138449018724352-hl48VNXeU8tWB0au41YUZucDOLccMH</string>
     <string name="access_token_secret" translatable="false">SVdHfA0qYTE8mnwJyPmGULalRbtjaJdia0Pc6eWUP1GQG</string>

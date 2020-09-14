@@ -18,7 +18,7 @@ public class WorkmateViewModel extends ViewModel {
 
     }
 
-    public LiveData<ArrayList<Workmate>> getAllworkmates(){
+    public LiveData<ArrayList<Workmate>> getAllWorkmates(){
         return workmates;
     }
 }

@@ -240,15 +240,21 @@ public class MainActivity extends AppCompatActivity {
                     openLanguagesDialog();
                     break;
                 case R.id.nav_logout:
-                    FirebaseAuth.getInstance().signOut();
-                    Intent backToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
-                    startActivity(backToLogin);
+                    logOut();
                     Toasty.success(MainActivity.this, getString(R.string.logout_with_success), Toasty.LENGTH_SHORT).show();
                     break;
             }
             return false;
         }
     };
+
+    // ---------------------------- Log out --------------------------------------------------------
+    private void logOut() {
+        FirebaseAuth.getInstance().signOut();
+        Intent backToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
+        startActivity(backToLogin);
+    }
+
 
     // ---------------------------- Language selection ---------------------------------------------
     private void openLanguagesDialog() {

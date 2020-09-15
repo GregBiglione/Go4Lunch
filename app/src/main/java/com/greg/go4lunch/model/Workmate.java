@@ -7,10 +7,10 @@ public class Workmate {
     @Nullable private String picture;
     private String name;
     private String email;
-    private String pickedRestaurant;
+    @Nullable private String pickedRestaurant;
     private boolean isJoining;
 
-    public Workmate(String uid, @Nullable String picture, String name, String email, String pickedRestaurant, boolean isJoining) {
+    public Workmate(String uid, @Nullable String picture, String name, String email, @Nullable String pickedRestaurant, boolean isJoining) {
         this.uid = uid;
         this.picture = picture;
         this.name = name;
@@ -52,11 +52,12 @@ public class Workmate {
         this.email = email;
     }
 
+    @Nullable
     public String getPickedRestaurant() {
         return pickedRestaurant;
     }
 
-    public void setPickedRestaurant(String pickedRestaurant) {
+    public void setPickedRestaurant(@Nullable String pickedRestaurant) {
         this.pickedRestaurant = pickedRestaurant;
     }
 

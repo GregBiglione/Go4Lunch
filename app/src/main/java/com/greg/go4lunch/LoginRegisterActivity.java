@@ -39,6 +39,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.ui.home.HomeFragment;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -82,6 +83,10 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
     // ---------------------------- Email/password -------------------------------------------------
     @BindView(R.id.email_login_button) Button mEmailLoginButton;
+
+    // ----------------------------  Firestore -----------------------------------------------------
+    //FirebaseFirestore mFirebaseFirestore;
+    //private WorkmateHelper mWorkmateHelper;
 
     @BindView(R.id.language_button) Button mLanguageButton;
 
@@ -300,7 +305,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login_register);
     }
-//
+
     // ---------------------------- Click Twitter Login button -------------------------------------
     private void handleTwitterAccess(){
         mTwitterLoginButton = findViewById(R.id.twitter_login_button);

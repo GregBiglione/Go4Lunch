@@ -200,9 +200,7 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             String name = user.getDisplayName();
             String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
-
-            String testPhoto = "https://i.redd.it/wuaak297y4a21.jpg";
+            String photo = user.getPhotoUrl().toString();
 
             if (name != null){
                 mName.setText(name);
@@ -210,10 +208,10 @@ public class MainActivity extends AppCompatActivity {
             if (email != null){
                 mMail.setText(email);
             }
-            if (photoUrl == null){
+            if (photo != null){
 
                 Glide.with(this)
-                        .load(testPhoto)
+                        .load(photo)
                         .apply(RequestOptions.circleCropTransform())
                         .into(mPhoto);
             }

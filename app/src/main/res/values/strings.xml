@@ -50,6 +50,11 @@
     <string name="places">Places: </string>
     <string name="wait_message">Please wait</string>
     <string name="is_joining_text">Bradley hasn\'t decided yet</string>
+    <string name="restaurant_name">Restaurant name</string>
+    <string name="distance">Distance</string>
+    <string name="open_hour">Open until 7pm</string>
+    <string name="restaurant_address">1321, 2204 Lincoln Blvd A, Santa Monica, CA 90405, United States</string>
+    <string name="workmates_joining">(3)</string>
 
     <string-array name="country_array">
         <item>Français</item>

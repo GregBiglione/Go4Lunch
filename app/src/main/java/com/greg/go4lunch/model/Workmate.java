@@ -10,6 +10,8 @@ public class Workmate {
     @Nullable private String pickedRestaurant;
     private boolean isJoining;
 
+    public Workmate(){ }
+
     public Workmate(String uid, @Nullable String picture, String name, String email, @Nullable String pickedRestaurant, boolean isJoining) {
         this.uid = uid;
         this.picture = picture;

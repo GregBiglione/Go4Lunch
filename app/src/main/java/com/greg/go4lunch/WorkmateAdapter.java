@@ -17,11 +17,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class WorkmateAdapater extends RecyclerView.Adapter<WorkmateAdapater.ViewHolder> {
+public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
 
     private List<Workmate> mWorkmates;
 
-    public WorkmateAdapater(List<Workmate> mWorkmates) {
+    public WorkmateAdapter(List<Workmate> mWorkmates) {
         this.mWorkmates = mWorkmates;
     }
 

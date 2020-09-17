@@ -18,8 +18,8 @@ import butterknife.BindView;
 public class WorkmatesFragment extends Fragment {
 
     @BindView(R.id.workmates_recycler_view) RecyclerView mWorkmateRecyclerView;
-    private WorkmateAdapater mWorkmateAdapater;
-    private List<Workmate> mWorkmates;
+    private WorkmateAdapter mWorkmateAdapater;
+    List<Workmate> mWorkmates;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class WorkmatesFragment extends Fragment {
         mWorkmateRecyclerView = view.findViewById(R.id.workmates_recycler_view);
         mWorkmateRecyclerView.setHasFixedSize(true);
         mWorkmateRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        mWorkmateRecyclerView.setAdapter( new WorkmateAdapater(mWorkmates));
+        mWorkmateRecyclerView.setAdapter(new WorkmateAdapter(mWorkmates));
         return view;
     }
 

@@ -64,11 +64,11 @@ dependencies {
     // ---------------------------- Firebase  ----------------------------------------------------------------------------------------------------------------------
 
     // ---------------------------- FirebaseUI for Firebase Auth -----------------------------------
-    implementation 'com.google.firebase:firebase-auth:19.4.0'
+    //implementation 'com.google.firebase:firebase-auth:19.3.2'
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.firebaseui:firebase-ui-auth:6.3.0'
-    //implementation 'com.google.firebase:firebase-firestore:21.6.0'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
 
     // ---------------------------- Firebase Facebook ----------------------------------------------
     implementation 'com.facebook.android:facebook-android-sdk:4.42.0'

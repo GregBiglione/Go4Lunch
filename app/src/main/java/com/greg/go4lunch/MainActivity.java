@@ -8,12 +8,17 @@ import android.os.Bundle;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -157,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // ---------------------------- Get places ------------------------------------------------------------------------------------------------------
+    // ---------------------------- Get places ----------------------------------------------------------------------------------------------------------------
     public void initPlaces(){
         if (!Places.isInitialized()){
             Places.initialize(getApplicationContext(), API_KEY);
@@ -259,5 +264,4 @@ public class MainActivity extends AppCompatActivity {
         LanguagesDialog languagesDialog = new LanguagesDialog();
         languagesDialog.show(getSupportFragmentManager(),"languages dialog");
     }
-
 }

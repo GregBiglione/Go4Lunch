@@ -1,13 +1,19 @@
 package com.greg.go4lunch.model;
 
+import android.graphics.Bitmap;
+
 import androidx.annotation.Nullable;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
 public class Restaurant {
+    private String idRestaurant;
     private String name;
     private String distanceFromUser;
-    @Nullable String restaurantPicture;
+    private LatLng latLng;
+    Bitmap restaurantPicture;
     private String address;
     private int joiningNumber;
     private String openingHour;
@@ -18,19 +24,25 @@ public class Restaurant {
 
     public Restaurant(){}
 
-    public Restaurant(String name, String distanceFromUser, @Nullable String restaurantPicture,
-                      String address, int joiningNumber, String openingHour, float rating,
-                      String phoneNumber, String website, List<Workmate> joiningWorkmate) {
-        this.name = name;
-        this.distanceFromUser = distanceFromUser;
+
+    public String getIdRestaurant() {
+        return idRestaurant;
+    }
+
+    public void setIdRestaurant(String idRestaurant) {
+        this.idRestaurant = idRestaurant;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
+    public void setRestaurantPicture(Bitmap restaurantPicture) {
         this.restaurantPicture = restaurantPicture;
-        this.address = address;
-        this.joiningNumber = joiningNumber;
-        this.openingHour = openingHour;
-        this.rating = rating;
-        this.phoneNumber = phoneNumber;
-        this.website = website;
-        this.joiningWorkmate = joiningWorkmate;
     }
 
     public String getName() {
@@ -47,15 +59,6 @@ public class Restaurant {
 
     public void setDistanceFromUser(String distanceFromUser) {
         this.distanceFromUser = distanceFromUser;
-    }
-
-    @Nullable
-    public String getRestaurantPicture() {
-        return restaurantPicture;
-    }
-
-    public void setRestaurantPicture(@Nullable String restaurantPicture) {
-        this.restaurantPicture = restaurantPicture;
     }
 
     public String getAddress() {

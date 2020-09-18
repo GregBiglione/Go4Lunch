@@ -3,6 +3,7 @@ package com.greg.go4lunch.ui.home;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,12 +30,16 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPhotoResponse;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
@@ -41,8 +48,10 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.greg.go4lunch.R;
+import com.greg.go4lunch.model.Restaurant;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,12 +70,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 8;
     @BindView(R.id.gps) FloatingActionButton mGps;
     private PlacesClient mPlacesClient;
+    private HomeViewModel mHomeViewModel;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPlacesClient = Places.createClient(getContext());
+        mHomeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
     }
 
     @Override
@@ -95,7 +106,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         zoomOnLocation();
         noLandMarksFilter(googleMap);
         checkPermissions();
-        //getNearbyPlaces();
     }
 
     // ---------------------------- Location accuracy ----------------------------------------------
@@ -160,7 +170,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     //---------------------------- Places information type initialization -------------------------
     public void getNearbyPlaces(){
-        List<Place.Field> placeFields = Arrays.asList(Place.Field.NAME, Place.Field.TYPES, Place.Field.LAT_LNG);
+        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES, Place.Field.LAT_LNG);
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
 
         if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED){
@@ -179,9 +189,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                     placeLikelihood.getLikelihood()));
 
                             if (placeLikelihood.getPlace().getTypes().contains(Place.Type.RESTAURANT)){
+                                Restaurant r = new Restaurant();
+                                r.setIdRestaurant(placeLikelihood.getPlace().getId());
+                                r.setName(placeLikelihood.getPlace().getName());
+                                r.setAddress(placeLikelihood.getPlace().getAddress());
+                                r.setLatLng(placeLikelihood.getPlace().getLatLng());
+                                mHomeViewModel.restaurants.add(r);
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                                        .title(placeLikelihood.getPlace().getName()));
+                                        .title(r.getName() + "\n" + r.getAddress()));
+                                getRestaurantDetails(r);
                             }
 
                         }
@@ -202,25 +219,37 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    // ---------------------------- Places details -------------------------------------------------
-    //private void restaurantDetails(){
-    //    //final String placeId = "";
-    //    final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID,
-    //            Place.Field.NAME,
-    //            Place.Field.ADDRESS,
-    //            Place.Field.PHONE_NUMBER,
-    //            Place.Field.OPENING_HOURS,
-    //            Place.Field.RATING);
-//
-    //    final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
-    //    mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-    //        @Override
-    //        public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-    //            Place place = fetchPlaceResponse.getPlace();
-    //            Log.i(TAG, "Place found : ")
-    //        }
-    //    });
-//
-    //}
+    // ---------------------------- Get restaurants details ---------------------------------------------------------------------------------------------------
+    private void getRestaurantDetails(Restaurant r){
+        // ---------------------------- Define a place Id ----------------------------------------------
+        final String placeId = r.getIdRestaurant();
 
+        // ---------------------------- Specify a field to return ----------------------------------
+        final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
+                Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI, Place.Field.PHOTO_METADATAS);
+
+        // ---------------------------- Construct a request object, passing the place ID and fields array -----------------
+        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
+
+        mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+            @Override
+            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                Place place = fetchPlaceResponse.getPlace();
+                Log.i(TAG, "Place found: " + place.getName());
+                r.setOpeningHour(place.getOpeningHours().toString());
+                r.setRating(place.getRating().floatValue());
+                r.setPhoneNumber(place.getPhoneNumber());
+                r.setWebsite(place.getWebsiteUri().toString());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if(e instanceof ApiException){
+                    final ApiException apiException = (ApiException) e;
+                    Log.e(TAG, "Place not found: " + e.getMessage());
+                    final int statusCode = apiException.getStatusCode();
+                }
+            }
+        });
+    }
 }

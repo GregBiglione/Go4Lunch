@@ -240,11 +240,43 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 r.setRating(place.getRating().floatValue());
                 r.setPhoneNumber(place.getPhoneNumber());
                 r.setWebsite(place.getWebsiteUri().toString());
+                final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
+                if (metadata == null || metadata.isEmpty()) {
+                    Log.w(TAG, "No photo metadata.");
+                    return;
+                }
+                final PhotoMetadata photoMetadata = metadata.get(0);
+                getRestaurantPhoto(r, photoMetadata);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 if(e instanceof ApiException){
+                    final ApiException apiException = (ApiException) e;
+                    Log.e(TAG, "Place not found: " + e.getMessage());
+                    final int statusCode = apiException.getStatusCode();
+                }
+            }
+        });
+    }
+
+    // ---------------------------- Get restaurants photo --------------------------------------------------------------------------------------------------------
+    private void getRestaurantPhoto(Restaurant r, PhotoMetadata photoMetadata){
+
+        // ---------------------------- Create a FetchPhotoRequest -------------------------
+        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .build();
+        mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
+            @Override
+            public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                r.setRestaurantPicture(bitmap);
+                //imageView.setImageBitmap(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException) {
                     final ApiException apiException = (ApiException) e;
                     Log.e(TAG, "Place not found: " + e.getMessage());
                     final int statusCode = apiException.getStatusCode();

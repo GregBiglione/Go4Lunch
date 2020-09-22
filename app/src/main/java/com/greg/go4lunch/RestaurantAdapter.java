@@ -3,12 +3,14 @@ package com.greg.go4lunch;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.greg.go4lunch.model.Restaurant;
 
 import java.util.List;
@@ -18,10 +20,10 @@ import butterknife.ButterKnife;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
 
-    private List<Restaurant> mRestaurants;
+    private List<Restaurant> restaurants;
 
-    public RestaurantAdapter(List<Restaurant> mRestaurants) {
-        this.mRestaurants = mRestaurants;
+    public RestaurantAdapter(List<Restaurant> restaurants) {
+        this.restaurants = restaurants;
     }
 
     @NonNull
@@ -34,18 +36,23 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.itemView.setTag(mRestaurants.get(position));
-        holder.mRestaurantName.setText(mRestaurants.get(position).getName());
-        holder.mRestaurantDistance.setText(mRestaurants.get(position).getDistanceFromUser());
-        holder.mRestaurantAddress.setText(mRestaurants.get(position).getAddress());
-        holder.mJoiningWorkmates.setText(mRestaurants.get(position).getJoiningNumber());
-        holder.mRestaurantHour.setText(mRestaurants.get(position).getOpeningHour());
-        holder.mRestaurantRating.setRating(mRestaurants.get(position).getRating());
+       Restaurant r = restaurants.get(position);
+
+       holder.mRestaurantName.setText(r.getName());
+       holder.mRestaurantAddress.setText(r.getAddress());
+       holder.mRestaurantRating.setRating(r.getRating());
+       //holder.mRestaurantHour.setText(r.getOpeningHour());
+
+       Glide.with(holder.mRestaurantPicture)
+               .load(r.getRestaurantPicture())
+               .into(holder.mRestaurantPicture);
+
+       //TODO: Add on click listener with eventbus to go to detailed restaurant
     }
 
     @Override
     public int getItemCount() {
-        return mRestaurants.size();
+        return restaurants.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -56,6 +63,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         @BindView(R.id.workmates_joining) TextView mJoiningWorkmates;
         @BindView(R.id.restaurant_hour) TextView mRestaurantHour;
         @BindView(R.id.restaurant_rating) RatingBar mRestaurantRating;
+        @BindView(R.id.restaurant_picture) ImageView mRestaurantPicture;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

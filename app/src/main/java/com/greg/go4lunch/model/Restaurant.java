@@ -2,24 +2,22 @@ package com.greg.go4lunch.model;
 
 import android.graphics.Bitmap;
 
-import androidx.annotation.Nullable;
-
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
 public class Restaurant {
-    private String idRestaurant;
-    private String name;
-    private String distanceFromUser;
+    private String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
+    //private String name;
+    //private String distanceFromUser;
     private LatLng latLng;
     Bitmap restaurantPicture;
-    private String address;
+    //private String address;
     private int joiningNumber;
-    private String openingHour;
+    //private String openingHour;
     private float rating;
-    private String phoneNumber;
-    private String website;
+    //private String phoneNumber;
+    //private String website;
     private List<Workmate> joiningWorkmate;
 
     public Restaurant(){}
@@ -39,6 +37,10 @@ public class Restaurant {
 
     public void setLatLng(LatLng latLng) {
         this.latLng = latLng;
+    }
+
+    public Bitmap getRestaurantPicture() {
+        return restaurantPicture;
     }
 
     public void setRestaurantPicture(Bitmap restaurantPicture) {

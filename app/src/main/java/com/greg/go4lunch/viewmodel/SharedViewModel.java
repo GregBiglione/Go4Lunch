@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.home;
+package com.greg.go4lunch.viewmodel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,12 +9,12 @@ import com.greg.go4lunch.model.Restaurant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeViewModel extends ViewModel {
+public class SharedViewModel extends ViewModel {
 
     private MutableLiveData<String> mText;
-    List<Restaurant> restaurants = new ArrayList<>();
+    public List<Restaurant> restaurants = new ArrayList<>();
 
-    public HomeViewModel() {
+    public SharedViewModel() {
         mText = new MutableLiveData<>();
         mText.setValue("This is home fragment");
     }
@@ -22,4 +22,6 @@ public class HomeViewModel extends ViewModel {
     public LiveData<String> getText() {
         return mText;
     }
+
+    public List<Restaurant> getRestaurants(){ return restaurants; }
 }

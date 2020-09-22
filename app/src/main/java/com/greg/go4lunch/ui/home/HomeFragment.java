@@ -9,14 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,7 +32,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
@@ -49,9 +46,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
+import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -70,14 +67,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 8;
     @BindView(R.id.gps) FloatingActionButton mGps;
     private PlacesClient mPlacesClient;
-    private HomeViewModel mHomeViewModel;
+    private SharedViewModel mSharedViewModel;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPlacesClient = Places.createClient(getContext());
-        mHomeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
+        //mSharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -194,10 +192,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setName(placeLikelihood.getPlace().getName());
                                 r.setAddress(placeLikelihood.getPlace().getAddress());
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
-                                mHomeViewModel.restaurants.add(r);
+                                mSharedViewModel.restaurants.add(r);
+                                //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                                        .title(r.getName() + "\n" + r.getAddress()));
+                                       .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                       .title(r.getName() + "\n" + r.getAddress()));
                                 getRestaurantDetails(r);
                             }
 

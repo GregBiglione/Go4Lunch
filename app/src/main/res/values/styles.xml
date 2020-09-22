@@ -85,12 +85,18 @@
         <item name="android:layout_height">1dp</item>
         <item name="android:paddingLeft">0dp</item>
         <item name="android:paddingEnd">0dp</item>
-        <item name="android:background">@color/isJoiningColor</item>
+        <item name="android:background">@color/hr</item>
     </style>
     
-    <style name="three_items_style">
+    <style name="three_items_text_style">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
+    <style name="three_items_icon_style">
+        <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
 

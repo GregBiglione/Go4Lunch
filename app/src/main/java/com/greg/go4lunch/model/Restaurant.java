@@ -4,24 +4,20 @@ import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
+@Parcel
 public class Restaurant {
-    private String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
-    //private String name;
-    //private String distanceFromUser;
-    private LatLng latLng;
+    public String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
+    public LatLng latLng;
     Bitmap restaurantPicture;
-    //private String address;
-    private int joiningNumber;
-    //private String openingHour;
-    private float rating;
-    //private String phoneNumber;
-    //private String website;
-    private List<Workmate> joiningWorkmate;
+    public int joiningNumber;
+    public float rating;
+    //private List<Workmate> joiningWorkmate;
 
     public Restaurant(){}
-
 
     public String getIdRestaurant() {
         return idRestaurant;
@@ -111,11 +107,11 @@ public class Restaurant {
         this.website = website;
     }
 
-    public List<Workmate> getJoiningWorkmate() {
-        return joiningWorkmate;
-    }
-
-    public void setJoiningWorkmate(List<Workmate> joiningWorkmate) {
-        this.joiningWorkmate = joiningWorkmate;
-    }
+    //public List<Workmate> getJoiningWorkmate() {
+    //    return joiningWorkmate;
+    //}
+//
+    //public void setJoiningWorkmate(List<Workmate> joiningWorkmate) {
+    //    this.joiningWorkmate = joiningWorkmate;
+    //}
 }

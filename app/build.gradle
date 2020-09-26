@@ -86,4 +86,10 @@ dependencies {
     // ---------------------------- Circle image view ----------------------------------------------
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 
+    // ---------------------------- Butter Knife ---------------------------------------------------
+    implementation 'org.greenrobot:eventbus:3.2.0'
+
+    // ---------------------------- Parceler -------------------------------------------------------
+    implementation 'org.parceler:parceler-api:1.1.12'
+    annotationProcessor 'org.parceler:parceler:1.1.12'
 }

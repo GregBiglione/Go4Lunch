@@ -6,7 +6,7 @@
     android:paddingTop="10dp"
     android:paddingEnd="16dp"
     android:paddingBottom="10dp"
-    android:id="@+id/relative_layout_restaurant">
+    android:id="@+id/button_to_detailed_restaurant">
 
     <LinearLayout
         android:id="@+id/restaurant_main_linear_layout"
@@ -79,9 +79,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="?android:attr/ratingBarStyleSmall"
-                android:numStars="3"
-                android:stepSize="0.1"
-                android:isIndicator="true"/>
+                android:progressTint="@color/colorStar"
+                android:numStars="5"/>
 
         </LinearLayout>
 
@@ -90,13 +89,10 @@
 
     <ImageView
         android:id="@+id/restaurant_picture"
+        android:scaleType="centerCrop"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_alignParentEnd="true"/>
-
-    <View
-        style="@style/horizontalLine_style"/>
-
 
 </RelativeLayout>
 

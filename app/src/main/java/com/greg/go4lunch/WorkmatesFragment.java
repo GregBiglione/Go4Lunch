@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.greg.go4lunch.model.Workmate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -19,7 +20,7 @@ public class WorkmatesFragment extends Fragment {
 
     @BindView(R.id.workmates_recycler_view) RecyclerView mWorkmateRecyclerView;
     private WorkmateAdapter mWorkmateAdapater;
-    List<Workmate> mWorkmates;
+    List<Workmate> mWorkmates = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

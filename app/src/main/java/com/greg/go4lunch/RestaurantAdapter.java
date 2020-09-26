@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.greg.go4lunch.model.Restaurant;
+import com.greg.go4lunch.ui.event.DetailedRestaurantEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -47,7 +51,12 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                .load(r.getRestaurantPicture())
                .into(holder.mRestaurantPicture);
 
-       //TODO: Add on click listener with eventbus to go to detailed restaurant
+       holder.mButtonDetailedRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new DetailedRestaurantEvent(r));
+            }
+       });
     }
 
     @Override
@@ -64,6 +73,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         @BindView(R.id.restaurant_hour) TextView mRestaurantHour;
         @BindView(R.id.restaurant_rating) RatingBar mRestaurantRating;
         @BindView(R.id.restaurant_picture) ImageView mRestaurantPicture;
+        @BindView(R.id.button_to_detailed_restaurant) RelativeLayout mButtonDetailedRestaurant;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

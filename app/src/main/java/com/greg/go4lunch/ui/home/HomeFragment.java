@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -269,7 +271,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
                 Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                r.setRestaurantPicture(bitmap);
+                String picOfRestaurant = fetchPhotoResponse.getBitmap().toString();
+                r.setRestaurantPicture(BitMapToString(bitmap));
+                r.setRestaurantPicture(picOfRestaurant);
                 //imageView.setImageBitmap(bitmap);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -282,5 +286,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
+    }
+
+    // ---------------------------- Convert Bitmap to String to lighten the parcelable -------------
+    public String BitMapToString(Bitmap bitmap){
+        ByteArrayOutputStream byteArrayOutputStream = new  ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream);
+        byte [] b = byteArrayOutputStream.toByteArray();
+        String picture = Base64.encodeToString(b, Base64.DEFAULT);
+        return picture;
     }
 }

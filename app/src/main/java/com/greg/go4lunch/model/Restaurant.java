@@ -10,9 +10,8 @@ import java.util.List;
 
 @Parcel
 public class Restaurant {
-    public String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
+    public String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, restaurantPicture, website;
     public LatLng latLng;
-    Bitmap restaurantPicture;
     public int joiningNumber;
     public float rating;
     //private List<Workmate> joiningWorkmate;
@@ -35,11 +34,11 @@ public class Restaurant {
         this.latLng = latLng;
     }
 
-    public Bitmap getRestaurantPicture() {
+    public String getRestaurantPicture() {
         return restaurantPicture;
     }
 
-    public void setRestaurantPicture(Bitmap restaurantPicture) {
+    public void setRestaurantPicture(String restaurantPicture) {
         this.restaurantPicture = restaurantPicture;
     }
 

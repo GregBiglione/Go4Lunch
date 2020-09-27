@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:id="@+id/orange_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             style="@style/orange_layout_style">
@@ -32,15 +32,15 @@
                     android:text="@string/restaurant_name"
                     style="@style/detailed_name"/>
 
+
                 <RatingBar
                     android:id="@+id/detailed_restaurant_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="?android:attr/ratingBarStyleSmall"
-                    android:numStars="3"
-                    android:stepSize="0.1"
-                    android:isIndicator="true"
-                    android:layout_gravity="bottom"
+                    android:progressTint="@color/colorStar"
+                    android:numStars="5"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginStart="10dp"/>
             </LinearLayout>
 
@@ -61,6 +61,7 @@
             android:padding="15dp">
 
             <LinearLayout
+                android:id="@+id/call_Layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"

@@ -86,7 +86,7 @@
         <item name="android:textColorHint">@android:color/white</item>
     </style>
 
-    <string name="title_activity_detailed_restaurant" translatable="false">DetailedRestaurant</string>
+    <string name="title_activity_detailed_restaurant" translatable="false"></string>
     <string name="large_text" translatable="false">
         "Material is the metaphor.\n\n"
 
@@ -177,8 +177,8 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings" translatable="false">Settings</string>
-    <string name="detailed_call">Call</string>
-    <string name="detailed_like">Like</string>
-    <string name="detailed_website">website</string>
+    <string name="detailed_call" translatable="false">Call</string>
+    <string name="detailed_like" translatable="false">Like</string>
+    <string name="detailed_website" translatable="false">website</string>
 
 </resources>

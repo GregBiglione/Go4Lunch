@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
+import com.greg.go4lunch.model.Workmate;
 
 import org.parceler.Parcels;
 
@@ -39,6 +40,10 @@ public class DetailedRestaurant extends AppCompatActivity {
     @BindView(R.id.detailed_restaurant_rating) RatingBar mDetailedRating;
     @BindView(R.id.detailed_restaurant_address) TextView mDetailedAddress;
 
+    @BindView(R.id.fab) FloatingActionButton mPickButton;
+    boolean isJoiningRestaurant;
+    private Workmate mWorkmate;
+
     @BindView(R.id.call_Layout) LinearLayout mCallLyt;
     public static final int CALL_REQUEST_CODE = 218;
 
@@ -52,16 +57,21 @@ public class DetailedRestaurant extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //FloatingActionButton fab = findViewById(R.id.fab);
+        //fab.setOnClickListener(new View.OnClickListener() {
+        //    @Override
+        //    public void onClick(View view) {
+        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+        //                .setAction("Action", null).show();
+        //        clickOnJoin();
+        //    }
+        //});
 
         recoverIntent();
+
+        defaultPickIcon();
+        clickOnJoin();
+
         clickOnCall();
         clickOnWebsite();
     }
@@ -85,6 +95,35 @@ public class DetailedRestaurant extends AppCompatActivity {
         mDetailedAddress.setText(restaurantAddress);
         //String restaurantPhone = restaurant.getPhoneNumber();
         //Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("Phone: " + restaurantPhone));
+
+    }
+
+    // ---------------------------- Click on join button --------------------------------------------------------------------------------------------------
+    private void defaultPickIcon(){
+        if (!isJoiningRestaurant){
+            mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
+        }
+        else{
+            mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
+        }
+    }
+
+    private void clickOnJoin() {
+        mPickButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isJoiningRestaurant){
+                    mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
+                    isJoiningRestaurant = true;
+                    //TODO change restaurant marker color to green for this restaurant
+                }
+                else{
+                    mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
+                    isJoiningRestaurant = false;
+                    //TODO change restaurant marker color to orange for this restaurant
+                }
+            }
+        });
     }
 
     // ---------------------------- Call function --------------------------------------------------------------------------------------------------

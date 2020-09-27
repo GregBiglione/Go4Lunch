@@ -1,10 +1,7 @@
 package com.greg.go4lunch.ui;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,8 +12,6 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -24,10 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.greg.go4lunch.MainActivity;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
-import com.greg.go4lunch.ui.home.HomeFragment;
 
 import org.parceler.Parcels;
 
@@ -37,7 +30,6 @@ import es.dmoral.toasty.Toasty;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CALL_PHONE;
 
 public class DetailedRestaurant extends AppCompatActivity {
@@ -49,6 +41,8 @@ public class DetailedRestaurant extends AppCompatActivity {
 
     @BindView(R.id.call_Layout) LinearLayout mCallLyt;
     public static final int CALL_REQUEST_CODE = 218;
+
+    @BindView(R.id.website_Layout) LinearLayout mWebsiteLyt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +63,7 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         recoverIntent();
         clickOnCall();
+        clickOnWebsite();
     }
 
     public void recoverIntent(){
@@ -88,8 +83,8 @@ public class DetailedRestaurant extends AppCompatActivity {
         mDetailedRating.setRating(restaurantRating);
         String restaurantAddress = restaurant.getAddress();
         mDetailedAddress.setText(restaurantAddress);
-        String restaurantPhone = restaurant.getPhoneNumber();
-        Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("Phone: " + restaurantPhone));
+        //String restaurantPhone = restaurant.getPhoneNumber();
+        //Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("Phone: " + restaurantPhone));
     }
 
     // ---------------------------- Call function --------------------------------------------------------------------------------------------------
@@ -118,9 +113,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
         String phoneNumber = "tel:" + restaurant.getPhoneNumber();
         if (EasyPermissions.hasPermissions(this, perm)){
-            Toasty.success(this, "Has permission", Toasty.LENGTH_SHORT).show();
             Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
-            callIntent.setData(Uri.parse(phoneNumber));
             startActivity(callIntent);
         }
         else {
@@ -128,5 +121,23 @@ public class DetailedRestaurant extends AppCompatActivity {
                     CALL_REQUEST_CODE, perm);
             Toasty.warning(this, "Request permission", Toasty.LENGTH_SHORT).show();
         }
+    }
+
+    // ---------------------------- Go to website function -----------------------------------------------------------------------------------------------
+    private void clickOnWebsite(){
+        mWebsiteLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToWebsite();
+            }
+        });
+    }
+
+    private void goToWebsite(){
+        Intent i = getIntent();
+        Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+        String website = restaurant.getWebsite();
+        Intent websiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
+        startActivity(websiteIntent);
     }
 }

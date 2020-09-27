@@ -99,5 +99,10 @@
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
 
+    <style name="login_activity_bkg">
+        <item name="android:background">@drawable/dinner_dark</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
 
 </resources>

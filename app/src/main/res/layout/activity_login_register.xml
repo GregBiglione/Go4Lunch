@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dinner_dark"
-    tools:context=".LoginRegisterActivity">
+    tools:context=".LoginRegisterActivity"
+    style="@style/login_activity_bkg">
 
     <LinearLayout
         android:orientation="vertical"

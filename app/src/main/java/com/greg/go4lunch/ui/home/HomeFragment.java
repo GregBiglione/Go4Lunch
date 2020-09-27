@@ -270,9 +270,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
             @Override
             public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
-                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                //Bitmap bitmap = fetchPhotoResponse.getBitmap();
                 String picOfRestaurant = fetchPhotoResponse.getBitmap().toString();
-                r.setRestaurantPicture(BitMapToString(bitmap));
+                //r.setRestaurantPicture(BitMapToString(bitmap));
                 r.setRestaurantPicture(picOfRestaurant);
                 //imageView.setImageBitmap(bitmap);
             }

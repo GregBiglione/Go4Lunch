@@ -108,11 +108,13 @@ public class DetailedRestaurant extends AppCompatActivity {
         }
     }
 
-    private void clickOnJoin() {
+    public void clickOnJoin() {
+        Workmate workmate = new Workmate();
+        String restaurantName = workmate.getPickedRestaurant();
         mPickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!isJoiningRestaurant){
+                if (restaurantName == null){
                     mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
                     isJoiningRestaurant = true;
                     //TODO change restaurant marker color to green for this restaurant

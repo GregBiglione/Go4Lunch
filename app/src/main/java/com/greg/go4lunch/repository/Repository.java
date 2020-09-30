@@ -13,7 +13,7 @@ public class Repository {
 
     public static Repository getInstance(){
         if (instance == null){
-            new Repository();
+            instance = new Repository();
         }
         return instance;
     }

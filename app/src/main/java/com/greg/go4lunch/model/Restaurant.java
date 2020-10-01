@@ -3,6 +3,7 @@ package com.greg.go4lunch.model;
 import android.graphics.Bitmap;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 
 import org.parceler.Parcel;
 
@@ -10,7 +11,8 @@ import java.util.List;
 
 @Parcel
 public class Restaurant {
-    public String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, restaurantPicture, website;
+    public String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
+    public PhotoMetadata restaurantPicture;
     public LatLng latLng;
     public int joiningNumber;
     public float rating;
@@ -24,22 +26,6 @@ public class Restaurant {
 
     public void setIdRestaurant(String idRestaurant) {
         this.idRestaurant = idRestaurant;
-    }
-
-    public LatLng getLatLng() {
-        return latLng;
-    }
-
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
-    }
-
-    public String getRestaurantPicture() {
-        return restaurantPicture;
-    }
-
-    public void setRestaurantPicture(String restaurantPicture) {
-        this.restaurantPicture = restaurantPicture;
     }
 
     public String getName() {
@@ -66,28 +52,12 @@ public class Restaurant {
         this.address = address;
     }
 
-    public int getJoiningNumber() {
-        return joiningNumber;
-    }
-
-    public void setJoiningNumber(int joiningNumber) {
-        this.joiningNumber = joiningNumber;
-    }
-
     public String getOpeningHour() {
         return openingHour;
     }
 
     public void setOpeningHour(String openingHour) {
         this.openingHour = openingHour;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
     }
 
     public String getPhoneNumber() {
@@ -106,11 +76,35 @@ public class Restaurant {
         this.website = website;
     }
 
-    //public List<Workmate> getJoiningWorkmate() {
-    //    return joiningWorkmate;
-    //}
-//
-    //public void setJoiningWorkmate(List<Workmate> joiningWorkmate) {
-    //    this.joiningWorkmate = joiningWorkmate;
-    //}
+    public PhotoMetadata getRestaurantPicture() {
+        return restaurantPicture;
+    }
+
+    public void setRestaurantPicture(PhotoMetadata restaurantPicture) {
+        this.restaurantPicture = restaurantPicture;
+    }
+
+    public LatLng getLatLng() {
+        return latLng;
+    }
+
+    public void setLatLng(LatLng latLng) {
+        this.latLng = latLng;
+    }
+
+    public int getJoiningNumber() {
+        return joiningNumber;
+    }
+
+    public void setJoiningNumber(int joiningNumber) {
+        this.joiningNumber = joiningNumber;
+    }
+
+    public float getRating() {
+        return rating;
+    }
+
+    public void setRating(float rating) {
+        this.rating = rating;
+    }
 }

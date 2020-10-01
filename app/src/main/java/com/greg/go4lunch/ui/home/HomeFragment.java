@@ -3,9 +3,8 @@ package com.greg.go4lunch.ui.home;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
+
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,8 +35,6 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FetchPhotoRequest;
-import com.google.android.libraries.places.api.net.FetchPhotoResponse;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
@@ -49,7 +46,6 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,7 +72,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mPlacesClient = Places.createClient(getContext());
-        //mSharedViewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
         mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
@@ -247,7 +242,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     return;
                 }
                 final PhotoMetadata photoMetadata = metadata.get(0);
-                getRestaurantPhoto(r, photoMetadata);
+                r.setRestaurantPicture(photoMetadata);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -259,41 +254,5 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-    }
-
-    // ---------------------------- Get restaurants photo --------------------------------------------------------------------------------------------------------
-    private void getRestaurantPhoto(Restaurant r, PhotoMetadata photoMetadata){
-
-        // ---------------------------- Create a FetchPhotoRequest -------------------------
-        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                .build();
-        mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
-            @Override
-            public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
-                //Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                String picOfRestaurant = fetchPhotoResponse.getBitmap().toString();
-                //r.setRestaurantPicture(BitMapToString(bitmap));
-                r.setRestaurantPicture(picOfRestaurant);
-                //imageView.setImageBitmap(bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ApiException) {
-                    final ApiException apiException = (ApiException) e;
-                    Log.e(TAG, "Place not found: " + e.getMessage());
-                    final int statusCode = apiException.getStatusCode();
-                }
-            }
-        });
-    }
-
-    // ---------------------------- Convert Bitmap to String to lighten the parcelable -------------
-    public String BitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream byteArrayOutputStream = new  ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, byteArrayOutputStream);
-        byte [] b = byteArrayOutputStream.toByteArray();
-        String picture = Base64.encodeToString(b, Base64.DEFAULT);
-        return picture;
     }
 }

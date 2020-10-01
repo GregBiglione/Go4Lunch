@@ -21,9 +21,9 @@ public class WorkmateHelper {
         return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
     }
 
-    // ---------------------------- Get workmate ---------------------------------------------------
-    public static Task<DocumentSnapshot> getWorkmate(String uid){
-        return WorkmateHelper.getWorkmatesCollection().document(uid).get();
+    // ---------------------------- Get workmates --------------------------------------------------
+    public static Task<DocumentSnapshot> getAllWorkmates(){
+        return WorkmateHelper.getWorkmatesCollection().document().get();
     }
 
     // ---------------------------- Update PickedRestaurant ----------------------------------------
@@ -35,9 +35,4 @@ public class WorkmateHelper {
     public static Task<Void> upDateIsJoining(String uid, boolean isJoining){
         return WorkmateHelper.getWorkmatesCollection().document(uid).update("isJoining", isJoining);
     }
-
-    // ---------------------------- Delete workmate ------------------------------------------------
-    //public static Task<Void> deleteWorkmate(String uid){
-    //    return WorkmateHelper.getWorkmatesCollection().document(uid).delete();
-    //}
 }

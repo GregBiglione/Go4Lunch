@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.libraries.places.api.Places;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.ui.DetailedRestaurant;
@@ -47,7 +48,7 @@ public class ListFragment extends Fragment {
     private void initList() {
         //restaurants = mSharedViewModel.restaurants;
         restaurants = mSharedViewModel.getRestaurants();
-        mRestaurantRecyclerView.setAdapter(new RestaurantAdapter(restaurants));
+        mRestaurantRecyclerView.setAdapter(new RestaurantAdapter(restaurants, Places.createClient(getContext()), getContext()));
     }
 
     // ---------------------------- Go to detailed restaurant --------------------------------------

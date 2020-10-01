@@ -2,10 +2,19 @@ package com.greg.go4lunch.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPhotoResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -57,16 +66,6 @@ public class DetailedRestaurant extends AppCompatActivity {
         setSupportActionBar(toolbar);
         ButterKnife.bind(this);
 
-        //FloatingActionButton fab = findViewById(R.id.fab);
-        //fab.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View view) {
-        //        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        //                .setAction("Action", null).show();
-        //        clickOnJoin();
-        //    }
-        //});
-
         recoverIntent();
 
         defaultPickIcon();
@@ -80,22 +79,13 @@ public class DetailedRestaurant extends AppCompatActivity {
         Intent i = getIntent();
         Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
 
-        //Bitmap picture = restaurant.getRestaurantPicture();
-        //mDetailedPicture.setImageBitmap(picture);
-        //String picture = restaurant.getRestaurantPicture();
-        //Glide.with(this)
-        //        .load(picture)
-        //        .into(mDetailedPicture);
-
         String restaurantName = restaurant.getName();
         mDetailedName.setText(restaurantName);
         float restaurantRating = restaurant.getRating();
         mDetailedRating.setRating(restaurantRating);
         String restaurantAddress = restaurant.getAddress();
         mDetailedAddress.setText(restaurantAddress);
-        //String restaurantPhone = restaurant.getPhoneNumber();
-        //Intent callIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("Phone: " + restaurantPhone));
-
+        getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
     }
 
     // ---------------------------- Click on join button --------------------------------------------------------------------------------------------------
@@ -123,6 +113,31 @@ public class DetailedRestaurant extends AppCompatActivity {
                     mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
                     isJoiningRestaurant = false;
                     //TODO change restaurant marker color to orange for this restaurant
+                }
+            }
+        });
+    }
+
+    private void getRestaurantPhoto(ImageView v, PhotoMetadata photoMetadata){
+
+        // ---------------------------- Create a FetchPhotoRequest -------------------------
+        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .build();
+        PlacesClient mPlacesClient = Places.createClient(this);
+        mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
+            @Override
+            public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                Glide.with(DetailedRestaurant.this)
+                        .load(bitmap)
+                        .into(v);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException) {
+                    final ApiException apiException = (ApiException) e;
+                    final int statusCode = apiException.getStatusCode();
                 }
             }
         });

@@ -1,5 +1,8 @@
 package com.greg.go4lunch;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
+import com.google.android.libraries.places.api.net.FetchPhotoRequest;
+import com.google.android.libraries.places.api.net.FetchPhotoResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.ui.event.DetailedRestaurantEvent;
 
@@ -25,9 +35,13 @@ import butterknife.ButterKnife;
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
 
     private List<Restaurant> restaurants;
+    private PlacesClient mPlacesClient;
+    private Context c;
 
-    public RestaurantAdapter(List<Restaurant> restaurants) {
+    public RestaurantAdapter(List<Restaurant> restaurants, PlacesClient mPlacesClient, Context c) {
         this.restaurants = restaurants;
+        this.mPlacesClient = mPlacesClient;
+        this.c = c;
     }
 
     @NonNull
@@ -45,12 +59,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
        holder.mRestaurantName.setText(r.getName());
        holder.mRestaurantAddress.setText(r.getAddress());
        holder.mRestaurantRating.setRating(r.getRating());
-       //holder.mRestaurantHour.setText(r.getOpeningHour());
-
-       Glide.with(holder.mRestaurantPicture)
-               .load(r.getRestaurantPicture())
-               .into(holder.mRestaurantPicture);
-
+       getRestaurantPhoto(holder.mRestaurantPicture, r.getRestaurantPicture());
        holder.mButtonDetailedRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,5 +88,30 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    // ---------------------------- Get restaurants photo --------------------------------------------------------------------------------------------------------
+    private void getRestaurantPhoto(ImageView v, PhotoMetadata photoMetadata){
+
+        // ---------------------------- Create a FetchPhotoRequest -------------------------
+        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .build();
+        mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
+            @Override
+            public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                Glide.with(c)
+                        .load(bitmap)
+                        .into(v);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException) {
+                    final ApiException apiException = (ApiException) e;
+                    final int statusCode = apiException.getStatusCode();
+                }
+            }
+        });
     }
 }

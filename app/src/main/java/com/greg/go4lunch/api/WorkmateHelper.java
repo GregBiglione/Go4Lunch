@@ -21,9 +21,14 @@ public class WorkmateHelper {
         return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
     }
 
-    // ---------------------------- Get workmates --------------------------------------------------
+    // ---------------------------- Get all workmates ----------------------------------------------
     public static Task<DocumentSnapshot> getAllWorkmates(){
         return WorkmateHelper.getWorkmatesCollection().document().get();
+    }
+
+    // ---------------------------- Get current workmate -------------------------------------------
+    public static Task<DocumentSnapshot> getWorkmate(String uid){
+        return WorkmateHelper.getWorkmatesCollection().document(uid).get();
     }
 
     // ---------------------------- Update PickedRestaurant ----------------------------------------

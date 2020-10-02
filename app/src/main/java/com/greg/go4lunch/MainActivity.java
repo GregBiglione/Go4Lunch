@@ -39,6 +39,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.ui.home.HomeFragment;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -50,6 +51,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -201,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
         mMail = headerView.findViewById(R.id.user_mail);
         mPhoto = headerView.findViewById(R.id.user_photo);
 
-
         if (user != null) {
+            String uid = user.getUid();
             String name = user.getDisplayName();
             String email = user.getEmail();
             String photo = user.getPhotoUrl().toString();
@@ -220,10 +222,21 @@ public class MainActivity extends AppCompatActivity {
                         .apply(RequestOptions.circleCropTransform())
                         .into(mPhoto);
             }
+
+            // ---------------------------- Create workmate in Firestore ---------------------------
+            WorkmateHelper.createWorkmate(uid, photo, name, email, null, false);
         }
-
-
     }
+
+    // ---------------------------- Error handler --------------------------------------------------
+    //protected OnFailureListener onFailureListener(){
+    //    return new OnFailureListener() {
+    //        @Override
+    //        public void onFailure(@NonNull Exception e) {
+    //            Toasty.error(getApplicationContext(), getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show();
+    //        }
+    //    };
+    //}
 
     // ---------------------------- Lateral navigation menu ----------------------------------------
     public void navigationViewMenu(){

@@ -8,17 +8,17 @@ public class Workmate {
     private String name;
     private String email;
     @Nullable private String pickedRestaurant;
-    private boolean isJoining;
+    private boolean joining;
 
     public Workmate(){ }
 
-    public Workmate(String uid, @Nullable String picture, String name, String email, @Nullable String pickedRestaurant, boolean isJoining) {
+    public Workmate(String uid, @Nullable String picture, String name, String email, @Nullable String pickedRestaurant, boolean joining) {
         this.uid = uid;
         this.picture = picture;
         this.name = name;
         this.email = email;
         this.pickedRestaurant = pickedRestaurant;
-        this.isJoining = isJoining;
+        this.joining = joining;
     }
 
     // --- Getters ---
@@ -29,7 +29,7 @@ public class Workmate {
     public String getEmail() { return email; }
     @Nullable
     public String getPickedRestaurant() { return pickedRestaurant; }
-    public boolean isJoining() { return isJoining; }
+    public boolean joining() { return joining; }
 
     // --- Setters ---
     public void setUid(String uid) { this.uid = uid; }

@@ -16,8 +16,8 @@ public class WorkmateHelper {
     }
 
     // ---------------------------- Create workmate ------------------------------------------------
-    public static Task<Void> createWorkmate(String uid, String picture, String name, String email, String pickedRestaurant, boolean isJoining){
-        Workmate workmateToCreate = new Workmate(uid, picture, name, email, pickedRestaurant, isJoining);
+    public static Task<Void> createWorkmate(String uid, String picture, String name, String email, String pickedRestaurant, boolean joining){
+        Workmate workmateToCreate = new Workmate(uid, picture, name, email, pickedRestaurant, joining);
         return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
     }
 
@@ -37,7 +37,7 @@ public class WorkmateHelper {
     }
 
     // ---------------------------- Update isJoining -----------------------------------------------
-    public static Task<Void> upDateIsJoining(String uid, boolean isJoining){
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("isJoining", isJoining);
+    public static Task<Void> upDateIsJoining(String uid, boolean joining){
+        return WorkmateHelper.getWorkmatesCollection().document(uid).update("joining", joining);
     }
 }

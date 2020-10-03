@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.greg.go4lunch.R;
+import com.greg.go4lunch.RestaurantAdapter;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
@@ -108,12 +109,14 @@ public class DetailedRestaurant extends AppCompatActivity {
                     mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
                     isJoiningRestaurant = true;
                     updateIsJoining();
+                    restaurantIsPicked();
                     //TODO change restaurant marker color to green for this restaurant
                 }
                 else{
                     mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
                     isJoiningRestaurant = false;
                     updateIsNotJoining();
+                    restaurantNotPicked();
                     //TODO change restaurant marker color to orange for this restaurant
                 }
             }
@@ -211,6 +214,24 @@ public class DetailedRestaurant extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
             WorkmateHelper.upDateIsJoining(user.getUid(), false);
+        }
+    }
+
+    // ---------------------------- Update picked restaurant ----------------------------------------------------------------------------------------------
+    private void restaurantIsPicked(){
+        Intent i = getIntent();
+        Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+        String namePickedRestaurant = restaurant.getName();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            WorkmateHelper.upDatePickedRestaurant(user.getUid(), namePickedRestaurant);
+        }
+    }
+
+    private void restaurantNotPicked(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            WorkmateHelper.upDatePickedRestaurant(user.getUid(), null);
         }
     }
 }

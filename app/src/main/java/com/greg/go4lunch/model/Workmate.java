@@ -21,53 +21,21 @@ public class Workmate {
         this.isJoining = isJoining;
     }
 
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
-
+    // --- Getters ---
+    public String getUid() { return uid; }
     @Nullable
-    public String getPicture() {
-        return picture;
-    }
-
-    public void setPicture(@Nullable String picture) {
-        this.picture = picture;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
+    public String getPicture() { return picture; }
+    public String getName() { return name; }
+    public String getEmail() { return email; }
     @Nullable
-    public String getPickedRestaurant() {
-        return pickedRestaurant;
-    }
+    public String getPickedRestaurant() { return pickedRestaurant; }
+    public boolean isJoining() { return isJoining; }
 
-    public void setPickedRestaurant(@Nullable String pickedRestaurant) {
-        this.pickedRestaurant = pickedRestaurant;
-    }
-
-    public boolean isJoining() {
-        return isJoining;
-    }
-
-    public void setJoining(boolean joining) {
-        isJoining = joining;
-    }
+    // --- Setters ---
+    public void setUid(String uid) { this.uid = uid; }
+    public void setPicture(@Nullable String picture) { this.picture = picture; }
+    public void setName(String name) { this.name = name; }
+    public void setEmail(String email) { this.email = email; }
+    public void setPickedRestaurant(@Nullable String pickedRestaurant) { this.pickedRestaurant = pickedRestaurant; }
+    public void setIsJoining(boolean isJoining) { isJoining = isJoining; }
 }

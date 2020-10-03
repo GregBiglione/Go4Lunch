@@ -30,6 +30,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.greg.go4lunch.R;
+import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 
@@ -100,19 +101,19 @@ public class DetailedRestaurant extends AppCompatActivity {
     }
 
     public void clickOnJoin() {
-        Workmate workmate = new Workmate();
-        String restaurantName = workmate.getPickedRestaurant();
         mPickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (restaurantName == null){
+                if (!isJoiningRestaurant){
                     mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
                     isJoiningRestaurant = true;
+                    updateIsJoining();
                     //TODO change restaurant marker color to green for this restaurant
                 }
                 else{
                     mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
                     isJoiningRestaurant = false;
+                    updateIsNotJoining();
                     //TODO change restaurant marker color to orange for this restaurant
                 }
             }
@@ -198,8 +199,18 @@ public class DetailedRestaurant extends AppCompatActivity {
         startActivity(websiteIntent);
     }
 
-    // ---------------------------- Update picked restaurant ----------------------------------------------------------------------------------------------
-    protected FirebaseUser getCurrentUser(){
-        return FirebaseAuth.getInstance().getCurrentUser();
+    // ---------------------------- Update workmate is joining ----------------------------------------------------------------------------------------------
+    private void updateIsJoining() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            WorkmateHelper.upDateIsJoining(user.getUid(), true);
+        }
+    }
+
+    private void updateIsNotJoining() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            WorkmateHelper.upDateIsJoining(user.getUid(), false);
+        }
     }
 }

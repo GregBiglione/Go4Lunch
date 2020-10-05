@@ -38,5 +38,5 @@ public class Workmate {
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setPickedRestaurant(@Nullable String pickedRestaurant) { this.pickedRestaurant = pickedRestaurant; }
-    public void setJoining(boolean joining) { joining = joining; }
+    public void setJoining(boolean joining) { this.joining = joining; }
 }

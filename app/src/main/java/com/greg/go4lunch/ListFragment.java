@@ -45,8 +45,8 @@ public class ListFragment extends Fragment {
         return view;
     }
 
+    // ---------------------------- Get all restaurants --------------------------------------------
     private void initList() {
-        //restaurants = mSharedViewModel.restaurants;
         restaurants = mSharedViewModel.getRestaurants();
         mRestaurantRecyclerView.setAdapter(new RestaurantAdapter(restaurants, Places.createClient(getContext()), getContext()));
     }
@@ -55,7 +55,6 @@ public class ListFragment extends Fragment {
     @Subscribe
     @AllowConcurrentEvents
     public void onDetailedRestaurant(DetailedRestaurantEvent event){
-
         try {
             Intent i = new Intent(getContext(), DetailedRestaurant.class);
             i.putExtra("RestaurantDetails", Parcels.wrap(event.restaurant));

@@ -29,6 +29,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -39,7 +40,9 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.home.HomeFragment;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -104,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         autocompleteSupportFragInit();
 
         currentLoggedUserInformation();
+        getUserFromFireStore();
 
         navigationViewMenu();
 
@@ -197,36 +201,56 @@ public class MainActivity extends AppCompatActivity {
     // ---------------------------- Get user information --------------------------------------------------------------------------------------------
     private void currentLoggedUserInformation(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        View headerView = navigationView.getHeaderView(0);
-        mName = headerView.findViewById(R.id.user_name);
-        mMail = headerView.findViewById(R.id.user_mail);
-        mPhoto = headerView.findViewById(R.id.user_photo);
 
-        if (user != null) {
+        if (user != null){
             String uid = user.getUid();
             String name = user.getDisplayName();
             String email = user.getEmail();
             String photo = user.getPhotoUrl().toString();
 
-            if (name != null){
-                mName.setText(name);
-            }
-            if (email != null){
-                mMail.setText(email);
-            }
-            if (photo != null){
-
-                Glide.with(this)
-                        .load(photo)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(mPhoto);
-            }
-
             // ---------------------------- Create workmate in Firestore ---------------------------
             WorkmateHelper.createWorkmate(uid, photo, name, email, null, false);
         }
     }
+
+    // ---------------------------- Get current user -------------------------------------------------------------------------------------------------
+    @Nullable
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
+    // --------- Get current user from firestore -----------------------------------------------------------------------------------------------------
+    private void getUserFromFireStore(){
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                if (currentWorkmate != null){
+                    String name = currentWorkmate.getName();
+                    String email = currentWorkmate.getEmail();
+                    String photo = currentWorkmate.getPicture();
+
+                    NavigationView navigationView = findViewById(R.id.nav_view);
+                    View headerView = navigationView.getHeaderView(0);
+                    mName = headerView.findViewById(R.id.user_name);
+                    mMail = headerView.findViewById(R.id.user_mail);
+                    mPhoto = headerView.findViewById(R.id.user_photo);
+
+                    if(name != null){
+                        mName.setText(name);
+                    }
+                    if (email != null){
+                        mMail.setText(email);
+                    }
+                    if (photo != null){
+                        Glide.with(MainActivity.this)
+                                .load(photo)
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(mPhoto);
+                    }
+                }
+            }
+        });
+    }
+
 
     // ---------------------------- Error handler --------------------------------------------------
     //protected OnFailureListener onFailureListener(){
@@ -270,7 +294,6 @@ public class MainActivity extends AppCompatActivity {
         Intent backToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
         startActivity(backToLogin);
     }
-
 
     // ---------------------------- Language selection ---------------------------------------------
     private void openLanguagesDialog() {

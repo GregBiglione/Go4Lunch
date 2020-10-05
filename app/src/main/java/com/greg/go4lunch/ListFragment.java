@@ -52,12 +52,6 @@ public class ListFragment extends Fragment {
     }
 
     // ---------------------------- Go to detailed restaurant --------------------------------------
-    //@Subscribe
-    //public void onDetailedRestaurant(DetailedRestaurantEvent event){
-    //    Intent i = new Intent(getContext(), DetailedRestaurant.class);
-    //    i.putExtra("RestaurantDetails", Parcels.wrap(event.restaurant));
-    //    startActivity(i);
-    //}
     @Subscribe
     @AllowConcurrentEvents
     public void onDetailedRestaurant(DetailedRestaurantEvent event){

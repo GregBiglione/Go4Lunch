@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,6 +30,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.RestaurantAdapter;
 import com.greg.go4lunch.api.WorkmateHelper;
@@ -76,6 +78,7 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         clickOnCall();
         clickOnWebsite();
+        //getFirestoreWorkmate();
     }
 
     public void recoverIntent(){

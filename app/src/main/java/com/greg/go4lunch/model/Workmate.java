@@ -10,6 +10,7 @@ public class Workmate {
     @Nullable private String pickedRestaurant;
     private boolean joining;
 
+    // --- Empty constructor for Firebase ---
     public Workmate(){ }
 
     public Workmate(String uid, @Nullable String picture, String name, String email, @Nullable String pickedRestaurant, boolean joining) {
@@ -37,5 +38,5 @@ public class Workmate {
     public void setName(String name) { this.name = name; }
     public void setEmail(String email) { this.email = email; }
     public void setPickedRestaurant(@Nullable String pickedRestaurant) { this.pickedRestaurant = pickedRestaurant; }
-    public void setIsJoining(boolean isJoining) { isJoining = isJoining; }
+    public void setJoining(boolean joining) { joining = joining; }
 }

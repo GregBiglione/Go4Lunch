@@ -1,13 +1,10 @@
 package com.greg.go4lunch.model;
 
-import android.graphics.Bitmap;
-
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 
 import org.parceler.Parcel;
 
-import java.util.List;
 
 @Parcel
 public class Restaurant {
@@ -20,91 +17,29 @@ public class Restaurant {
 
     public Restaurant(){}
 
-    public String getIdRestaurant() {
-        return idRestaurant;
-    }
+    // --- Getters ---
+    public String getIdRestaurant() { return idRestaurant; }
+    public String getName() { return name; }
+    public String getDistanceFromUser() { return distanceFromUser; }
+    public String getAddress() { return address; }
+    public String getOpeningHour() { return openingHour; }
+    public String getPhoneNumber() { return phoneNumber; }
+    public String getWebsite() { return website; }
+    public PhotoMetadata getRestaurantPicture() { return restaurantPicture; }
+    public LatLng getLatLng() { return latLng; }
+    public int getJoiningNumber() { return joiningNumber; }
+    public float getRating() { return rating; }
 
-    public void setIdRestaurant(String idRestaurant) {
-        this.idRestaurant = idRestaurant;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDistanceFromUser() {
-        return distanceFromUser;
-    }
-
-    public void setDistanceFromUser(String distanceFromUser) {
-        this.distanceFromUser = distanceFromUser;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getOpeningHour() {
-        return openingHour;
-    }
-
-    public void setOpeningHour(String openingHour) {
-        this.openingHour = openingHour;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public PhotoMetadata getRestaurantPicture() {
-        return restaurantPicture;
-    }
-
-    public void setRestaurantPicture(PhotoMetadata restaurantPicture) {
-        this.restaurantPicture = restaurantPicture;
-    }
-
-    public LatLng getLatLng() {
-        return latLng;
-    }
-
-    public void setLatLng(LatLng latLng) {
-        this.latLng = latLng;
-    }
-
-    public int getJoiningNumber() {
-        return joiningNumber;
-    }
-
-    public void setJoiningNumber(int joiningNumber) {
-        this.joiningNumber = joiningNumber;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
+    // --- Setters ---
+    public void setIdRestaurant(String idRestaurant) { this.idRestaurant = idRestaurant; }
+    public void setName(String name) { this.name = name; }
+    public void setDistanceFromUser(String distanceFromUser) { this.distanceFromUser = distanceFromUser; }
+    public void setAddress(String address) { this.address = address; }
+    public void setOpeningHour(String openingHour) { this.openingHour = openingHour; }
+    public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
+    public void setWebsite(String website) { this.website = website; }
+    public void setRestaurantPicture(PhotoMetadata restaurantPicture) { this.restaurantPicture = restaurantPicture; }
+    public void setLatLng(LatLng latLng) { this.latLng = latLng; }
+    public void setJoiningNumber(int joiningNumber) { this.joiningNumber = joiningNumber; }
+    public void setRating(float rating) { this.rating = rating; }
 }

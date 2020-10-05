@@ -50,7 +50,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         @BindView(R.id.workmates_photo)CircleImageView mCircleImageView;
-        @BindView(R.id.workmate_isJoining_message) TextView mMessageTextView;
+        @BindView(R.id.workmate_joining_message) TextView mMessageTextView;
 
 
         public ViewHolder(@NonNull View itemView) {

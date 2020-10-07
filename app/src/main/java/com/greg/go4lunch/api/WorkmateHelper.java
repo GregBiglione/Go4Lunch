@@ -4,15 +4,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Workmate;
 
 public class WorkmateHelper {
 
-    private static final String COLLECTION_NAME = "workmates";
+    private static final String WORKMATE_COLLECTION = "workmates";
+    private static final String LIKED_RESTAURANTS_COLLECTION = "likedRestaurants";
+
+    //-----------------------------------
+    //--- WORKMATES ---------------------
+    //-----------------------------------
 
     // ---------------------------- Collection reference -------------------------------------------
     public static CollectionReference getWorkmatesCollection(){
-        return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
+        return FirebaseFirestore.getInstance().collection(WORKMATE_COLLECTION);
     }
 
     // ---------------------------- Create workmate ------------------------------------------------
@@ -34,5 +40,23 @@ public class WorkmateHelper {
     // ---------------------------- Update isJoining -----------------------------------------------
     public static Task<Void> upDateIsJoining(String uid, boolean joining){
         return WorkmateHelper.getWorkmatesCollection().document(uid).update("joining", joining);
+    }
+
+    //-------------------------------------------
+    //--- LIKED RESTAURANTS ---------------------
+    //-------------------------------------------
+
+    public static CollectionReference getLikedRestaurantsCollection(){
+        return FirebaseFirestore.getInstance().collection(LIKED_RESTAURANTS_COLLECTION);
+    }
+
+    // ---------------------------- Create liked restaurant ----------------------------------------
+    public static Task<Void> CreateLikedRestaurant(String uid, String idRestaurant, boolean favorite){
+        LikedRestaurant likedRestaurant = new LikedRestaurant(uid, idRestaurant, favorite);
+        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).set(likedRestaurant);
+    }
+
+    public static Task<Void> upDateFavoriteRestaurant(String uid, String idRestaurant, boolean favorite){
+        return WorkmateHelper.getLikedRestaurantsCollection().document().update(uid, idRestaurant, favorite);
     }
 }

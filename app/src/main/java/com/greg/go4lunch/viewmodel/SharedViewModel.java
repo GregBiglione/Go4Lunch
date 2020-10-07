@@ -23,7 +23,8 @@ public class SharedViewModel extends ViewModel {
 
     public List<Restaurant> getRestaurants(){ return restaurants; }
 
-    public void init(Context context){
+    // ---------------------------- Get all workmates ----------------------------------------------
+    public void initAllWorkmates(Context context){
         if (workmates != null){
             return;
         }

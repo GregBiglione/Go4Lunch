@@ -18,6 +18,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -61,6 +62,11 @@ public class DetailedRestaurant extends AppCompatActivity {
     @BindView(R.id.call_Layout) LinearLayout mCallLyt;
     public static final int CALL_REQUEST_CODE = 218;
 
+    @BindView(R.id.like_Layout) LinearLayout mLikeLyt;
+    @BindView(R.id.like_image) ImageView mLikeStar;
+    @BindView(R.id.detailed_like) TextView mLikeText;
+    boolean isFavorite;
+
     @BindView(R.id.website_Layout) LinearLayout mWebsiteLyt;
 
     @Override
@@ -77,8 +83,8 @@ public class DetailedRestaurant extends AppCompatActivity {
         clickOnJoin();
 
         clickOnCall();
+        clickOnLike();
         clickOnWebsite();
-        //getFirestoreWorkmate();
     }
 
     public void recoverIntent(){
@@ -187,6 +193,58 @@ public class DetailedRestaurant extends AppCompatActivity {
         }
     }
 
+    // ---------------------------- Add favorite function -----------------------------------------------------------------------------------------------
+    public void clickOnLike(){
+        mLikeLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!isFavorite){
+                    //isFavorite = true;
+                    mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+                    mLikeText.setText(R.string.likedDetailedText);
+                    mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
+                    addFavorite();
+
+                }
+                else{
+                    //isFavorite = false;
+                    mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+                    mLikeText.setText(R.string.detailed_like);
+                    mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
+                    upDateFavorite();
+                }
+            }
+        });
+    }
+
+    private void addFavorite(){
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                if (currentWorkmate != null){
+                    String uid = currentWorkmate.getUid();
+
+                    Intent i = getIntent();
+                    Restaurant restaurantLiked = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+
+                    String idRestaurant = restaurantLiked.getIdRestaurant();
+
+                    // ------------ Create liked restaurant in Firestore ------------------
+                    WorkmateHelper.CreateLikedRestaurant(uid, idRestaurant, true);
+                    Toasty.success(getApplicationContext(), "Favorite restaurant created in Firestore after click on star button",
+                            Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void upDateFavorite(){
+        WorkmateHelper.upDateFavoriteRestaurant(null, null, false);
+        Toasty.warning(getApplicationContext(), "Favorite restaurant removed from Firestore after click on star button",
+                Toasty.LENGTH_SHORT).show();
+    }
+
     // ---------------------------- Go to website function -----------------------------------------------------------------------------------------------
     private void clickOnWebsite(){
         mWebsiteLyt.setOnClickListener(new View.OnClickListener() {
@@ -205,12 +263,25 @@ public class DetailedRestaurant extends AppCompatActivity {
         startActivity(websiteIntent);
     }
 
+    // ---------------------------- Get current user -------------------------------------------------------------------------------------------------
+    @Nullable
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
     // ---------------------------- Update workmate is joining ----------------------------------------------------------------------------------------------
     private void updateIsJoining() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            WorkmateHelper.upDateIsJoining(user.getUid(), true);
-        }
+        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        //if(user != null){
+        //    WorkmateHelper.upDateIsJoining(user.getUid(), true);
+        //}
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                if (currentWorkmate != null){
+                    WorkmateHelper.upDateIsJoining(currentWorkmate.getUid(), true);
+                }
+            }
+        });
     }
 
     private void updateIsNotJoining() {

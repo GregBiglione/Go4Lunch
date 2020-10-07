@@ -32,4 +32,10 @@
     <string name="places">Места: </string>
     <string name="wait_message">Пожалуйста, подождите</string>
     <string name="is_joining_text">Брэдли ещё не решил</string>
+
+    <string name="action_settings" translatable="false">Настройки</string>
+    <string name="detailed_call" translatable="false">Звоните</string>
+    <string name="detailed_like" translatable="false">люби́ть</string>
+    <string name="detailed_website" translatable="false">Веб-сайт</string>
+    <string name="likedDetailedText">ЛЮБИЛ</string>
 </resources>

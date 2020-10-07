@@ -25,7 +25,7 @@ public class WorkmatesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        mSharedViewModel.init(getContext());
+        mSharedViewModel.initAllWorkmates(getContext());
 
         View view = inflater.inflate(R.layout.fragment_workmates, container, false);
         mWorkmateRecyclerView = view.findViewById(R.id.workmates_recycler_view);

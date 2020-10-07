@@ -33,4 +33,10 @@
     <string name="places">Lieux: </string>
     <string name="wait_message">Patientez s\'il vous plaît</string>
     <string name="is_joining_text">Bradley n\'a pas encore décidé</string>
+
+    <string name="action_settings" translatable="false">Réglages</string>
+    <string name="detailed_call" translatable="false">Appeler</string>
+    <string name="detailed_like" translatable="false">Like</string>
+    <string name="detailed_website" translatable="false">Site web</string>
+    <string name="likedDetailedText">Liké</string>
 </resources>

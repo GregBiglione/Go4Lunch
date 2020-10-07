@@ -180,5 +180,6 @@
     <string name="detailed_call" translatable="false">Call</string>
     <string name="detailed_like" translatable="false">Like</string>
     <string name="detailed_website" translatable="false">website</string>
+    <string name="likedDetailedText">LIKED</string>
 
 </resources>

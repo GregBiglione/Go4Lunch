@@ -2,24 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
     android:paddingTop="10dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="10dp"
-    android:id="@+id/button_to_detailed_restaurant">
+    android:id="@+id/button_to_detailed_restaurant"
+    >
 
     <LinearLayout
         android:id="@+id/restaurant_main_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="65dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <LinearLayout
             android:id="@+id/restaurant_layout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            style="@style/horizontal_restaurant_item_layout">
 
             <TextView
                 android:id="@+id/restaurant_name"
@@ -34,14 +33,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/distance"
                 android:textAlignment="textEnd"/>
-
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/restaurant_layout_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            style="@style/horizontal_restaurant_item_layout">
 
             <TextView
                 android:id="@+id/restaurant_address"
@@ -66,7 +65,8 @@
             android:id="@+id/restaurant_layout_hour"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            style="@style/horizontal_restaurant_item_layout">
 
             <TextView
                 android:id="@+id/restaurant_hour"
@@ -80,19 +80,17 @@
                 android:layout_height="wrap_content"
                 style="?android:attr/ratingBarStyleSmall"
                 android:progressTint="@color/colorStar"
-                android:numStars="5"/>
-
+                android:numStars="5"
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
+        <View
+            style="@style/restaurant_horizontalLine_style"/>
     </LinearLayout>
-
 
     <ImageView
         android:id="@+id/restaurant_picture"
-        android:scaleType="centerCrop"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentEnd="true"/>
+        style="@style/image_restaurant_item"/>
 
 </RelativeLayout>
 

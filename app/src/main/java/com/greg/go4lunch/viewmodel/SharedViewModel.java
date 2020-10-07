@@ -6,9 +6,6 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.repository.Repository;
@@ -19,7 +16,8 @@ import java.util.List;
 public class SharedViewModel extends ViewModel {
 
     public List<Restaurant> restaurants = new ArrayList<>();
-    MutableLiveData<ArrayList<Workmate>> workmates;
+    private MutableLiveData<ArrayList<Workmate>> workmates;
+    //private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
 
     public List<Restaurant> getRestaurants(){ return restaurants; }
 
@@ -34,4 +32,14 @@ public class SharedViewModel extends ViewModel {
     public LiveData<ArrayList<Workmate>> getAllWorkmatesData(){
         return workmates;
     }
+
+    // ---------------------------- Get joining workmates ------------------------------------------
+    //public void initJoiningWorkmates(Context context){
+    //    if (joiningWorkmates != null){
+    //        return;
+    //    }
+    //    joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates();
+    //}
+//
+    //public LiveData<ArrayList<Workmate>> getJoiningWorkmatesData(){ return joiningWorkmates; }
 }

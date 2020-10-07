@@ -1,33 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/item_relative_Lyt"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/workmates_photo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="16dp"/>
-
     <LinearLayout
-        android:id="@+id/workmate_Lyt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginEnd="20dp"
-        android:layout_centerVertical="true">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/workmate_message"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:lines="1"
-            android:text="@string/is_joining_text"
-            style="@style/is_joining_style"/>
-    </LinearLayout>
+            android:orientation="horizontal">
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/workmates_photo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:id="@+id/workmate_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/is_joining_text"
+                style="@style/is_joining_style"/>
+
+        </LinearLayout>
+
+        <View
+           style="@style/workmate_horizontalLine_style"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

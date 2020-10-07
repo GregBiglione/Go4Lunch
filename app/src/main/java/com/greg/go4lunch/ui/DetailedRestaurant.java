@@ -21,8 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,11 +36,13 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.greg.go4lunch.JoiningWorkmatesAdapter;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.RestaurantAdapter;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
 
@@ -69,12 +75,19 @@ public class DetailedRestaurant extends AppCompatActivity {
 
     @BindView(R.id.website_Layout) LinearLayout mWebsiteLyt;
 
+    @BindView(R.id.joining_workmates_recycler) RecyclerView mJoiningWorkmatesRecyclerView;
+    private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
+    private SharedViewModel mSharedViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
+        //mSharedViewModel.initJoiningWorkmates(this);
         setContentView(R.layout.activity_detailed_restaurant);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
         recoverIntent();
@@ -85,6 +98,8 @@ public class DetailedRestaurant extends AppCompatActivity {
         clickOnCall();
         clickOnLike();
         clickOnWebsite();
+
+        //configureJoiningWorkmatesRecyclerView();
     }
 
     public void recoverIntent(){
@@ -307,5 +322,23 @@ public class DetailedRestaurant extends AppCompatActivity {
         if(user != null){
             WorkmateHelper.upDatePickedRestaurant(user.getUid(), null);
         }
+    }
+
+    // ---------------------------- Configure recyclerview ----------------------------------------------------------------------------------------------
+    //private void configureJoiningWorkmatesRecyclerView() {
+    //    mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);
+    //    mJoiningWorkmatesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+    //    mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(mSharedViewModel.getJoiningWorkmatesData().getValue());
+    //    mJoiningWorkmatesAdapter.notifyDataSetChanged();
+    //}
+
+    // ---------------------------- Back to restaurants list ----------------------------------------------------------------------------------------------
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home){
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

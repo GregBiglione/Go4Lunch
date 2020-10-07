@@ -60,6 +60,8 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/isJoiningColor</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:layout_marginStart">10dp</item>
     </style>
 
     <style name="orange_layout_style">
@@ -104,5 +106,31 @@
         <item name="android:scaleType">centerCrop</item>
     </style>
 
+    <style name="workmate_horizontalLine_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">76dp</item>
+        <item name="android:background">@color/hr</item>
+    </style>
+
+    <style name="restaurant_horizontalLine_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:background">@color/hr</item>
+    </style>
+
+    <style name="horizontal_restaurant_item_layout">
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">75dp</item>
+    </style>
+
+    <style name="image_restaurant_item">
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:layout_width">60dp</item>
+        <item name="android:layout_height">60dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_alignParentEnd">true</item>
+    </style>
 
 </resources>

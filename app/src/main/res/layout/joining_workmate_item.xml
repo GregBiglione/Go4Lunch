@@ -4,7 +4,7 @@
     android:layout_height="wrap_content">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/workmates_photo"
+        android:id="@+id/joining_workmates_photo"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -12,7 +12,7 @@
         android:layout_marginStart="16dp"/>
 
     <LinearLayout
-        android:id="@+id/workmate_Lyt"
+        android:id="@+id/joining_workmate_Lyt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
@@ -20,7 +20,7 @@
         android:layout_centerVertical="true">
 
         <TextView
-            android:id="@+id/workmate_message"
+            android:id="@+id/joining_workmate_message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"

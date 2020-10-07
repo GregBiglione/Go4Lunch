@@ -199,19 +199,19 @@ public class DetailedRestaurant extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!isFavorite){
-                    //isFavorite = true;
                     mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
                     mLikeText.setText(R.string.likedDetailedText);
                     mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
                     addFavorite();
+                    //isFavorite = true;
 
                 }
-                else{
-                    //isFavorite = false;
+                else {
                     mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
                     mLikeText.setText(R.string.detailed_like);
                     mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
                     upDateFavorite();
+                    //isFavorite = false;
                 }
             }
         });

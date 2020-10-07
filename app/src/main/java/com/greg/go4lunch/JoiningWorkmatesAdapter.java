@@ -17,41 +17,40 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
+public class JoiningWorkmatesAdapter extends RecyclerView.Adapter<JoiningWorkmatesAdapter.ViewHolder> {
 
-    private List<Workmate> mWorkmates;
+    private List<Workmate> mJoiningWorkmates;
 
-    public WorkmateAdapter(List<Workmate> mWorkmates) {
-        this.mWorkmates = mWorkmates;
+    public JoiningWorkmatesAdapter(List<Workmate> mJoiningWorkmates) {
+        this.mJoiningWorkmates = mJoiningWorkmates;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.workmate_item, parent,false);
+                .inflate(R.layout.joining_workmate_item, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.itemView.setTag(mWorkmates.get(position));
-        Glide.with(holder.mCircleImageView.getContext())
-                .load(mWorkmates.get(position).getPicture())
-                .into(holder.mCircleImageView);
-        holder.mMessageTextView.setText(mWorkmates.get(position).getName());
+        holder.itemView.setTag(mJoiningWorkmates.get(position));
+        Glide.with(holder.mJoiningCircleImageView.getContext())
+                .load(mJoiningWorkmates.get(position).getPicture())
+                .into(holder.mJoiningCircleImageView);
+        holder.mJoiningMessageTextView.setText(mJoiningWorkmates.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        return mWorkmates.size();
+        return mJoiningWorkmates.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.workmates_photo)CircleImageView mCircleImageView;
-        @BindView(R.id.workmate_message) TextView mMessageTextView;
-
+        @BindView(R.id.joining_workmates_photo) CircleImageView mJoiningCircleImageView;
+        @BindView(R.id.joining_workmate_message) TextView mJoiningMessageTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

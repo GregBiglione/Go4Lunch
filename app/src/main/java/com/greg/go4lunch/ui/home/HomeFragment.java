@@ -1,15 +1,21 @@
 package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -22,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -192,7 +199,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 mSharedViewModel.restaurants.add(r);
                                 //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
-                                       .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                       //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                        .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_restaurant_dark_orange_24dp))
                                        .title(r.getName() + "\n" + r.getAddress()));
                                 getRestaurantDetails(r);
                             }
@@ -255,4 +263,26 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    // ---------------------------- Custom marker ---------------------------------------------------------------------------------------------
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
+        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
+        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_restaurant_dark_orange_24dp);
+        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        background.draw(canvas);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+    //private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+    //    Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+    //    vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+    //    Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+    //    //bitmap.eraseColor(Color.GREEN);
+    //    Canvas canvas = new Canvas(bitmap);
+    //    vectorDrawable.draw(canvas);
+    //    return BitmapDescriptorFactory.fromBitmap(bitmap);
+    //}
 }

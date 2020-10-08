@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+        getSupportActionBar().setTitle(getString(R.string.ImHungry));
 
         navigationBottomMenu();
         initPlaces();
@@ -110,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
         getUserFromFireStore();
 
         navigationViewMenu();
-
     }
 
     @Override
@@ -153,12 +153,15 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.nav_maps:
                     selectedFragment = new NavHostFragment();
+                    getSupportActionBar().setTitle(getString(R.string.ImHungry));
                     break;
                 case R.id.nav_list:
                     selectedFragment = new ListFragment();
+                    getSupportActionBar().setTitle(getString(R.string.ImHungry));
                     break;
                 case R.id.nav_workmates:
                     selectedFragment = new WorkmatesFragment();
+                    getSupportActionBar().setTitle(getString(R.string.AvailableWorkmates));
                     break;
             }
 

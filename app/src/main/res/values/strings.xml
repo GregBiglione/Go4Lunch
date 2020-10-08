@@ -181,5 +181,7 @@
     <string name="detailed_like" translatable="false">Like</string>
     <string name="detailed_website" translatable="false">website</string>
     <string name="likedDetailedText">LIKED</string>
+    <string name="ImHungry">I\'m hungry!</string>
+    <string name="AvailableWorkmates">Available workmates</string>
 
 </resources>

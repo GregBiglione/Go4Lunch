@@ -38,4 +38,6 @@
     <string name="detailed_like" translatable="false">люби́ть</string>
     <string name="detailed_website" translatable="false">Веб-сайт</string>
     <string name="likedDetailedText">ЛЮБИЛ</string>
+    <string name="ImHungry">Я голоден!</string>
+    <string name="AvailableWorkmates">Коллеги доступны</string>
 </resources>

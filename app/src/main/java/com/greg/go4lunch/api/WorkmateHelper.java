@@ -57,6 +57,6 @@ public class WorkmateHelper {
     }
 
     public static Task<Void> upDateFavoriteRestaurant(String uid, String idRestaurant, boolean favorite){
-        return WorkmateHelper.getLikedRestaurantsCollection().document().update(uid, idRestaurant, favorite);
+        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).update("idRestaurant", idRestaurant,"isFavorite", favorite);
     }
 }

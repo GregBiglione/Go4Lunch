@@ -40,6 +40,7 @@ import com.greg.go4lunch.JoiningWorkmatesAdapter;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.RestaurantAdapter;
 import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
@@ -96,7 +97,10 @@ public class DetailedRestaurant extends AppCompatActivity {
         clickOnJoin();
 
         clickOnCall();
+
+        defaultLikeIcon();
         clickOnLike();
+
         clickOnWebsite();
 
         //configureJoiningWorkmatesRecyclerView();
@@ -209,6 +213,19 @@ public class DetailedRestaurant extends AppCompatActivity {
     }
 
     // ---------------------------- Add favorite function -----------------------------------------------------------------------------------------------
+    private void defaultLikeIcon(){
+        if (!isFavorite){
+            mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+            mLikeText.setText(R.string.detailed_like);
+            mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        }
+        else{
+            mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+            mLikeText.setText(R.string.likedDetailedText);
+            mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
+        }
+    }
+
     public void clickOnLike(){
         mLikeLyt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +235,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                     mLikeText.setText(R.string.likedDetailedText);
                     mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
                     addFavorite();
-                    //isFavorite = true;
+                    isFavorite = true;
 
                 }
                 else {
@@ -226,7 +243,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                     mLikeText.setText(R.string.detailed_like);
                     mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
                     upDateFavorite();
-                    //isFavorite = false;
+                    isFavorite = false;
                 }
             }
         });

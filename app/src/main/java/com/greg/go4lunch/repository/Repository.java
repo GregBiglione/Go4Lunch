@@ -34,13 +34,7 @@ public class Repository {
 
     // ---------------------------- Get all workmates ----------------------------------------------
     public MutableLiveData<ArrayList<Workmate>> getAllWorkmates(){
-        loadWorkmates();
         MutableLiveData<ArrayList<Workmate>> allWorkmates = new MutableLiveData<>();
-        allWorkmates.setValue(workmates);
-        return allWorkmates;
-    }
-
-    private void loadWorkmates() {
         db.collection("workmates")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -50,6 +44,7 @@ public class Repository {
                     for (DocumentSnapshot documentSnapshot : list) {
                         workmates.add(documentSnapshot.toObject(Workmate.class));
                     }
+                    allWorkmates.setValue(workmates);
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -58,6 +53,7 @@ public class Repository {
                 Log.d(TAG, "Impossible to get workmates list", e);
             }
         });
+        return allWorkmates;
     }
 
     // ---------------------------- Get joining workmates ------------------------------------------

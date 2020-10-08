@@ -39,4 +39,6 @@
     <string name="detailed_like" translatable="false">Like</string>
     <string name="detailed_website" translatable="false">Site web</string>
     <string name="likedDetailedText">Liké</string>
+    <string name="ImHungry">J\'ai faim !</string>
+    <string name="AvailableWorkmates">Collègues disponibles</string>
 </resources>

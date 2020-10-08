@@ -38,4 +38,6 @@
     <string name="detailed_like" translatable="false">Gustar</string>
     <string name="detailed_website" translatable="false">website</string>
     <string name="likedDetailedText">GUSTADA</string>
+    <string name="ImHungry">¡Tengo hambre!</string>
+    <string name="AvailableWorkmates">Colegas disponibles</string>
 </resources>

@@ -7,11 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 
@@ -33,11 +37,16 @@ public class WorkmatesFragment extends Fragment {
         return view;
     }
 
-    public void configureRecyclerView(){
+    private void configureRecyclerView(){
         mWorkmateRecyclerView.setHasFixedSize(true);
         mWorkmateRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mWorkmateAdapter = new WorkmateAdapter(mSharedViewModel.getAllWorkmatesData().getValue());
-        mWorkmateRecyclerView.setAdapter(mWorkmateAdapter);
-        mWorkmateAdapter.notifyDataSetChanged();
+        mSharedViewModel.getAllWorkmatesData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Workmate>>() {
+            @Override
+            public void onChanged(ArrayList<Workmate> workmates) {
+                mWorkmateAdapter = new WorkmateAdapter(workmates);
+                mWorkmateRecyclerView.setAdapter(mWorkmateAdapter);
+                mWorkmateAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

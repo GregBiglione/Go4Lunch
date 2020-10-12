@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public Menu mSearchMenu;
 
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     @BindView(R.id.user_name) TextView mName;
     @BindView(R.id.user_mail) TextView mMail;
     @BindView(R.id.user_photo) ImageView mPhoto;
@@ -112,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         //getUserFromFireStore();     //   Google ok
                                       //   Fb pics not shown
         navigationViewMenu();
+        setUpFireBaseListener();
     }
 
     @Override
@@ -121,7 +123,10 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // ---------------------------- Search Menu ----------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Search Menu ----------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
@@ -140,7 +145,10 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    // ---------------------------- Bottom Navigation Menu -----------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Bottom Navigation Menu -----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public void navigationBottomMenu(){
         mBottomNavigationView = findViewById(R.id.bottom_navigation);
         mBottomNavigationView.setOnNavigationItemSelectedListener(navListener);
@@ -172,7 +180,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // ---------------------------- Get places ----------------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get places -----------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public void initPlaces(){
         if (!Places.isInitialized()){
             Places.initialize(getApplicationContext(), API_KEY);
@@ -202,7 +213,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // ---------------------------- Get user information --------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get user information -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void getCurrentUserFromFireBase(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -231,62 +245,17 @@ public class MainActivity extends AppCompatActivity {
                         .apply(RequestOptions.circleCropTransform())
                         .into(mPhoto);
             }
-
-            // ---------------------------- Create workmate in Firestore ---------------------------
-            //WorkmateHelper.createWorkmate(uid, photo, name, email, null, false);
         }
     }
 
-    // ---------------------------- Get current user -------------------------------------------------------------------------------------------------
+    // ---------------------------- Get current user -----------------------------------------------
     @Nullable
     protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    // --------- Get current user from firestore -----------------------------------------------------------------------------------------------------
-    //private void getUserFromFireStore(){
-    //    WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-    //        @Override
-    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-    //            Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
-    //            if (currentWorkmate != null){
-    //                String name = currentWorkmate.getName();
-    //                String email = currentWorkmate.getEmail();
-    //                String photo = currentWorkmate.getPicture();
-//
-    //                NavigationView navigationView = findViewById(R.id.nav_view);
-    //                View headerView = navigationView.getHeaderView(0);
-    //                mName = headerView.findViewById(R.id.user_name);
-    //                mMail = headerView.findViewById(R.id.user_mail);
-    //                mPhoto = headerView.findViewById(R.id.user_photo);
-//
-    //                if(name != null){
-    //                    mName.setText(name);
-    //                }
-    //                if (email != null){
-    //                    mMail.setText(email);
-    //                }
-    //                if (photo != null){
-    //                    Glide.with(MainActivity.this)
-    //                            .load(photo)
-    //                            .apply(RequestOptions.circleCropTransform())
-    //                            .into(mPhoto);
-    //                }
-    //            }
-    //        }
-    //    });
-    //}
-
-
-    // ---------------------------- Error handler --------------------------------------------------
-    //protected OnFailureListener onFailureListener(){
-    //    return new OnFailureListener() {
-    //        @Override
-    //        public void onFailure(@NonNull Exception e) {
-    //            Toasty.error(getApplicationContext(), getString(R.string.error_unknown_error), Toast.LENGTH_SHORT).show();
-    //        }
-    //    };
-    //}
-
+    //----------------------------------------------------------------------------------------------
     // ---------------------------- Lateral navigation menu ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public void navigationViewMenu(){
         mNavigationView = findViewById(R.id.nav_view);
         mNavigationView.setNavigationItemSelectedListener(lateralNavListener);
@@ -312,12 +281,50 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // ---------------------------- Log out --------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Log out --------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void logOut() {
         FirebaseAuth.getInstance().signOut();
-        finish();
-        Intent backToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
-        startActivity(backToLogin);
+    }
+
+    private void setUpFireBaseListener(){
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null){
+                    Log.d(TAG, "onAuthStateChanged: signed in:" + user.getUid());
+                }
+                else {
+                    Log.d(TAG, "onAuthStateChanged: signed out");
+                    Toasty.success(MainActivity.this, getString(R.string.logout_with_success), Toasty.LENGTH_SHORT).show();
+                    clearUserLoggedInfo();
+                }
+            }
+        };
+    }
+
+    //----------------------------- Clear user information -----------------------------------------
+    private void clearUserLoggedInfo(){
+        Intent goToLogin = new Intent(MainActivity.this, LoginRegisterActivity.class);
+        goToLogin.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(goToLogin);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseAuth.getInstance().addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mAuthStateListener != null){
+            FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
+        }
     }
 
     // ---------------------------- Language selection ---------------------------------------------

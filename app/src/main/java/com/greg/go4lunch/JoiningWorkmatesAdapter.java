@@ -39,7 +39,7 @@ public class JoiningWorkmatesAdapter extends RecyclerView.Adapter<JoiningWorkmat
         Glide.with(holder.mJoiningCircleImageView.getContext())
                 .load(mJoiningWorkmates.get(position).getPicture())
                 .into(holder.mJoiningCircleImageView);
-        holder.mJoiningMessageTextView.setText(mJoiningWorkmates.get(position).getName());
+        holder.mJoiningMessageTextView.setText(mJoiningWorkmates.get(position).getName() + " is joining!");
     }
 
     @Override

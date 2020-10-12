@@ -51,7 +51,7 @@
                 android:text="@string/restaurant_address"
                 android:layout_weight="0.5"/>
             <TextView
-                android:id="@+id/workmates_joining"
+                android:id="@+id/workmates_joining_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/workmates_joining"

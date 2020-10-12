@@ -1,11 +1,14 @@
 package com.greg.go4lunch;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -20,9 +23,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
 
     private List<Workmate> mWorkmates;
+    private Context context;
 
-    public WorkmateAdapter(List<Workmate> mWorkmates) {
+    public WorkmateAdapter(List<Workmate> mWorkmates, Context context) {
         this.mWorkmates = mWorkmates;
+        this.context = context;
     }
 
     @NonNull
@@ -39,7 +44,23 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
         Glide.with(holder.mCircleImageView.getContext())
                 .load(mWorkmates.get(position).getPicture())
                 .into(holder.mCircleImageView);
-        holder.mMessageTextView.setText(mWorkmates.get(position).getName());
+        if (mWorkmates.get(position) != null){
+
+            String name = mWorkmates.get(position).getName();
+            String restaurant = mWorkmates.get(position).getPickedRestaurant();
+            //String restaurantNotChosen = String.valueOf(R.string.restaurantNotChosen);
+            //String restaurantChosen = String.valueOf(R.string.restaurantChosen);
+
+            if(!mWorkmates.get(position).getJoining()){
+                holder.mMessageTextView.setText(name + " hasn't decide yet ");
+                holder.mMessageTextView.setTextColor(ContextCompat.getColor(context, R.color.isJoiningColor));
+                holder.mMessageTextView.setTypeface(holder.mMessageTextView.getTypeface(), Typeface.ITALIC);
+            }
+            else{
+                holder.mMessageTextView.setText(name + " is eating at " + restaurant);
+            }
+        }
+
     }
 
     @Override
@@ -51,7 +72,6 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
 
         @BindView(R.id.workmates_photo)CircleImageView mCircleImageView;
         @BindView(R.id.workmate_message) TextView mMessageTextView;
-
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

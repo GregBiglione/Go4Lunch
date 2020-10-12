@@ -13,7 +13,8 @@
     <string name="error_authentication_canceled">Authentification annulée&#8230;</string>
     <string name="error_no_internet">Aucune connexion internet !</string>
     <string name="error_unknown_error">Une erreur inconnue s\'est produite&#8230;</string>
-    <string name="connection_succeed" translatable="false">Authentification réussie !</string>
+    <string name="connection_succeed" translatable="false">Connexion réussie !</string>
+    <string name="connection_failed" translatable="false">Échec de la connexion</string>
 
     <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
     <string name="login_message">Trouvez un bon restaurant et invitez vos collègues à déjeuner</string>
@@ -41,4 +42,6 @@
     <string name="likedDetailedText">Liké</string>
     <string name="ImHungry">J\'ai faim !</string>
     <string name="AvailableWorkmates">Collègues disponibles</string>
+    <string name="restaurantNotChosen">n\'a pas encore décidé</string>
+    <string name="restaurantChosen">mange au</string>
 </resources>

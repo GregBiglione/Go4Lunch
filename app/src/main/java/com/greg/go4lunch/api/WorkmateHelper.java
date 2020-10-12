@@ -22,8 +22,9 @@ public class WorkmateHelper {
     }
 
     // ---------------------------- Create workmate ------------------------------------------------
-    public static Task<Void> createWorkmate(String uid, String picture, String name, String email, String pickedRestaurant, boolean joining){
-        Workmate workmateToCreate = new Workmate(uid, picture, name, email, pickedRestaurant, joining);
+    public static Task<Void> createWorkmate(String uid, String picture, String name, String email, String idPickedRestaurant,
+                                            String pickedRestaurant, boolean joining){
+        Workmate workmateToCreate = new Workmate(uid, picture, name, email, idPickedRestaurant, pickedRestaurant, joining);
         return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
     }
 
@@ -33,13 +34,19 @@ public class WorkmateHelper {
     }
 
     // ---------------------------- Update PickedRestaurant ----------------------------------------
-    public static Task<Void> upDatePickedRestaurant(String uid, String pickedRestaurant){
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("pickedRestaurant", pickedRestaurant);
-    }
+    //public static Task<Void> upDatePickedRestaurant(String uid, String idPickedRestaurant, String pickedRestaurant){
+    //    return WorkmateHelper.getWorkmatesCollection().document(uid).update("String idPickedRestaurant",  idPickedRestaurant,
+    //            "pickedRestaurant", pickedRestaurant);
+    //}
+//
+    //// ---------------------------- Update isJoining -----------------------------------------------
+    //public static Task<Void> upDateIsJoining(String uid, boolean joining){
+    //    return WorkmateHelper.getWorkmatesCollection().document(uid).update("joining", joining);
+    //}
 
-    // ---------------------------- Update isJoining -----------------------------------------------
-    public static Task<Void> upDateIsJoining(String uid, boolean joining){
-        return WorkmateHelper.getWorkmatesCollection().document(uid).update("joining", joining);
+    public static Task<Void> updatePickedRestaurantAndIsJoining(String uid,  String idPickedRestaurant, String pickedRestaurant, boolean joining){
+        return WorkmateHelper.getWorkmatesCollection().document(uid).update("idPickedRestaurant", idPickedRestaurant,
+                "pickedRestaurant", pickedRestaurant, "joining", joining);
     }
 
     //-------------------------------------------

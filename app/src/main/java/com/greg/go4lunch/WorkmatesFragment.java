@@ -43,10 +43,11 @@ public class WorkmatesFragment extends Fragment {
         mSharedViewModel.getAllWorkmatesData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Workmate>>() {
             @Override
             public void onChanged(ArrayList<Workmate> workmates) {
-                mWorkmateAdapter = new WorkmateAdapter(workmates);
+                mWorkmateAdapter = new WorkmateAdapter(workmates, getContext());
                 mWorkmateRecyclerView.setAdapter(mWorkmateAdapter);
                 mWorkmateAdapter.notifyDataSetChanged();
             }
         });
     }
 }
+

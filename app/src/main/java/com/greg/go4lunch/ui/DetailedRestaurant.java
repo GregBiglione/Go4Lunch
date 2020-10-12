@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +47,8 @@ import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,8 +86,8 @@ public class DetailedRestaurant extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
-        //mSharedViewModel.initJoiningWorkmates(this);
+        mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
+        mSharedViewModel.initJoiningWorkmates(this);
         setContentView(R.layout.activity_detailed_restaurant);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -93,17 +96,17 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         recoverIntent();
 
-        defaultPickIcon();
-        clickOnJoin();
+        //defaultPickIcon();
+        //clickOnJoin();
+//
+        //clickOnCall();
+//
+        //defaultLikeIcon();
+        //clickOnLike();
+//
+        //clickOnWebsite();
 
-        clickOnCall();
-
-        defaultLikeIcon();
-        clickOnLike();
-
-        clickOnWebsite();
-
-        //configureJoiningWorkmatesRecyclerView();
+        configureJoiningWorkmatesRecyclerView();
     }
 
     public void recoverIntent(){
@@ -136,15 +139,17 @@ public class DetailedRestaurant extends AppCompatActivity {
                 if (!isJoiningRestaurant){
                     mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
                     isJoiningRestaurant = true;
-                    updateIsJoining();
-                    restaurantIsPicked();
+                    //updateIsJoining();
+                    //restaurantIsPicked();
+                    //updateRestaurantAndWorkmateJoiningData();
                     //TODO change restaurant marker color to green for this restaurant
                 }
                 else{
                     mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
                     isJoiningRestaurant = false;
-                    updateIsNotJoining();
-                    restaurantNotPicked();
+                    //updateIsNotJoining();
+                    //restaurantNotPicked();
+                    //updateRestaurantAndWorkmateIsNotJoiningData();
                     //TODO change restaurant marker color to orange for this restaurant
                 }
             }
@@ -234,7 +239,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                     mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
                     mLikeText.setText(R.string.likedDetailedText);
                     mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
-                    addFavorite();
+                    //addFavorite();
                     isFavorite = true;
 
                 }
@@ -242,7 +247,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                     mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
                     mLikeText.setText(R.string.detailed_like);
                     mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    upDateFavorite();
+                    //upDateFavorite();
                     isFavorite = false;
                 }
             }
@@ -295,59 +300,64 @@ public class DetailedRestaurant extends AppCompatActivity {
         startActivity(websiteIntent);
     }
 
+    // ---------------------------- Create user in Firestore -------------------------------------------------------------------------------------------------
+    private void createWorkmateInFireStore(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null){
+            String uid = user.getUid();
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            String photo = user.getPhotoUrl().toString();
+
+            // ---------------------------- Create workmate in Firestore ---------------------------
+            WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null, false);
+        }
+    }
+
     // ---------------------------- Get current user -------------------------------------------------------------------------------------------------
     @Nullable
     protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    // ---------------------------- Update workmate is joining ----------------------------------------------------------------------------------------------
-    private void updateIsJoining() {
-        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        //if(user != null){
-        //    WorkmateHelper.upDateIsJoining(user.getUid(), true);
-        //}
+    // ---------------------------- Update restaurant & is joining ----------------------------------------------------------------------------------------------
+    private void updateRestaurantAndWorkmateJoiningData(){
+        //createWorkmateInFireStore();
         WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                Intent i = getIntent();
+                Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+                String idPickedRestaurant = restaurant.getIdRestaurant();
+                String namePickedRestaurant = restaurant.getName();
                 if (currentWorkmate != null){
-                    WorkmateHelper.upDateIsJoining(currentWorkmate.getUid(), true);
+                    WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant, true);
                 }
             }
         });
     }
 
-    private void updateIsNotJoining() {
+    private void updateRestaurantAndWorkmateIsNotJoiningData(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
-            WorkmateHelper.upDateIsJoining(user.getUid(), false);
+            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(),null, null, false);
         }
     }
 
-    // ---------------------------- Update picked restaurant ----------------------------------------------------------------------------------------------
-    private void restaurantIsPicked(){
-        Intent i = getIntent();
-        Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-        String namePickedRestaurant = restaurant.getName();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            WorkmateHelper.upDatePickedRestaurant(user.getUid(), namePickedRestaurant);
-        }
+    // ---------------------------- Configure RecyclerView ----------------------------------------------------------------------------------------------
+    private void configureJoiningWorkmatesRecyclerView() {
+        mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);
+        mJoiningWorkmatesRecyclerView.setHasFixedSize(true);
+        mJoiningWorkmatesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mSharedViewModel.getJoiningWorkmatesData().observe(this, new Observer<ArrayList<Workmate>>() {
+            @Override
+            public void onChanged(ArrayList<Workmate> workmates) {
+                mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(workmates);
+                mJoiningWorkmatesRecyclerView.setAdapter(mJoiningWorkmatesAdapter);
+                mJoiningWorkmatesAdapter.notifyDataSetChanged();
+            }
+        });
     }
-
-    private void restaurantNotPicked(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            WorkmateHelper.upDatePickedRestaurant(user.getUid(), null);
-        }
-    }
-
-    // ---------------------------- Configure recyclerview ----------------------------------------------------------------------------------------------
-    //private void configureJoiningWorkmatesRecyclerView() {
-    //    mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);
-    //    mJoiningWorkmatesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-    //    mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(mSharedViewModel.getJoiningWorkmatesData().getValue());
-    //    mJoiningWorkmatesAdapter.notifyDataSetChanged();
-    //}
 
     // ---------------------------- Back to restaurants list ----------------------------------------------------------------------------------------------
     @Override

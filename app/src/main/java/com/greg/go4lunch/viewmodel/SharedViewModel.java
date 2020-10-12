@@ -17,7 +17,7 @@ public class SharedViewModel extends ViewModel {
 
     public List<Restaurant> restaurants = new ArrayList<>();
     private MutableLiveData<ArrayList<Workmate>> workmates;
-    //private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
+    private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
 
     public List<Restaurant> getRestaurants(){ return restaurants; }
 
@@ -34,12 +34,12 @@ public class SharedViewModel extends ViewModel {
     }
 
     // ---------------------------- Get joining workmates ------------------------------------------
-    //public void initJoiningWorkmates(Context context){
-    //    if (joiningWorkmates != null){
-    //        return;
-    //    }
-    //    joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates();
-    //}
-//
-    //public LiveData<ArrayList<Workmate>> getJoiningWorkmatesData(){ return joiningWorkmates; }
+    public void initJoiningWorkmates(Context context){
+        if (joiningWorkmates != null){
+            return;
+        }
+        joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates();
+    }
+
+    public LiveData<ArrayList<Workmate>> getJoiningWorkmatesData(){ return joiningWorkmates; }
 }

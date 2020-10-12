@@ -37,6 +37,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private List<Restaurant> restaurants;
     private PlacesClient mPlacesClient;
     private Context c;
+    private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
 
     public RestaurantAdapter(List<Restaurant> restaurants, PlacesClient mPlacesClient, Context c) {
         this.restaurants = restaurants;
@@ -58,6 +59,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
        holder.mRestaurantName.setText(r.getName());
        holder.mRestaurantAddress.setText(r.getAddress());
+       //if (mJoiningWorkmatesAdapter.getItemCount() > 0){
+       //    holder.mJoiningWorkmates.setText(mJoiningWorkmatesAdapter.getItemCount());
+       //}
        holder.mRestaurantRating.setRating(r.getRating());
        getRestaurantPhoto(holder.mRestaurantPicture, r.getRestaurantPicture());
        holder.mButtonDetailedRestaurant.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +82,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         @BindView(R.id.restaurant_name) TextView mRestaurantName;
         @BindView(R.id.restaurant_distance) TextView mRestaurantDistance;
         @BindView(R.id.restaurant_address) TextView mRestaurantAddress;
-        @BindView(R.id.workmates_joining) TextView mJoiningWorkmates;
+        @BindView(R.id.workmates_joining_number) TextView mJoiningWorkmates;
         @BindView(R.id.restaurant_hour) TextView mRestaurantHour;
         @BindView(R.id.restaurant_rating) RatingBar mRestaurantRating;
         @BindView(R.id.restaurant_picture) ImageView mRestaurantPicture;

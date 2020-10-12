@@ -14,6 +14,7 @@
     <string name="error_no_internet">Нет подключения к интернету!</string>
     <string name="error_unknown_error">Произошла неизвестная ошибка&#8230;</string>
     <string name="connection_succeed" translatable="false">Успешная аутентификация!</string>
+    <string name="connection_failed" translatable="false">Неудачная аутентификация</string>
 
     <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
     <string name="login_message">Найдите хороший ресторан и пригласите своих коллег на обед.</string>
@@ -40,4 +41,6 @@
     <string name="likedDetailedText">ЛЮБИЛ</string>
     <string name="ImHungry">Я голоден!</string>
     <string name="AvailableWorkmates">Коллеги доступны</string>
+    <string name="restaurantNotChosen">ещё не решил</string>
+    <string name="restaurantChosen">поедает в</string>
 </resources>

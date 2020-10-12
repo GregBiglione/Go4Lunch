@@ -14,6 +14,7 @@
     <string name="error_no_internet">¡No hay conexión a Internet!</string>
     <string name="error_unknown_error">Ha ocurrido un error desconocido&#8230;</string>
     <string name="connection_succeed" translatable="false">¡Autentificación exitosa!</string>
+    <string name="connection_failed" translatable="false">Autentificación fallida</string>
 
     <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
     <string name="login_message">Encuentra un buen restaurante e invita a tus compañeros de trabajo a almorzar.</string>
@@ -40,4 +41,6 @@
     <string name="likedDetailedText">GUSTADA</string>
     <string name="ImHungry">¡Tengo hambre!</string>
     <string name="AvailableWorkmates">Colegas disponibles</string>
+    <string name="restaurantNotChosen">no ha decidido aún</string>
+    <string name="restaurantChosen">está comiendo en</string>
 </resources>

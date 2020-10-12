@@ -5,27 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginRegisterActivity"
-    style="@style/login_activity_bkg">
+    style="@style/login_activity_bkg"
+    android:visibility="gone"> <!--delete  -->
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
-
-        <Button
-            android:id="@+id/language_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:cornerRadius="20dp"
-            android:hint="@string/select_language"
-            android:backgroundTint="@color/black"
-            android:textColorHint="@color/white"
-            android:drawableStart="@drawable/ic_language_white_24dp"
-            android:drawablePadding="5dp"
-            style="@style/button_margin_top"
-            />
 
         <ImageView
             android:id="@+id/logo"
@@ -48,19 +35,6 @@
             style="@style/login_subtitle_style"
             android:text="@string/login_message"/>
 
-        <Button
-            android:id="@+id/email_login_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:cornerRadius="20dp"
-            android:hint="@string/sign_in_with_email"
-            android:backgroundTint="@color/black"
-            android:textColorHint="@color/white"
-            android:drawableStart="@drawable/ic_email_white_24dp"
-            android:drawablePadding="5dp"
-            style="@style/button_margin_top"/>
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_google_button"
             android:layout_width="wrap_content"
@@ -68,7 +42,6 @@
             android:layout_gravity="center_horizontal"
             app:buttonSize="wide"
             style="@style/button_margin_top"/>
-
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/facebook_login_button"
@@ -83,15 +56,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             style="@style/button_margin_top"/>
-
-        <ProgressBar
-            android:id="@+id/indeterminateProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            android:visibility="invisible"
-            android:layout_marginTop="-7dp"/>
 
     </LinearLayout>
 

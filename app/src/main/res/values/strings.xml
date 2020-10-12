@@ -23,14 +23,15 @@
     <string name="error_no_internet">No internet connection!</string>
     <string name="error_unknown_error">An unknown error has occurred&#8230;</string>
     <string name="connection_succeed" translatable="false">Successful authentication!</string>
+    <string name="connection_failed" translatable="false">Failed authentication</string>
 
     <!--////////////////////////////////// Login ////////////////////////////////////////////////-->
     <string name="login_message">Find a nice restaurant and invite your co-workers for lunch</string>
     <string name="login_title">Go4Lunch</string>
     <string name="sign_in_with_email">Sign in with email</string>
 
-    <string name="facebook_app_id" translatable="false">358071792256008</string>
-    <string name="fb_login_protocol_scheme" translatable="false">fb358071792256008</string>
+    <string name="facebook_application_id" translatable="false">358071792256008</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb3358071792256008</string>
 
     <string name="twitter_consumer_key" translatable="false">1UqLX7ewH1FRT4GzxJ8fWoRoQ</string>
     <string name="twitter_consumer_secret" translatable="false">7fowh8J5Hek50Z2BuzE6XXniDg0zaAv6kF099gyzrRpefvTpLP</string>
@@ -80,7 +81,7 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textColorPrimary">@android:color/darker_gray</item>
         <item name="android:textColorSecondary">@android:color/darker_gray</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <item name="android:windowBackground">@drawable/dinner_dark</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColorHint">@android:color/white</item>
@@ -183,5 +184,7 @@
     <string name="likedDetailedText">LIKED</string>
     <string name="ImHungry">I\'m hungry!</string>
     <string name="AvailableWorkmates">Available workmates</string>
+    <string name="restaurantNotChosen">hasn\'t decided yet</string>
+    <string name="restaurantChosen">is eating at</string>
 
 </resources>

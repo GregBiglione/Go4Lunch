@@ -23,7 +23,7 @@ public class Repository {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "Repository";
 
-    //private ArrayList<Workmate> joiningWorkmates = new ArrayList<>();
+    private ArrayList<Workmate> joiningWorkmates = new ArrayList<>();
 
     public static Repository getInstance(Context context){
         if (instance == null){
@@ -57,32 +57,28 @@ public class Repository {
     }
 
     // ---------------------------- Get joining workmates ------------------------------------------
-    //public MutableLiveData<ArrayList<Workmate>> getJoiningWorkmates(){
-    //    loadJoiningWorkmates();
-    //    MutableLiveData<ArrayList<Workmate>> allJoiningWorkmates = new MutableLiveData<>();
-    //    allJoiningWorkmates.setValue(joiningWorkmates);
-    //    return allJoiningWorkmates;
-    //}
-//
-    ////Créer list avec id restaurant et id workmates ??
-    //private void loadJoiningWorkmates() {
-    //    db.collection("workmates")
-    //            .whereEqualTo("pickedRestaurant", joiningWorkmates.get(0).getPickedRestaurant())
-    //            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-    //        @Override
-    //        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-    //            if (!queryDocumentSnapshots.isEmpty()){
-    //                List<DocumentSnapshot> joiningList = queryDocumentSnapshots.getDocuments();
-    //                for ( DocumentSnapshot documentSnapshot : joiningList) {
-    //                    joiningWorkmates.add(documentSnapshot.toObject(Workmate.class));
-    //                }
-    //            }
-    //        }
-    //    }).addOnFailureListener(new OnFailureListener() {
-    //        @Override
-    //        public void onFailure(@NonNull Exception e) {
-    //            Log.d(TAG, "Impossible to get joining workmates list", e);
-    //        }
-    //    });
-    //}
+    public MutableLiveData<ArrayList<Workmate>> getJoiningWorkmates(){
+        MutableLiveData<ArrayList<Workmate>> allJoiningWorkmates = new MutableLiveData<>();
+        db.collection("workmates")
+                //.whereEqualTo("idPickedRestaurant", /*workmates.get(0).getIdPickedRestaurant()*/)
+                .whereEqualTo("joining", true)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> joiningList = queryDocumentSnapshots.getDocuments();
+                    for ( DocumentSnapshot documentSnapshot : joiningList) {
+                        joiningWorkmates.add(documentSnapshot.toObject(Workmate.class));
+                    }
+                    allJoiningWorkmates.setValue(joiningWorkmates);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Impossible to get joining workmates list", e);
+            }
+        });
+        return allJoiningWorkmates;
+    }
 }

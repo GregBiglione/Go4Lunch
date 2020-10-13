@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -74,11 +77,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @BindView(R.id.gps) FloatingActionButton mGps;
     private PlacesClient mPlacesClient;
     private SharedViewModel mSharedViewModel;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createLocationService();
         mPlacesClient = Places.createClient(getContext());
         mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
@@ -106,24 +111,46 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(getContext());
         mMap = googleMap;
         locationAccuracy();
-        zoomOnLocation();
         noLandMarksFilter(googleMap);
         checkPermissions();
     }
 
-    // ---------------------------- Location accuracy ----------------------------------------------
-    private void locationAccuracy(){
-        LatLng santaMonica = new LatLng(34.017434, -118.491768);
-        mMap.addMarker(new MarkerOptions().position(santaMonica).title("I'm here and I'm hungry !"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(santaMonica));
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get last known location ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //----------------------------- Location service -----------------------------------------------
+    private void createLocationService(){
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
     }
 
-    // ---------------------------- Zoom level -----------------------------------------------------
+    private void locationAccuracy(){
+        mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null){
+                    LatLng santaMonica = new LatLng(34.017434, -118.491768);
+                    mMap.addMarker(new MarkerOptions().position(santaMonica).title("I'm here and I'm hungry !"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(santaMonica));
+                    zoomOnLocation();
+                    getNearbyPlaces();
+                }
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Zoom level -----------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void zoomOnLocation(){
         mMap.animateCamera(CameraUpdateFactory.zoomTo(DEFAULT_ZOOM));
     }
 
-    // ---------------------------- No Landmarks on Maps -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- No Landmarks on Maps -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void noLandMarksFilter(GoogleMap googleMap){
         try {
             boolean success = googleMap.setMapStyle(
@@ -138,7 +165,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    // ---------------------------- Check permissions ----------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Check permissions ----------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -152,7 +182,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (EasyPermissions.hasPermissions(getContext(), perms)){
             Toasty.success(getContext(), getString(R.string.location_granted), Toasty.LENGTH_SHORT).show();
             customFocus();
-            getNearbyPlaces();
+            //getNearbyPlaces();
         }
         else {
             EasyPermissions.requestPermissions(this,"We need your permission to locate you",
@@ -160,7 +190,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    // ---------------------------- Custom position enabled ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Custom position enabled ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void customFocus(){
         mGps = getView().findViewById(R.id.gps);
         mGps.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +204,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    //---------------------------- Places information type initialization -------------------------
+    //----------------------------------------------------------------------------------------------
+    //---------------------------- Places information type initialization --------------------------
+    //----------------------------------------------------------------------------------------------
+
     public void getNearbyPlaces(){
         List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES, Place.Field.LAT_LNG);
         FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
@@ -202,7 +238,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
                                        //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                                         .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_restaurant_dark_orange_24dp))
-                                       .title(r.getName() + "\n" + r.getAddress()));
+                                       /*.title(r.getName() + "\n" + r.getAddress()));*/
+                                        .title(r.getName()));
                                 getRestaurantDetails(r);
                             }
 
@@ -224,7 +261,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    // ---------------------------- Get restaurants details ---------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get restaurants details ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void getRestaurantDetails(Restaurant r){
         // ---------------------------- Define a place Id ----------------------------------------------
         final String placeId = r.getIdRestaurant();
@@ -265,7 +305,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    // ---------------------------- Custom marker ---------------------------------------------------------------------------------------------
+    //----------------------------- Custom marker ---------------------------------------------------------------------------------------------
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
         Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
         background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());

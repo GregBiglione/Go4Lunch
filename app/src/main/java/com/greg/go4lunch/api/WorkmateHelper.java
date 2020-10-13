@@ -58,12 +58,16 @@ public class WorkmateHelper {
     }
 
     // ---------------------------- Create liked restaurant ----------------------------------------
-    public static Task<Void> CreateLikedRestaurant(String uid, String idRestaurant, boolean favorite){
-        LikedRestaurant likedRestaurant = new LikedRestaurant(uid, idRestaurant, favorite);
+    public static Task<Void> createLikedRestaurant(String uid, String idPickedRestaurant, boolean favorite){
+        LikedRestaurant likedRestaurant = new LikedRestaurant(uid, idPickedRestaurant, favorite);
         return WorkmateHelper.getLikedRestaurantsCollection().document(uid).set(likedRestaurant);
     }
 
-    public static Task<Void> upDateFavoriteRestaurant(String uid, String idRestaurant, boolean favorite){
-        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).update("idRestaurant", idRestaurant,"isFavorite", favorite);
+    public static Task<DocumentSnapshot> getLikedRestaurant(String uid){
+        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).get();
+    }
+
+    public static Task<Void> upDateFavoriteRestaurant(String uid, String idPickedRestaurant, boolean favorite){
+        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).update("idRestaurant", idPickedRestaurant,"isFavorite", favorite);
     }
 }

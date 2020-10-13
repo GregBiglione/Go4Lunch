@@ -26,7 +26,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,7 +38,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.JoiningWorkmatesAdapter;
 import com.greg.go4lunch.R;
-import com.greg.go4lunch.RestaurantAdapter;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
@@ -52,6 +50,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -69,15 +68,11 @@ public class DetailedRestaurant extends AppCompatActivity {
     boolean isJoiningRestaurant;
     private Workmate mWorkmate;
 
-    @BindView(R.id.call_Layout) LinearLayout mCallLyt;
     public static final int CALL_REQUEST_CODE = 218;
 
-    @BindView(R.id.like_Layout) LinearLayout mLikeLyt;
     @BindView(R.id.like_image) ImageView mLikeStar;
     @BindView(R.id.detailed_like) TextView mLikeText;
-    boolean isFavorite;
-
-    @BindView(R.id.website_Layout) LinearLayout mWebsiteLyt;
+    //boolean isFavorite;
 
     @BindView(R.id.joining_workmates_recycler) RecyclerView mJoiningWorkmatesRecyclerView;
     private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
@@ -96,15 +91,10 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         recoverIntent();
 
-        //defaultPickIcon();
-        //clickOnJoin();
-//
-        //clickOnCall();
-//
-        //defaultLikeIcon();
-        //clickOnLike();
-//
-        //clickOnWebsite();
+        defaultPickIcon();
+        clickOnJoin();
+
+        defaultLikeIcon();
 
         configureJoiningWorkmatesRecyclerView();
     }
@@ -122,7 +112,10 @@ public class DetailedRestaurant extends AppCompatActivity {
         getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
     }
 
-    // ---------------------------- Click on join button --------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Click on join button -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void defaultPickIcon(){
         if (!isJoiningRestaurant){
             mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
@@ -141,7 +134,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                     isJoiningRestaurant = true;
                     //updateIsJoining();
                     //restaurantIsPicked();
-                    //updateRestaurantAndWorkmateJoiningData();
+                    updateRestaurantAndWorkmateJoiningData();
                     //TODO change restaurant marker color to green for this restaurant
                 }
                 else{
@@ -149,7 +142,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                     isJoiningRestaurant = false;
                     //updateIsNotJoining();
                     //restaurantNotPicked();
-                    //updateRestaurantAndWorkmateIsNotJoiningData();
+                    updateRestaurantAndWorkmateIsNotJoiningData();
                     //TODO change restaurant marker color to orange for this restaurant
                 }
             }
@@ -181,24 +174,27 @@ public class DetailedRestaurant extends AppCompatActivity {
         });
     }
 
-    // ---------------------------- Call function --------------------------------------------------------------------------------------------------
-    public void clickOnCall(){
-        mCallLyt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startCall();
-            }
-        });
-    }
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Call function --------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
-    // ---------------------------- Check call permission ------------------------------------------
+    @OnClick(R.id.call_Layout)
+    void clickOnCall(){ startCall(); }
+
+    //----------------------------------------------------------------------------------------------
+    //---------------------------- Check call permission -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
-    // ---------------------------- Start a call ---------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Start a call ---------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     @SuppressLint("MissingPermission")
     @AfterPermissionGranted(CALL_REQUEST_CODE)
     private void startCall(){
@@ -217,9 +213,14 @@ public class DetailedRestaurant extends AppCompatActivity {
         }
     }
 
-    // ---------------------------- Add favorite function -----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Add favorite function ------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    boolean isFavoriteTemporary;
+
     private void defaultLikeIcon(){
-        if (!isFavorite){
+        if (!isFavoriteTemporary){
             mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
             mLikeText.setText(R.string.detailed_like);
             mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
@@ -231,28 +232,31 @@ public class DetailedRestaurant extends AppCompatActivity {
         }
     }
 
-    public void clickOnLike(){
-        mLikeLyt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isFavorite){
-                    mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-                    mLikeText.setText(R.string.likedDetailedText);
-                    mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
-                    //addFavorite();
-                    isFavorite = true;
-
-                }
-                else {
-                    mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-                    mLikeText.setText(R.string.detailed_like);
-                    mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    //upDateFavorite();
-                    isFavorite = false;
-                }
-            }
-        });
+    @OnClick(R.id.like_Layout)
+    void clickOnLike(){
+        if (!isFavoriteTemporary){
+            mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+            mLikeText.setText(R.string.likedDetailedText);
+            mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
+            addFavorite();
+            isFavoriteTemporary = true;
+        }
+        else{
+            mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+            mLikeText.setText(R.string.detailed_like);
+            mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
+            upDateFavorite();
+            isFavoriteTemporary = false;
+        }
     }
+
+    //private boolean isLikedRestaurant(){
+    //    Intent i = getIntent();
+    //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+    //    String idPickedRestaurant = restaurant.getIdRestaurant();
+    //    WorkmateHelper.getLikedRestaurant(idPickedRestaurant);
+    //    return false;
+    //}
 
     private void addFavorite(){
         WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -267,8 +271,8 @@ public class DetailedRestaurant extends AppCompatActivity {
 
                     String idRestaurant = restaurantLiked.getIdRestaurant();
 
-                    // ------------ Create liked restaurant in Firestore ------------------
-                    WorkmateHelper.CreateLikedRestaurant(uid, idRestaurant, true);
+                    //------------- Create liked restaurant in FireStore ---------------------------
+                    WorkmateHelper.createLikedRestaurant(uid, idRestaurant, true);
                     Toasty.success(getApplicationContext(), "Favorite restaurant created in Firestore after click on star button",
                             Toasty.LENGTH_SHORT).show();
                 }
@@ -277,20 +281,25 @@ public class DetailedRestaurant extends AppCompatActivity {
     }
 
     private void upDateFavorite(){
-        WorkmateHelper.upDateFavoriteRestaurant(null, null, false);
-        Toasty.warning(getApplicationContext(), "Favorite restaurant removed from Firestore after click on star button",
-                Toasty.LENGTH_SHORT).show();
-    }
-
-    // ---------------------------- Go to website function -----------------------------------------------------------------------------------------------
-    private void clickOnWebsite(){
-        mWebsiteLyt.setOnClickListener(new View.OnClickListener() {
+        WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                goToWebsite();
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
+                if(currentLikedRestaurant != null){
+                    WorkmateHelper.upDateFavoriteRestaurant(currentLikedRestaurant.getWorkmateId(), null, false);
+                    Toasty.warning(getApplicationContext(), "Favorite restaurant removed from Firestore after click on star button",
+                            Toasty.LENGTH_SHORT).show();
+                }
             }
         });
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Go to website function -----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    @OnClick(R.id.website_Layout)
+    void clickOnWebsite(){ goToWebsite(); }
 
     private void goToWebsite(){
         Intent i = getIntent();
@@ -300,7 +309,10 @@ public class DetailedRestaurant extends AppCompatActivity {
         startActivity(websiteIntent);
     }
 
-    // ---------------------------- Create user in Firestore -------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // ---------------------------- Create user in FireStore ---------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void createWorkmateInFireStore(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -310,18 +322,24 @@ public class DetailedRestaurant extends AppCompatActivity {
             String email = user.getEmail();
             String photo = user.getPhotoUrl().toString();
 
-            // ---------------------------- Create workmate in Firestore ---------------------------
+            //----------------------------- Create workmate in FireStore ---------------------------
             WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null, false);
         }
     }
 
-    // ---------------------------- Get current user -------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get current user -----------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     @Nullable
     protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
-    // ---------------------------- Update restaurant & is joining ----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Update restaurant & is joining ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void updateRestaurantAndWorkmateJoiningData(){
-        //createWorkmateInFireStore();
+        createWorkmateInFireStore();
         WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -344,7 +362,10 @@ public class DetailedRestaurant extends AppCompatActivity {
         }
     }
 
-    // ---------------------------- Configure RecyclerView ----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Configure RecyclerView -----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void configureJoiningWorkmatesRecyclerView() {
         mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);
         mJoiningWorkmatesRecyclerView.setHasFixedSize(true);
@@ -359,7 +380,10 @@ public class DetailedRestaurant extends AppCompatActivity {
         });
     }
 
-    // ---------------------------- Back to restaurants list ----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Back to restaurants list ---------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home){

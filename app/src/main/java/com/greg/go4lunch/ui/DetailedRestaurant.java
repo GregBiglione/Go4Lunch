@@ -250,6 +250,20 @@ public class DetailedRestaurant extends AppCompatActivity {
         }
     }
 
+
+    //private boolean isLiked(){
+    //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    //        @Override
+    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
+    //            LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
+    //            if(currentLikedRestaurant != null){
+    //                WorkmateHelper.getLikedRestaurant(currentLikedRestaurant.getWorkmateId());
+    //            }
+    //        }
+    //    });
+    //    return false;
+    //}
+
     //private boolean isLikedRestaurant(){
     //    Intent i = getIntent();
     //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));

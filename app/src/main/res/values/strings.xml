@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
     <string name="title_activity_maps" translatable="false">Map</string>
-    <string name="title_activity_main" translatable="false">MainActivity</string>
+    <string name="title_activity_main" translatable="false">Go4Lunch</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
     <string name="nav_header_title" translatable="false">Android Studio</string>

@@ -57,11 +57,15 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
        Restaurant r = restaurants.get(position);
 
+       //String joiningWorkmates = String.valueOf(mJoiningWorkmatesAdapter.getItemCount());
        holder.mRestaurantName.setText(r.getName());
        holder.mRestaurantAddress.setText(r.getAddress());
        //if (mJoiningWorkmatesAdapter.getItemCount() > 0){
-       //    holder.mJoiningWorkmates.setText(mJoiningWorkmatesAdapter.getItemCount());
+       //    holder.mJoiningWorkmates.setText("(" + joiningWorkmates + ")");
+       //    holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
        //}
+        //holder.mJoiningWorkmates.setText("(" + joiningWorkmates + ")");
+        //holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
        holder.mRestaurantRating.setRating(r.getRating());
        getRestaurantPhoto(holder.mRestaurantPicture, r.getRestaurantPicture());
        holder.mButtonDetailedRestaurant.setOnClickListener(new View.OnClickListener() {
@@ -94,7 +98,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         }
     }
 
-    // ---------------------------- Get restaurants photo --------------------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get restaurants photo ------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     private void getRestaurantPhoto(ImageView v, PhotoMetadata photoMetadata){
 
         // ---------------------------- Create a FetchPhotoRequest -------------------------

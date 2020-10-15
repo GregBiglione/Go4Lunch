@@ -187,4 +187,9 @@
     <string name="restaurantNotChosen">hasn\'t decided yet</string>
     <string name="restaurantChosen">is eating at</string>
 
+    <!--///////////////////////////////// Notifications /////////////////////////////////////////-->
+    <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
+    <string name="notification_title" translatable="false">Notification title</string>
+    <string name="notification_message" translatable="false">Notification message</string>
+
 </resources>

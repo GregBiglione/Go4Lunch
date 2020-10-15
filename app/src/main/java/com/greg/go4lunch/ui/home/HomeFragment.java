@@ -129,9 +129,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(Location location) {
                 if (location != null){
-                    LatLng santaMonica = new LatLng(34.017434, -118.491768);
-                    mMap.addMarker(new MarkerOptions().position(santaMonica).title("I'm here and I'm hungry !"));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(santaMonica));
+                    LatLng losAngeles = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(losAngeles).title("I'm here and I'm hungry !"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(losAngeles));
                     zoomOnLocation();
                     getNearbyPlaces();
                 }

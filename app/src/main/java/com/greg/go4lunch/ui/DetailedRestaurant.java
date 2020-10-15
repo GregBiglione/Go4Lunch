@@ -389,7 +389,7 @@ public class DetailedRestaurant extends AppCompatActivity {
             public void onChanged(ArrayList<Workmate> workmates) {
                 mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(workmates);
                 mJoiningWorkmatesRecyclerView.setAdapter(mJoiningWorkmatesAdapter);
-                mJoiningWorkmatesAdapter.notifyDataSetChanged();
+                //mJoiningWorkmatesAdapter.notifyDataSetChanged();
             }
         });
     }

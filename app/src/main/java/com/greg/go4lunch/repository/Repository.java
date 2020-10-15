@@ -23,8 +23,6 @@ public class Repository {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "Repository";
 
-    private ArrayList<Workmate> joiningWorkmates = new ArrayList<>();
-
     public static Repository getInstance(Context context){
         if (instance == null){
             instance = new Repository();
@@ -67,6 +65,7 @@ public class Repository {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()){
                     List<DocumentSnapshot> joiningList = queryDocumentSnapshots.getDocuments();
+                    ArrayList<Workmate> joiningWorkmates = new ArrayList<>();
                     for ( DocumentSnapshot documentSnapshot : joiningList) {
                         joiningWorkmates.add(documentSnapshot.toObject(Workmate.class));
                     }

@@ -85,11 +85,11 @@ public class Repository {
 
     //----------------------------- Get favorite restaurant ----------------------------------------
     //4)
-    //public MutableLiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurant(String uid, String idPickedRestaurant){
+    //public MutableLiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurant(String uid, String idFavoriteRestaurant){
     //   MutableLiveData<ArrayList<LikedRestaurant>> allFavorites = new MutableLiveData<>();
     //   db.collection("likedRestaurants")
     //           .whereEqualTo("workmateId", uid)
-    //           .whereEqualTo("restaurantId", idPickedRestaurant)
+    //           .whereEqualTo("restaurantId", idFavoriteRestaurant)
     //           .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
     //       @Override
     //       public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

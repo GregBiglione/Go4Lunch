@@ -49,14 +49,12 @@ public class SharedViewModel extends ViewModel {
 
     //----------------------------- Get favorite restaurant ----------------------------------------
     //2)
-    //public void initFavoriteRestaurant(Context context){
+    //public void initFavoriteRestaurant(Context context, String uid, String idFavoriteRestaurant){
     //    if (favorites != null){
     //        return;
     //    }
     //    //6)
-    //    String uid = "";
-    //    String idPickedRestaurant = "";
-    //    favorites = Repository.getInstance(context).getFavoriteRestaurant(uid, idPickedRestaurant);
+    //    favorites = Repository.getInstance(context).getFavoriteRestaurant(uid, idFavoriteRestaurant);
     //}
 //
     ////3)

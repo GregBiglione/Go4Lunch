@@ -217,11 +217,9 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //----------------------------- Add favorite function ------------------------------------------
     //----------------------------------------------------------------------------------------------
-
     boolean isFavoriteTemporary;
 
     private void defaultLikeIcon(){
-
         if (!isFavoriteTemporary){
             mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
             mLikeText.setText(R.string.detailed_like);
@@ -241,14 +239,14 @@ public class DetailedRestaurant extends AppCompatActivity {
             mLikeText.setText(R.string.likedDetailedText);
             mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
             addFavorite();
-            //isFavoriteTemporary = true;
+            isFavoriteTemporary = true;
         }
         else{
             mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
             mLikeText.setText(R.string.detailed_like);
             mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
             upDateFavorite();
-            //isFavoriteTemporary = false;
+            isFavoriteTemporary = false;
         }
     }
 
@@ -410,7 +408,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure view model -------------------------------------------
     //----------------------------------------------------------------------------------------------
-    private void configureViewModel(){
+    public void configureViewModel(){
         Intent i = getIntent();
         Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
         String restaurantId = restaurant.getIdRestaurant();
@@ -418,6 +416,14 @@ public class DetailedRestaurant extends AppCompatActivity {
         mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
         mSharedViewModel.initJoiningWorkmates(this, getCurrentUser().getUid(), restaurantId);
     }
+
+    //private boolean isFavorite(){
+    //    Intent i = getIntent();
+    //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+    //    String restaurantId = restaurant.getIdRestaurant();
+    //    mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
+    //    return true;
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure recycler view ----------------------------------------

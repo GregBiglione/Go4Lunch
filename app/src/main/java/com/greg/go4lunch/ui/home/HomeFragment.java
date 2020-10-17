@@ -236,9 +236,11 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
                                 mSharedViewModel.restaurants.add(r);
                                 //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
+                                //----------------------------- Custom marker ----------------------
+                                BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
-                                       //.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                                        .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_restaurant_dark_orange_24dp))
+                                       .icon(subwayBitmapDescriptor)
+                                       // .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_restaurant_dark_orange_24dp))
                                        /*.title(r.getName() + "\n" + r.getAddress()));*/
                                         .title(r.getName()));
                                 getRestaurantDetails(r);
@@ -306,34 +308,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    //----------------------------- Custom marker ---------------------------------------------------------------------------------------------
-    private BitmapDescriptor bitmapDescriptorFromVector(Context context, @DrawableRes int vectorDrawableResourceId) {
-        Drawable background = ContextCompat.getDrawable(context, vectorDrawableResourceId);
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight());
-        Drawable vectorDrawable = ContextCompat.getDrawable(context, R.drawable.ic_restaurant_dark_orange_24dp);
-        Bitmap bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        background.draw(canvas);
-        vectorDrawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-    public static String getDistance(double lat_a, float lng_a, float lat_b, float lng_b) {
-        // earth radius is in mile
-        double earthRadius = 3958.75;
-        double latDiff = Math.toRadians(lat_b - lat_a);
-        double lngDiff = Math.toRadians(lng_b - lng_a);
-        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2)
-                + Math.cos(Math.toRadians(lat_a))
-                * Math.cos(Math.toRadians(lat_b)) * Math.sin(lngDiff / 2)
-                * Math.sin(lngDiff / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        double distance = earthRadius * c;
-
-        int meterConversion = 1609;
-        double kmConvertion = 1.6093;
-        // return new Float(distance * meterConversion).floatValue();
-        //return String.format("%.2f", new Float(distance * kmConvertion).floatValue()) + " km";
-         return String.format("%.2f", distance)+" m";
-    }
+    //public static String getDistance(double lat_a, float lng_a, float lat_b, float lng_b) {
+    //    // earth radius is in mile
+    //    double earthRadius = 3958.75;
+    //    double latDiff = Math.toRadians(lat_b - lat_a);
+    //    double lngDiff = Math.toRadians(lng_b - lng_a);
+    //    double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2)
+    //            + Math.cos(Math.toRadians(lat_a))
+    //            * Math.cos(Math.toRadians(lat_b)) * Math.sin(lngDiff / 2)
+    //            * Math.sin(lngDiff / 2);
+    //    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    //    double distance = earthRadius * c;
+//
+    //    int meterConversion = 1609;
+    //    double kmConvertion = 1.6093;
+    //    // return new Float(distance * meterConversion).floatValue();
+    //    //return String.format("%.2f", new Float(distance * kmConvertion).floatValue()) + " km";
+    //     return String.format("%.2f", distance)+" m";
+    //}
 }

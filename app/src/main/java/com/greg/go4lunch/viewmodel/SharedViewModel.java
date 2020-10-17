@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.repository.Repository;
@@ -18,10 +19,13 @@ public class SharedViewModel extends ViewModel {
     public List<Restaurant> restaurants = new ArrayList<>();
     private MutableLiveData<ArrayList<Workmate>> workmates;
     private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
+    //1)
+    private MutableLiveData<ArrayList<LikedRestaurant>> favorites;
 
+    //----------------------------- Get all restaurants --------------------------------------------
     public List<Restaurant> getRestaurants(){ return restaurants; }
 
-    // ---------------------------- Get all workmates ----------------------------------------------
+    //----------------------------- Get all workmates ----------------------------------------------
     public void initAllWorkmates(Context context){
         if (workmates != null){
             return;
@@ -33,13 +37,28 @@ public class SharedViewModel extends ViewModel {
         return workmates;
     }
 
-    // ---------------------------- Get joining workmates ------------------------------------------
-    public void initJoiningWorkmates(Context context){
+    //----------------------------- Get joining workmates ------------------------------------------
+    public void initJoiningWorkmates(Context context, String uid, String idPickedRestaurant){
         if (joiningWorkmates != null){
             return;
         }
-        joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates();
+        joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates(uid, idPickedRestaurant);
     }
 
     public LiveData<ArrayList<Workmate>> getJoiningWorkmatesData(){ return joiningWorkmates; }
+
+    //----------------------------- Get favorite restaurant ----------------------------------------
+    //2)
+    //public void initFavoriteRestaurant(Context context){
+    //    if (favorites != null){
+    //        return;
+    //    }
+    //    //6)
+    //    String uid = "";
+    //    String idPickedRestaurant = "";
+    //    favorites = Repository.getInstance(context).getFavoriteRestaurant(uid, idPickedRestaurant);
+    //}
+//
+    ////3)
+    //public LiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurantData(){ return favorites; }
 }

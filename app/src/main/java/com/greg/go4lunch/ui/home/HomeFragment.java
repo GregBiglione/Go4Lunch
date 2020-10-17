@@ -124,7 +124,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
     }
 
-    private void locationAccuracy(){
+    public void locationAccuracy(){
         mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
@@ -132,6 +132,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     LatLng losAngeles = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(losAngeles).title("I'm here and I'm hungry !"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(losAngeles));
+                    double lat_a = location.getLatitude();
                     zoomOnLocation();
                     getNearbyPlaces();
                 }
@@ -266,7 +267,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //----------------------------------------------------------------------------------------------
 
     private void getRestaurantDetails(Restaurant r){
-        // ---------------------------- Define a place Id ----------------------------------------------
+        // ---------------------------- Define a place Id ------------------------------------------
         final String placeId = r.getIdRestaurant();
 
         // ---------------------------- Specify a field to return ----------------------------------
@@ -317,13 +318,22 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    //private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
-    //    Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
-    //    vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
-    //    Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-    //    //bitmap.eraseColor(Color.GREEN);
-    //    Canvas canvas = new Canvas(bitmap);
-    //    vectorDrawable.draw(canvas);
-    //    return BitmapDescriptorFactory.fromBitmap(bitmap);
-    //}
+    public static String getDistance(double lat_a, float lng_a, float lat_b, float lng_b) {
+        // earth radius is in mile
+        double earthRadius = 3958.75;
+        double latDiff = Math.toRadians(lat_b - lat_a);
+        double lngDiff = Math.toRadians(lng_b - lng_a);
+        double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2)
+                + Math.cos(Math.toRadians(lat_a))
+                * Math.cos(Math.toRadians(lat_b)) * Math.sin(lngDiff / 2)
+                * Math.sin(lngDiff / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = earthRadius * c;
+
+        int meterConversion = 1609;
+        double kmConvertion = 1.6093;
+        // return new Float(distance * meterConversion).floatValue();
+        //return String.format("%.2f", new Float(distance * kmConvertion).floatValue()) + " km";
+         return String.format("%.2f", distance)+" m";
+    }
 }

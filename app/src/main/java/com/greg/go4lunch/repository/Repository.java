@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Workmate;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public class Repository {
         return instance;
     }
 
-    // ---------------------------- Get all workmates ----------------------------------------------
+    //----------------------------- Get all workmates ----------------------------------------------
     public MutableLiveData<ArrayList<Workmate>> getAllWorkmates(){
         MutableLiveData<ArrayList<Workmate>> allWorkmates = new MutableLiveData<>();
         db.collection("workmates")
@@ -54,11 +55,12 @@ public class Repository {
         return allWorkmates;
     }
 
-    // ---------------------------- Get joining workmates ------------------------------------------
-    public MutableLiveData<ArrayList<Workmate>> getJoiningWorkmates(){
+    //----------------------------- Get joining workmates ------------------------------------------
+    public MutableLiveData<ArrayList<Workmate>> getJoiningWorkmates(String uid, String idPickedRestaurant){
         MutableLiveData<ArrayList<Workmate>> allJoiningWorkmates = new MutableLiveData<>();
         db.collection("workmates")
-                //.whereEqualTo("idPickedRestaurant", /*workmates.get(0).getIdPickedRestaurant()*/)
+                .whereEqualTo("uid", uid)
+                .whereEqualTo("idPickedRestaurant", idPickedRestaurant)
                 .whereEqualTo("joining", true)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -80,4 +82,33 @@ public class Repository {
         });
         return allJoiningWorkmates;
     }
+
+    //----------------------------- Get favorite restaurant ----------------------------------------
+    //4)
+    //public MutableLiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurant(String uid, String idPickedRestaurant){
+    //   MutableLiveData<ArrayList<LikedRestaurant>> allFavorites = new MutableLiveData<>();
+    //   db.collection("likedRestaurants")
+    //           .whereEqualTo("workmateId", uid)
+    //           .whereEqualTo("restaurantId", idPickedRestaurant)
+    //           .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    //       @Override
+    //       public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+    //           if (!queryDocumentSnapshots.isEmpty()){
+    //               List<DocumentSnapshot> favoriteList = queryDocumentSnapshots.getDocuments();
+    //               //5)
+    //               ArrayList<LikedRestaurant> favorites = new ArrayList<>();
+    //               for (DocumentSnapshot documentSnapshot : favoriteList) {
+    //                   favorites.add(documentSnapshot.toObject(LikedRestaurant.class));
+    //               }
+    //               allFavorites.setValue(favorites);
+    //           }
+    //       }
+    //   }).addOnFailureListener(new OnFailureListener() {
+    //       @Override
+    //       public void onFailure(@NonNull Exception e) {
+    //           Log.d(TAG, "Impossible to get favorite list", e);
+    //       }
+    //   });
+    //   return allFavorites;
+    //}
 }

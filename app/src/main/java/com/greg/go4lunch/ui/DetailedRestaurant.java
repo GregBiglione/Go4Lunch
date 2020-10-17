@@ -45,6 +45,7 @@ import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
+import org.parceler.Repository;
 
 import java.util.ArrayList;
 
@@ -81,8 +82,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
-        mSharedViewModel.initJoiningWorkmates(this);
+        configureViewModel();
         setContentView(R.layout.activity_detailed_restaurant);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,6 +103,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         Intent i = getIntent();
         Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
 
+        //String restaurantId = restaurant.getIdRestaurant();
         String restaurantName = restaurant.getName();
         mDetailedName.setText(restaurantName);
         float restaurantRating = restaurant.getRating();
@@ -220,6 +221,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     boolean isFavoriteTemporary;
 
     private void defaultLikeIcon(){
+
         if (!isFavoriteTemporary){
             mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
             mLikeText.setText(R.string.detailed_like);
@@ -234,22 +236,21 @@ public class DetailedRestaurant extends AppCompatActivity {
 
     @OnClick(R.id.like_Layout)
     void clickOnLike(){
-        if (!isFavoriteTemporary){
+        if (isFavoriteTemporary){
             mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
             mLikeText.setText(R.string.likedDetailedText);
             mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
             addFavorite();
-            isFavoriteTemporary = true;
+            //isFavoriteTemporary = true;
         }
         else{
             mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
             mLikeText.setText(R.string.detailed_like);
             mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
             upDateFavorite();
-            isFavoriteTemporary = false;
+            //isFavoriteTemporary = false;
         }
     }
-
 
     //private boolean isLiked(){
     //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -307,6 +308,36 @@ public class DetailedRestaurant extends AppCompatActivity {
             }
         });
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Restaurant is favorite -----------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //private boolean isFavorite(String uid, String idFavoriteRestaurant){
+    //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    //        @Override
+    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
+    //            LikedRestaurant likedRestaurant = documentSnapshot
+//
+    //            String idFavoriteRestaurant = currentWorkmate.getIdPickedRestaurant();
+    //            WorkmateHelper.restaurantIsfavorite(getCurrentUser().getUid(), idFavoriteRestaurant);
+    //        }
+    //    });
+    //    return true;
+    //}
+    //private boolean isFavorite(){
+    //    mSharedViewModel.getFavoriteRestaurantData().observe(this, new Observer<ArrayList<LikedRestaurant>>() {
+    //        @Override
+    //        public void onChanged(ArrayList<LikedRestaurant> likedRestaurants) {
+    //            String uid = getCurrentUser().getUid();
+    //            Intent i = getIntent();
+    //            Restaurant restaurantLiked = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+    //            String idPickedRestaurant = restaurantLiked.getIdRestaurant();
+//
+    //                    WorkmateHelper.isFavorite(uid, idPickedRestaurant);
+    //        }
+    //    });
+    //    return true;
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Go to website function -----------------------------------------
@@ -377,7 +408,19 @@ public class DetailedRestaurant extends AppCompatActivity {
     }
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Configure RecyclerView -----------------------------------------
+    //----------------------------- Configure view model -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    private void configureViewModel(){
+        Intent i = getIntent();
+        Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+        String restaurantId = restaurant.getIdRestaurant();
+
+        mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
+        mSharedViewModel.initJoiningWorkmates(this, getCurrentUser().getUid(), restaurantId);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Configure recycler view ----------------------------------------
     //----------------------------------------------------------------------------------------------
 
     private void configureJoiningWorkmatesRecyclerView() {

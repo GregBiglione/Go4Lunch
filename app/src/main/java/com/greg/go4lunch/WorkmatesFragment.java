@@ -33,8 +33,14 @@ public class WorkmatesFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_workmates, container, false);
         mWorkmateRecyclerView = view.findViewById(R.id.workmates_recycler_view);
-        configureRecyclerView();
+        //configureRecyclerView();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        configureRecyclerView();
     }
 
     private void configureRecyclerView(){

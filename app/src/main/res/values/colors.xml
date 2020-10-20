@@ -10,4 +10,5 @@
     <color name="hr">#CECAC8</color>
     <color name="colorStar">#F9E911</color>
     <color name="emailColor">#D0001C</color>
+    <color name="loginBorderTop">#A65C5D5F</color>
 </resources>

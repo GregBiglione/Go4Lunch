@@ -132,7 +132,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     LatLng losAngeles = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(losAngeles).title("I'm here and I'm hungry !"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(losAngeles));
-                    double lat_a = location.getLatitude();
                     zoomOnLocation();
                     getNearbyPlaces();
                 }

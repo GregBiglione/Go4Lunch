@@ -49,6 +49,8 @@ public class WorkmateHelper {
                 "pickedRestaurant", pickedRestaurant, "joining", joining);
     }
 
+    // ---------------------------- Get picked restaurant ????? -----------------------------------------------
+
     //-------------------------------------------
     //--- LIKED RESTAURANTS ---------------------
     //-------------------------------------------
@@ -74,4 +76,8 @@ public class WorkmateHelper {
     //public static Task<DocumentSnapshot> isFavorite(String uid, String idPickedRestaurant){
     //    return WorkmateHelper.getLikedRestaurantsCollection().document(uid).get();
     //}
+
+    public static Task<Void> deleteFavoriteRestaurant(String uid){
+        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).delete();
+    }
 }

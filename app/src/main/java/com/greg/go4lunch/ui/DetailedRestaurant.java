@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,6 +43,7 @@ import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.ui.home.HomeFragment;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
@@ -67,13 +69,13 @@ public class DetailedRestaurant extends AppCompatActivity {
 
     @BindView(R.id.fab) FloatingActionButton mPickButton;
     boolean isJoiningRestaurant;
-    private Workmate mWorkmate;
 
     public static final int CALL_REQUEST_CODE = 218;
 
+    @BindView(R.id.like_Layout) LinearLayout mLikeLyt;
     @BindView(R.id.like_image) ImageView mLikeStar;
     @BindView(R.id.detailed_like) TextView mLikeText;
-    //boolean isFavorite;
+    boolean isFavorite;
 
     @BindView(R.id.joining_workmates_recycler) RecyclerView mJoiningWorkmatesRecyclerView;
     private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
@@ -94,9 +96,11 @@ public class DetailedRestaurant extends AppCompatActivity {
         defaultPickIcon();
         clickOnJoin();
 
-        defaultLikeIcon();
+        //defaultLikeIcon();
 
         configureJoiningWorkmatesRecyclerView();
+        //isFavorite();
+        getFavoriteRestaurant();
     }
 
     public void recoverIntent(){
@@ -217,58 +221,81 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //----------------------------- Add favorite function ------------------------------------------
     //----------------------------------------------------------------------------------------------
-    boolean isFavoriteTemporary;
 
-    private void defaultLikeIcon(){
-        if (!isFavoriteTemporary){
-            mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-            mLikeText.setText(R.string.detailed_like);
-            mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
-        }
-        else{
-            mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-            mLikeText.setText(R.string.likedDetailedText);
-            mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
-        }
-    }
+    //private void defaultLikeIcon(){
+    //    if (isFavorite){
+    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+    //        mLikeText.setText(R.string.detailed_like);
+    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    //    }
+    //    else{
+    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+    //        mLikeText.setText(R.string.likedDetailedText);
+    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorStar));
+    //    }
+    //}
 
     @OnClick(R.id.like_Layout)
     void clickOnLike(){
-        if (isFavoriteTemporary){
+        if (!isFavorite){
             mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
             mLikeText.setText(R.string.likedDetailedText);
             mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
             addFavorite();
-            isFavoriteTemporary = true;
+            isFavorite = true;
         }
         else{
             mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
             mLikeText.setText(R.string.detailed_like);
             mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
             upDateFavorite();
-            isFavoriteTemporary = false;
+            isFavorite = false;
         }
     }
 
-    //private boolean isLiked(){
-    //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-    //        @Override
-    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-    //            LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
-    //            if(currentLikedRestaurant != null){
-    //                WorkmateHelper.getLikedRestaurant(currentLikedRestaurant.getWorkmateId());
-    //            }
-    //        }
-    //    });
-    //    return false;
-    //}
-
-    //private boolean isLikedRestaurant(){
+    //@OnClick(R.id.like_Layout)
+    //void clickOnLike(){
     //    Intent i = getIntent();
     //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-    //    String idPickedRestaurant = restaurant.getIdRestaurant();
-    //    WorkmateHelper.getLikedRestaurant(idPickedRestaurant);
-    //    return false;
+    //    //boolean isFavorite = false;
+    //    String restaurantId = restaurant.getIdRestaurant();
+    //    mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
+    //    //mSharedViewModel.getFavoriteRestaurantData().getValue().get(0).getIsFavorite();
+//
+    //    //if(mSharedViewModel.getFavoriteRestaurantData().getValue().get(0).getIsFavorite()){
+    //    //    isFavorite = true;
+    //    //}
+    //    //if(mSharedViewModel.getFavoriteRestaurantData() != null){
+    //    //    isFavorite = true;
+    //    //}
+//
+    //    //if (isFavorite){
+    //    //    mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+    //    //    mLikeText.setText(R.string.detailed_like);
+    //    //    mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    //    //}
+    //    //else{
+    //    //    mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+    //    //    mLikeText.setText(R.string.likedDetailedText);
+    //    //    mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorStar));
+    //    //    //isFavoriteTemporary = true;
+    //    //}
+//
+    //    if (!isFavorite){
+    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+    //        mLikeText.setText(R.string.likedDetailedText);
+    //        mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
+    //        addFavorite();
+    //        isFavorite = true;
+    //    }
+    //    else{
+    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+    //        mLikeText.setText(R.string.detailed_like);
+    //        mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
+    //        upDateFavorite();
+    //        //deleteFavorite();
+    //        isFavorite = false;
+    //    }
     //}
 
     private void addFavorite(){
@@ -307,34 +334,65 @@ public class DetailedRestaurant extends AppCompatActivity {
         });
     }
 
+    private void getFavoriteRestaurant(){
+        WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
+                if (currentLikedRestaurant != null){
+                    String idFavoriteRestaurant = currentLikedRestaurant.getRestaurantId();
+                    boolean isFavoriteRestaurant = currentLikedRestaurant.getIsFavorite(); //false by default
+                    if (!isFavoriteRestaurant && idFavoriteRestaurant != null){
+                        isFavorite = true;
+                    }
+                }
+            }
+        });
+    }
+
+    //----------------------------- Delete ????:  Not a good way to act ----------------------------------------------------
+    private void deleteFavorite(){
+        WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                LikedRestaurant likedRestaurantToDelete = documentSnapshot.toObject(LikedRestaurant.class);
+                if (likedRestaurantToDelete != null){
+                    WorkmateHelper.deleteFavoriteRestaurant(likedRestaurantToDelete.getWorkmateId());
+                    Toasty.error(getApplicationContext(), "Favorite restaurant delete from Firestore after click on star button",
+                            Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     //----------------------------------------------------------------------------------------------
     //----------------------------- Restaurant is favorite -----------------------------------------
     //----------------------------------------------------------------------------------------------
-    //private boolean isFavorite(String uid, String idFavoriteRestaurant){
-    //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-    //        @Override
-    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-    //            LikedRestaurant likedRestaurant = documentSnapshot
+    //public void isFavorite(){
+    //    Intent i = getIntent();
+    //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
 //
-    //            String idFavoriteRestaurant = currentWorkmate.getIdPickedRestaurant();
-    //            WorkmateHelper.restaurantIsfavorite(getCurrentUser().getUid(), idFavoriteRestaurant);
-    //        }
-    //    });
-    //    return true;
-    //}
-    //private boolean isFavorite(){
-    //    mSharedViewModel.getFavoriteRestaurantData().observe(this, new Observer<ArrayList<LikedRestaurant>>() {
-    //        @Override
-    //        public void onChanged(ArrayList<LikedRestaurant> likedRestaurants) {
-    //            String uid = getCurrentUser().getUid();
-    //            Intent i = getIntent();
-    //            Restaurant restaurantLiked = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-    //            String idPickedRestaurant = restaurantLiked.getIdRestaurant();
+    //    boolean isFavoriteTemporary = false;
+    //    String restaurantId = restaurant.getIdRestaurant();
+    //    mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
+    //    //mSharedViewModel.getFavoriteRestaurantData();
+    //    if(mSharedViewModel.getFavoriteRestaurantData() != null){
+    //        isFavoriteTemporary = true;
+    //    }
 //
-    //                    WorkmateHelper.isFavorite(uid, idPickedRestaurant);
-    //        }
-    //    });
-    //    return true;
+    //    if (isFavoriteTemporary){
+    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+    //        mLikeText.setText(R.string.likedDetailedText);
+    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorStar));
+    //        addFavorite();
+    //    }
+    //    else{
+    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+    //        mLikeText.setText(R.string.detailed_like);
+    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+    //        upDateFavorite();
+    //    }
+//
     //}
 
     //----------------------------------------------------------------------------------------------
@@ -353,7 +411,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     }
 
     //----------------------------------------------------------------------------------------------
-    // ---------------------------- Create user in FireStore ---------------------------------------
+    //----------------------------- Create user in FireStore ---------------------------------------
     //----------------------------------------------------------------------------------------------
 
     private void createWorkmateInFireStore(){
@@ -408,22 +466,23 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure view model -------------------------------------------
     //----------------------------------------------------------------------------------------------
+
     public void configureViewModel(){
         Intent i = getIntent();
         Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
         String restaurantId = restaurant.getIdRestaurant();
 
-        mSharedViewModel = new ViewModelProvider(DetailedRestaurant.this).get(SharedViewModel.class);
-        mSharedViewModel.initJoiningWorkmates(this, getCurrentUser().getUid(), restaurantId);
+        mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        mSharedViewModel.initJoiningWorkmates(this, restaurantId);
+        //mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
+        //mSharedViewModel.getFavoriteRestaurantData().observe(this, new Observer<ArrayList<LikedRestaurant>>() {
+        //    @Override
+        //    public void onChanged(ArrayList<LikedRestaurant> likedRestaurants) {
+        //        //likedRestaurants.get(???).getIsFavorite();
+        //        //getFavoriteRestaurant();
+        //    }
+        //});
     }
-
-    //private boolean isFavorite(){
-    //    Intent i = getIntent();
-    //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-    //    String restaurantId = restaurant.getIdRestaurant();
-    //    mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
-    //    return true;
-    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure recycler view ----------------------------------------
@@ -431,11 +490,12 @@ public class DetailedRestaurant extends AppCompatActivity {
 
     private void configureJoiningWorkmatesRecyclerView() {
         mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);
-        mJoiningWorkmatesRecyclerView.setHasFixedSize(true);
+        //mJoiningWorkmatesRecyclerView.setHasFixedSize(true);
         mJoiningWorkmatesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mSharedViewModel.getJoiningWorkmatesData().observe(this, new Observer<ArrayList<Workmate>>() {
             @Override
             public void onChanged(ArrayList<Workmate> workmates) {
+                String uid = workmates.get(0).getUid();
                 mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(workmates);
                 mJoiningWorkmatesRecyclerView.setAdapter(mJoiningWorkmatesAdapter);
                 //mJoiningWorkmatesAdapter.notifyDataSetChanged();

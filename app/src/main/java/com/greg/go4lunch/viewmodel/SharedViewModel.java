@@ -38,25 +38,26 @@ public class SharedViewModel extends ViewModel {
     }
 
     //----------------------------- Get joining workmates ------------------------------------------
-    public void initJoiningWorkmates(Context context, String uid, String idPickedRestaurant){
+    public void initJoiningWorkmates(Context context, String idPickedRestaurant){
         if (joiningWorkmates != null){
             return;
         }
-        joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates(uid, idPickedRestaurant);
+        joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates(idPickedRestaurant);
     }
 
     public LiveData<ArrayList<Workmate>> getJoiningWorkmatesData(){ return joiningWorkmates; }
 
     //----------------------------- Get favorite restaurant ----------------------------------------
     //2)
-    //public void initFavoriteRestaurant(Context context, String uid, String idFavoriteRestaurant){
-    //    if (favorites != null){
-    //        return;
-    //    }
-    //    //6)
-    //    favorites = Repository.getInstance(context).getFavoriteRestaurant(uid, idFavoriteRestaurant);
-    //}
-//
-    ////3)
-    //public LiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurantData(){ return favorites; }
+    public void initFavoriteRestaurant(Context context, String uid, String idFavoriteRestaurant){
+        if (favorites != null){
+            return;
+        }
+        //6)
+        favorites = Repository.getInstance(context).getFavoriteRestaurant(uid, idFavoriteRestaurant);
+
+    }
+
+    //3)
+    public LiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurantData(){ return favorites; }
 }

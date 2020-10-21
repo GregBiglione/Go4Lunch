@@ -43,4 +43,6 @@
     <string name="AvailableWorkmates">Коллеги доступны</string>
     <string name="restaurantNotChosen">ещё не решил</string>
     <string name="restaurantChosen">поедает в</string>
+
+    <string name="notification_title" >Сообщение от Go4Lunch</string>
 </resources>

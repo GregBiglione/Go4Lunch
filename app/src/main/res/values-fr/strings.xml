@@ -44,4 +44,6 @@
     <string name="AvailableWorkmates">Collègues disponibles</string>
     <string name="restaurantNotChosen">n\'a pas encore décidé</string>
     <string name="restaurantChosen">mange au</string>
+
+    <string name="notification_title" >Message de Go4Lunch</string>
 </resources>

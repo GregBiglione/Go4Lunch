@@ -182,7 +182,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (EasyPermissions.hasPermissions(getContext(), perms)){
             Toasty.success(getContext(), getString(R.string.location_granted), Toasty.LENGTH_SHORT).show();
             customFocus();
-            //getNearbyPlaces();
+            //getDistanceTest2();
         }
         else {
             EasyPermissions.requestPermissions(this,"We need your permission to locate you",
@@ -233,6 +233,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setName(placeLikelihood.getPlace().getName());
                                 r.setAddress(placeLikelihood.getPlace().getAddress());
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
+                                //r.setDistanceFromUser(); <--------------------------------------------------------- distance
                                 mSharedViewModel.restaurants.add(r);
                                 //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
                                 //----------------------------- Custom marker ----------------------
@@ -307,22 +308,52 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    //public static String getDistance(double lat_a, float lng_a, float lat_b, float lng_b) {
-    //    // earth radius is in mile
-    //    double earthRadius = 3958.75;
-    //    double latDiff = Math.toRadians(lat_b - lat_a);
-    //    double lngDiff = Math.toRadians(lng_b - lng_a);
-    //    double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2)
-    //            + Math.cos(Math.toRadians(lat_a))
-    //            * Math.cos(Math.toRadians(lat_b)) * Math.sin(lngDiff / 2)
-    //            * Math.sin(lngDiff / 2);
-    //    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    //    double distance = earthRadius * c;
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get distance to restaurant -------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    public String getDistanceTest1(Location locationA, Location locationB){
+        //Get the current location in locationAccuracy() lg 32
+        LatLng losAngeles = new LatLng(locationA.getLatitude(), locationA.getLongitude());
+        Location currentLocation = new Location("locationA");
+        currentLocation.setLatitude(locationA.getLatitude());
+        currentLocation.setLatitude(locationA.getLongitude());
+
+        //Get the restaurant location in getNearbyPlaces() lg 235
+        //LatLng restaurant = new LatLng("locationB")
+        Location destination = new Location("locationB");
+        double latRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().latitude;
+        double longRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().longitude;
+        destination.setLatitude(latRestaurant);
+        destination.setLongitude(longRestaurant);
+
+        //Calculate distance
+        double distance = currentLocation.distanceTo(destination);
+        return (distance + "m");
+    }
+
+    //public void getDistanceTest2(){
+    //    mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+    //        @Override
+    //        public void onSuccess(Location location) {
+    //            //Get the current location
+    //            Location currentLocation = new Location("locationA");
+    //            currentLocation.setLatitude(location.getLatitude());
+    //            currentLocation.setLatitude(location.getLongitude());
 //
-    //    int meterConversion = 1609;
-    //    double kmConvertion = 1.6093;
-    //    // return new Float(distance * meterConversion).floatValue();
-    //    //return String.format("%.2f", new Float(distance * kmConvertion).floatValue()) + " km";
-    //     return String.format("%.2f", distance)+" m";
+    //            //Get the restaurant location
+    //            Location destination = new Location("locationB");
+    //            double latRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().latitude;
+    //            double longRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().longitude;
+    //            destination.setLatitude(latRestaurant);
+    //            destination.setLongitude(longRestaurant);
+//
+    //            //Calculate distance
+    //            double distance = currentLocation.distanceTo(destination);
+    //            //return (distance + "m");
+    //        }
+    //    });
+    //    //return ""; <----- si public String getDistanceTest2()
+    //    //return (distance + "m");
     //}
 }

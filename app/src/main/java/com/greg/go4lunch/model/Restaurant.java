@@ -8,11 +8,11 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Restaurant {
-    public String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
-    public PhotoMetadata restaurantPicture;
-    public LatLng latLng;
-    public int joiningNumber;
-    public float rating;
+    private String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
+    private PhotoMetadata restaurantPicture;
+    private LatLng latLng;
+    private int joiningNumber;
+    private float rating;
     //private List<Workmate> joiningWorkmate;
 
     public Restaurant(){}

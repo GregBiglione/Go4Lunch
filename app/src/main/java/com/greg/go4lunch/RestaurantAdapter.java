@@ -67,7 +67,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         //holder.mJoiningWorkmates.setText("(" + joiningWorkmates + ")");
         //holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
        holder.mRestaurantRating.setRating(r.getRating());
-       //holder.mRestaurantDistance.setText(r.getDistanceFromUser());
+       holder.mRestaurantDistance.setText(r.getDistanceFromUser());
        getRestaurantPhoto(holder.mRestaurantPicture, r.getRestaurantPicture());
        holder.mButtonDetailedRestaurant.setOnClickListener(new View.OnClickListener() {
             @Override

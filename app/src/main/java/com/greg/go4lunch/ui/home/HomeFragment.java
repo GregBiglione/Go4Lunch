@@ -71,8 +71,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private PlacesClient mPlacesClient;
     private SharedViewModel mSharedViewModel;
     private FusedLocationProviderClient mFusedLocationProviderClient;
-
-    //private Location mLocation;
+    private Location mLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -123,7 +122,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(Location location) {
                 if (location != null){
-                    //mLocation = location; //<--
+                    mLocation = location;
                     LatLng losAngeles = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(losAngeles).title("I'm here and I'm hungry !"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(losAngeles));
@@ -228,8 +227,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setName(placeLikelihood.getPlace().getName());
                                 r.setAddress(placeLikelihood.getPlace().getAddress());
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
-
-                                //r.setDistanceFromUser(getDistance(r.getLatLng()));
+                                r.setDistanceFromUser(getDistance(r.getLatLng()));
                                 mSharedViewModel.restaurants.add(r);
                                 //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
                                 //----------------------------- Custom marker ----------------------
@@ -306,19 +304,17 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //----------------------------- Get distance to restaurant -------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //private String getDistance(LatLng restaurantLocation){
-    //    //Get the current location in locationAccuracy() lg 32
-    //    Location currentLocation = new Location("locationA");
-    //    currentLocation.setLatitude(mLocation.getLatitude());
-    //    currentLocation.setLongitude(mLocation.getLongitude());
-//
-    //    //Get the restaurant location in getNearbyPlaces() lg 235
-    //    Location destination = new Location("locationB");
-    //    destination.setLatitude(restaurantLocation.latitude);
-    //    destination.setLongitude(restaurantLocation.longitude);
-//
-    //    //Calculate distance
-    //    double distance = currentLocation.distanceTo(destination);
-    //    return (distance + "m");
-    //}
+    private String getDistance(LatLng restaurantLocation){
+        Location currentLocation = new Location("locationA");
+        currentLocation.setLatitude(mLocation.getLatitude());
+        currentLocation.setLongitude(mLocation.getLongitude());
+
+        Location destination = new Location("locationB");
+        destination.setLatitude(restaurantLocation.latitude);
+        destination.setLongitude(restaurantLocation.longitude);
+
+        double accurateDistance = currentLocation.distanceTo(destination);
+        int distance= (int) Math.round(accurateDistance);
+        return (distance + "m");
+    }
 }

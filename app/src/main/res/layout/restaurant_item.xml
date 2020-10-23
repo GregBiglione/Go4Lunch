@@ -30,6 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/distance"
+                android:paddingEnd="20dp"
                 android:textAlignment="textEnd"/>
         </LinearLayout>
 

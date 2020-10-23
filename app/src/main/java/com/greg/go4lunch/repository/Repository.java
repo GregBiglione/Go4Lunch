@@ -66,7 +66,7 @@ public class Repository {
                 if (!queryDocumentSnapshots.isEmpty()){
                     List<DocumentSnapshot> joiningList = queryDocumentSnapshots.getDocuments();
                     ArrayList<Workmate> joiningWorkmates = new ArrayList<>();
-                    for ( DocumentSnapshot documentSnapshot : joiningList) {
+                    for (DocumentSnapshot documentSnapshot : joiningList) {
                         joiningWorkmates.add(documentSnapshot.toObject(Workmate.class));
                     }
                     allJoiningWorkmates.setValue(joiningWorkmates);
@@ -93,7 +93,6 @@ public class Repository {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()){
                     List<DocumentSnapshot> favoriteList = queryDocumentSnapshots.getDocuments();
-                    //5) Création d’une liste
                     ArrayList<LikedRestaurant> favorites = new ArrayList<>();
                     for (DocumentSnapshot documentSnapshot : favoriteList) {
                         favorites.add(documentSnapshot.toObject(LikedRestaurant.class));
@@ -108,5 +107,33 @@ public class Repository {
             }
         });
         return allFavorites;
+    }
+
+    //----------------------------- Get picked restaurant ------------------------------------------
+    public MutableLiveData<ArrayList<Workmate>> getPickedRestaurant(String uid, String idPickedRestaurant){
+        MutableLiveData<ArrayList<Workmate>> pickedRestaurant = new MutableLiveData<>();
+        db.collection("workmates")
+                .whereEqualTo("uid", uid)
+                .whereEqualTo("idPickedRestaurant", idPickedRestaurant)
+                .whereEqualTo("joining", true)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> pickedList = queryDocumentSnapshots.getDocuments();
+                    ArrayList<Workmate> picked = new ArrayList<>();
+                    for (DocumentSnapshot documentSnapshot: pickedList) {
+                        picked.add(documentSnapshot.toObject(Workmate.class));
+                    }
+                    pickedRestaurant.setValue(picked);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Impossible to get picked list", e);
+            }
+        });
+        return pickedRestaurant;
     }
 }

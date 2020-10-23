@@ -21,14 +21,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -43,11 +41,9 @@ import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
-import com.greg.go4lunch.ui.home.HomeFragment;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
-import org.parceler.Repository;
 
 import java.util.ArrayList;
 
@@ -59,7 +55,6 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.CALL_PHONE;
-import static androidx.test.InstrumentationRegistry.getContext;
 
 public class DetailedRestaurant extends AppCompatActivity {
 
@@ -69,7 +64,6 @@ public class DetailedRestaurant extends AppCompatActivity {
     @BindView(R.id.detailed_restaurant_address) TextView mDetailedAddress;
 
     @BindView(R.id.fab) FloatingActionButton mPickButton;
-    boolean isJoiningRestaurant;
 
     public static final int CALL_REQUEST_CODE = 218;
 
@@ -77,6 +71,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     @BindView(R.id.like_image) ImageView mLikeStar;
     @BindView(R.id.detailed_like) TextView mLikeText;
     boolean isFavorite;
+    boolean isJoining;
 
     @BindView(R.id.joining_workmates_recycler) RecyclerView mJoiningWorkmatesRecyclerView;
     private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
@@ -94,15 +89,9 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         recoverIntent();
 
-        defaultPickIcon();
-        clickOnJoin();
-
-        //defaultLikeIcon();
-
         configureJoiningWorkmatesRecyclerView();
-        //isFavorite();
-        //getFavoriteRestaurant();
         getFavorite();
+        getSelectedRestaurant();
     }
 
     public void recoverIntent(){
@@ -123,59 +112,81 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------- Click on join button -------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void defaultPickIcon(){
-        if (!isJoiningRestaurant){
-            mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
+    @OnClick(R.id.fab)
+    void clickOnPick(){
+        if (!isJoining){
+            mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            updateWorkmateIsJoining();
+            //createWorkmateInFireStore();
+            isJoining = true;
         }
         else{
-            mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
+            mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
+            updateWorkmateIsNotJoining();
+            isJoining = false;
         }
     }
 
-    public void clickOnJoin() {
-        mPickButton.setOnClickListener(new View.OnClickListener() {
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Create user in FireStore ---------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void createWorkmateInFireStore(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null){
+            String uid = user.getUid();
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            String photo = user.getPhotoUrl().toString();
+
+            //----------------------------- Create workmate in FireStore ---------------------------
+            WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null, false);
+        }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get current user -----------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    @Nullable
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Update restaurant & is joining ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void updateWorkmateIsJoining(){
+        createWorkmateInFireStore();
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onClick(View v) {
-                if (!isJoiningRestaurant){
-                    mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
-                    isJoiningRestaurant = true;
-                    //updateIsJoining();
-                    //restaurantIsPicked();
-                    updateRestaurantAndWorkmateJoiningData();
-                    //TODO change restaurant marker color to green for this restaurant
-                }
-                else{
-                    mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
-                    isJoiningRestaurant = false;
-                    //updateIsNotJoining();
-                    //restaurantNotPicked();
-                    updateRestaurantAndWorkmateIsNotJoiningData();
-                    //TODO change restaurant marker color to orange for this restaurant
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                Intent i = getIntent();
+                Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+                String idPickedRestaurant = restaurant.getIdRestaurant();
+                String namePickedRestaurant = restaurant.getName();
+                if (currentWorkmate != null){
+                    WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant, true);
                 }
             }
         });
     }
 
-    private void getRestaurantPhoto(ImageView v, PhotoMetadata photoMetadata){
+    private void updateWorkmateIsNotJoining(){
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if(user != null){
+            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(),null, null, false);
+        }
+    }
 
-        // ---------------------------- Create a FetchPhotoRequest -------------------------
-        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                .build();
-        PlacesClient mPlacesClient = Places.createClient(this);
-        mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
+    private void getSelectedRestaurant(){
+        mSharedViewModel.getPickedRestaurantData().observe(this, new Observer<ArrayList<Workmate>>() {
             @Override
-            public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
-                Bitmap bitmap = fetchPhotoResponse.getBitmap();
-                Glide.with(DetailedRestaurant.this)
-                        .load(bitmap)
-                        .into(v);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                if (e instanceof ApiException) {
-                    final ApiException apiException = (ApiException) e;
-                    final int statusCode = apiException.getStatusCode();
+            public void onChanged(ArrayList<Workmate> workmates) {
+                if(!workmates.isEmpty()){
+                    mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
+                    isJoining = true;
                 }
             }
         });
@@ -308,59 +319,6 @@ public class DetailedRestaurant extends AppCompatActivity {
     }
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Create user in FireStore ---------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    private void createWorkmateInFireStore(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
-        if (user != null){
-            String uid = user.getUid();
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            String photo = user.getPhotoUrl().toString();
-
-            //----------------------------- Create workmate in FireStore ---------------------------
-            WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null, false);
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Get current user -----------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    @Nullable
-    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Update restaurant & is joining ---------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    private void updateRestaurantAndWorkmateJoiningData(){
-        createWorkmateInFireStore();
-        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
-                Intent i = getIntent();
-                Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-                String idPickedRestaurant = restaurant.getIdRestaurant();
-                String namePickedRestaurant = restaurant.getName();
-                if (currentWorkmate != null){
-                    WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant, true);
-                }
-            }
-        });
-    }
-
-    private void updateRestaurantAndWorkmateIsNotJoiningData(){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null){
-            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(),null, null, false);
-        }
-    }
-
-    //----------------------------------------------------------------------------------------------
     //----------------------------- Configure view model -------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -372,6 +330,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         mSharedViewModel.initJoiningWorkmates(this, restaurantId);
         mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
+        mSharedViewModel.initPickedRestaurant(this, getCurrentUser().getUid(), restaurantId);
     }
 
     //----------------------------------------------------------------------------------------------
@@ -388,6 +347,35 @@ public class DetailedRestaurant extends AppCompatActivity {
                 mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(workmates);
                 mJoiningWorkmatesRecyclerView.setAdapter(mJoiningWorkmatesAdapter);
                 //mJoiningWorkmatesAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get restaurant photo -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void getRestaurantPhoto(ImageView v, PhotoMetadata photoMetadata){
+
+        // ---------------------------- Create a FetchPhotoRequest -------------------------
+        final FetchPhotoRequest photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                .build();
+        PlacesClient mPlacesClient = Places.createClient(this);
+        mPlacesClient.fetchPhoto(photoRequest).addOnSuccessListener(new OnSuccessListener<FetchPhotoResponse>() {
+            @Override
+            public void onSuccess(FetchPhotoResponse fetchPhotoResponse) {
+                Bitmap bitmap = fetchPhotoResponse.getBitmap();
+                Glide.with(DetailedRestaurant.this)
+                        .load(bitmap)
+                        .into(v);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException) {
+                    final ApiException apiException = (ApiException) e;
+                    final int statusCode = apiException.getStatusCode();
+                }
             }
         });
     }

@@ -20,6 +20,7 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Workmate>> workmates;
     private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
     private MutableLiveData<ArrayList<LikedRestaurant>> favorites;
+    private MutableLiveData<ArrayList<Workmate>> pickedRestaurant;
 
     //----------------------------- Get all restaurants --------------------------------------------
     public List<Restaurant> getRestaurants(){ return restaurants; }
@@ -57,4 +58,14 @@ public class SharedViewModel extends ViewModel {
     }
 
     public LiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurantData(){ return favorites; }
+
+    //----------------------------- Get picked restaurant ------------------------------------------
+    public void initPickedRestaurant(Context context, String uid, String idPickedRestaurant){
+        if (pickedRestaurant != null){
+            return;
+        }
+        pickedRestaurant = Repository.getInstance(context).getPickedRestaurant(uid, idPickedRestaurant);
+    }
+
+    public LiveData<ArrayList<Workmate>> getPickedRestaurantData(){ return pickedRestaurant; }
 }

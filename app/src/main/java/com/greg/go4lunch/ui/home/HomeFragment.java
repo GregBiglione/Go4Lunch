@@ -1,23 +1,16 @@
 package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -79,6 +72,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private SharedViewModel mSharedViewModel;
     private FusedLocationProviderClient mFusedLocationProviderClient;
 
+    //private Location mLocation;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -129,6 +123,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onSuccess(Location location) {
                 if (location != null){
+                    //mLocation = location; //<--
                     LatLng losAngeles = new LatLng(location.getLatitude(), location.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(losAngeles).title("I'm here and I'm hungry !"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(losAngeles));
@@ -233,15 +228,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setName(placeLikelihood.getPlace().getName());
                                 r.setAddress(placeLikelihood.getPlace().getAddress());
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
-                                //r.setDistanceFromUser(); <--------------------------------------------------------- distance
+
+                                //r.setDistanceFromUser(getDistance(r.getLatLng()));
                                 mSharedViewModel.restaurants.add(r);
                                 //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
                                 //----------------------------- Custom marker ----------------------
                                 BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
                                 mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
                                        .icon(subwayBitmapDescriptor)
-                                       // .icon(bitmapDescriptorFromVector(getActivity(), R.drawable.ic_restaurant_dark_orange_24dp))
-                                       /*.title(r.getName() + "\n" + r.getAddress()));*/
                                         .title(r.getName()));
                                 getRestaurantDetails(r);
                             }
@@ -312,48 +306,19 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //----------------------------- Get distance to restaurant -------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    public String getDistanceTest1(Location locationA, Location locationB){
-        //Get the current location in locationAccuracy() lg 32
-        LatLng losAngeles = new LatLng(locationA.getLatitude(), locationA.getLongitude());
-        Location currentLocation = new Location("locationA");
-        currentLocation.setLatitude(locationA.getLatitude());
-        currentLocation.setLatitude(locationA.getLongitude());
-
-        //Get the restaurant location in getNearbyPlaces() lg 235
-        //LatLng restaurant = new LatLng("locationB")
-        Location destination = new Location("locationB");
-        double latRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().latitude;
-        double longRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().longitude;
-        destination.setLatitude(latRestaurant);
-        destination.setLongitude(longRestaurant);
-
-        //Calculate distance
-        double distance = currentLocation.distanceTo(destination);
-        return (distance + "m");
-    }
-
-    //public void getDistanceTest2(){
-    //    mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-    //        @Override
-    //        public void onSuccess(Location location) {
-    //            //Get the current location
-    //            Location currentLocation = new Location("locationA");
-    //            currentLocation.setLatitude(location.getLatitude());
-    //            currentLocation.setLatitude(location.getLongitude());
+    //private String getDistance(LatLng restaurantLocation){
+    //    //Get the current location in locationAccuracy() lg 32
+    //    Location currentLocation = new Location("locationA");
+    //    currentLocation.setLatitude(mLocation.getLatitude());
+    //    currentLocation.setLongitude(mLocation.getLongitude());
 //
-    //            //Get the restaurant location
-    //            Location destination = new Location("locationB");
-    //            double latRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().latitude;
-    //            double longRestaurant = mSharedViewModel.getRestaurants().get(0).getLatLng().longitude;
-    //            destination.setLatitude(latRestaurant);
-    //            destination.setLongitude(longRestaurant);
+    //    //Get the restaurant location in getNearbyPlaces() lg 235
+    //    Location destination = new Location("locationB");
+    //    destination.setLatitude(restaurantLocation.latitude);
+    //    destination.setLongitude(restaurantLocation.longitude);
 //
-    //            //Calculate distance
-    //            double distance = currentLocation.distanceTo(destination);
-    //            //return (distance + "m");
-    //        }
-    //    });
-    //    //return ""; <----- si public String getDistanceTest2()
-    //    //return (distance + "m");
+    //    //Calculate distance
+    //    double distance = currentLocation.distanceTo(destination);
+    //    return (distance + "m");
     //}
 }

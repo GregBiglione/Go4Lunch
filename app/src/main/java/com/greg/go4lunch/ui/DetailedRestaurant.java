@@ -76,7 +76,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     @BindView(R.id.like_Layout) LinearLayout mLikeLyt;
     @BindView(R.id.like_image) ImageView mLikeStar;
     @BindView(R.id.detailed_like) TextView mLikeText;
-    //boolean isFavorite;
+    boolean isFavorite;
 
     @BindView(R.id.joining_workmates_recycler) RecyclerView mJoiningWorkmatesRecyclerView;
     private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
@@ -102,7 +102,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         configureJoiningWorkmatesRecyclerView();
         //isFavorite();
         //getFavoriteRestaurant();
-        //getFavorite();
+        getFavorite();
     }
 
     public void recoverIntent(){
@@ -224,81 +224,23 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------- Add favorite function ------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //private void defaultLikeIcon(){
-    //    if (isFavorite){
-    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-    //        mLikeText.setText(R.string.detailed_like);
-    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-    //    }
-    //    else{
-    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-    //        mLikeText.setText(R.string.likedDetailedText);
-    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorStar));
-    //    }
-    //}
-
-    //@OnClick(R.id.like_Layout)
-    //void clickOnLike(){
-    //    if (!isFavorite){
-    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-    //        mLikeText.setText(R.string.likedDetailedText);
-    //        mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
-    //        addFavorite();
-    //        isFavorite = true;
-    //    }
-    //    else{
-    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-    //        mLikeText.setText(R.string.detailed_like);
-    //        mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
-    //        upDateFavorite();
-    //        isFavorite = false;
-    //    }
-    //}
-
-    //@OnClick(R.id.like_Layout)
-    //void clickOnLike(){
-    //    Intent i = getIntent();
-    //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-    //    //boolean isFavorite = false;
-    //    String restaurantId = restaurant.getIdRestaurant();
-    //    mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
-    //    //mSharedViewModel.getFavoriteRestaurantData().getValue().get(0).getIsFavorite();
-//
-    //    //if(mSharedViewModel.getFavoriteRestaurantData().getValue().get(0).getIsFavorite()){
-    //    //    isFavorite = true;
-    //    //}
-    //    //if(mSharedViewModel.getFavoriteRestaurantData() != null){
-    //    //    isFavorite = true;
-    //    //}
-//
-    //    //if (isFavorite){
-    //    //    mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-    //    //    mLikeText.setText(R.string.detailed_like);
-    //    //    mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-    //    //}
-    //    //else{
-    //    //    mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-    //    //    mLikeText.setText(R.string.likedDetailedText);
-    //    //    mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorStar));
-    //    //    //isFavoriteTemporary = true;
-    //    //}
-//
-    //    if (!isFavorite){
-    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-    //        mLikeText.setText(R.string.likedDetailedText);
-    //        mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
-    //        addFavorite();
-    //        isFavorite = true;
-    //    }
-    //    else{
-    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-    //        mLikeText.setText(R.string.detailed_like);
-    //        mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
-    //        upDateFavorite();
-    //        //deleteFavorite();
-    //        isFavorite = false;
-    //    }
-    //}
+    @OnClick(R.id.like_Layout)
+    void clickOnLike(){
+        if (!isFavorite){
+            mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+            mLikeText.setText(R.string.likedDetailedText);
+            mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
+            addFavorite();
+            isFavorite = true;
+        }
+        else{
+            mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
+            mLikeText.setText(R.string.detailed_like);
+            mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
+            upDateFavorite();
+            isFavorite = false;
+        }
+    }
 
     private void addFavorite(){
         WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -336,113 +278,19 @@ public class DetailedRestaurant extends AppCompatActivity {
         });
     }
 
-    //private void getFavorite(){
-    //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-    //        @Override
-    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-    //            LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
-    //            if (currentLikedRestaurant != null){
-    //                mSharedViewModel.getFavoriteRestaurantData().
-    //            }
-    //        }
-    //    });
-    //}
-
-   //private void getFavoriteRestaurant(){
-   //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-   //        @Override
-   //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-   //            LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
-   //            if (currentLikedRestaurant != null){
-   //                String idFavoriteRestaurant = currentLikedRestaurant.getRestaurantId();
-   //                boolean isFavoriteRestaurant = currentLikedRestaurant.getIsFavorite(); //false by default
-   //                if (!isFavoriteRestaurant && idFavoriteRestaurant != null){
-   //                    isFavorite = true;
-   //                }
-   //            }
-   //        }
-   //    });
-   //}
-
-    //----------------------------- Delete ????:  No -------------------------------------------------------
-    //private void deleteFavorite(){
-    //    WorkmateHelper.getLikedRestaurant(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-    //        @Override
-    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-    //            LikedRestaurant likedRestaurantToDelete = documentSnapshot.toObject(LikedRestaurant.class);
-    //            if (likedRestaurantToDelete != null){
-    //                WorkmateHelper.deleteFavoriteRestaurant(likedRestaurantToDelete.getWorkmateId());
-    //                Toasty.error(getApplicationContext(), "Favorite restaurant delete from Firestore after click on star button",
-    //                        Toasty.LENGTH_SHORT).show();
-    //            }
-    //        }
-    //    });
-    //}
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Restaurant is favorite -----------------------------------------
-    //----------------------------------------------------------------------------------------------
-    //public void isFavorite(){
-    //    Intent i = getIntent();
-    //    Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-//
-    //    boolean isFavoriteTemporary = false;
-    //    String restaurantId = restaurant.getIdRestaurant();
-    //    mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
-    //    //mSharedViewModel.getFavoriteRestaurantData();
-    //    if(mSharedViewModel.getFavoriteRestaurantData() != null){
-    //        isFavoriteTemporary = true;
-    //    }
-//
-    //    if (isFavoriteTemporary){
-    //        mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-    //        mLikeText.setText(R.string.likedDetailedText);
-    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorStar));
-    //        addFavorite();
-    //    }
-    //    else{
-    //        mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-    //        mLikeText.setText(R.string.detailed_like);
-    //        mLikeText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
-    //        upDateFavorite();
-    //    }
-//
-    //}
-
-    //private void getFavorite(){
-    //    mSharedViewModel.getFavoriteRestaurantData().observe(this, new Observer<ArrayList<LikedRestaurant>>() {
-    //        @Override
-    //        public void onChanged(ArrayList<LikedRestaurant> likedRestaurants) {
-    //            String uid = likedRestaurants.get(0).getWorkmateId();
-    //            String idRestaurant = likedRestaurants.get(0).getRestaurantId();
-    //            boolean isFavorite = likedRestaurants.get(0).getIsFavorite();
-    //            if (uid != null && idRestaurant != null){
-    //                for (LikedRestaurant l: likedRestaurants) {
-    //                    mLikeLyt.setOnClickListener(new View.OnClickListener() {
-    //                        @Override
-    //                        public void onClick(View v) {
-    //                            if (!isFavorite){
-    //                                mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
-    //                                mLikeText.setText(R.string.likedDetailedText);
-    //                                mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
-    //                                addFavorite();
-    //                                l.setFavorite(true);
-    //                            }
-    //                            else{
-    //                                mLikeStar.setImageResource(R.drawable.ic_star_orange_24dp);
-    //                                mLikeText.setText(R.string.detailed_like);
-    //                                mLikeText.setTextColor(getResources().getColor(R.color.colorPrimary));
-    //                                upDateFavorite();
-    //                                l.setFavorite(false);
-    //                            }
-    //                        }
-    //                    });
-    //                }
-    //            }
-//
-    //        }
-    //    });
-    //}
+    private void getFavorite(){
+        mSharedViewModel.getFavoriteRestaurantData().observe(this, new Observer<ArrayList<LikedRestaurant>>() {
+            @Override
+            public void onChanged(ArrayList<LikedRestaurant> likedRestaurants) {
+                if (!likedRestaurants.isEmpty()){
+                    mLikeStar.setImageResource(R.drawable.ic_star_yellow_24dp);
+                    mLikeText.setText(R.string.likedDetailedText);
+                    mLikeText.setTextColor(getResources().getColor(R.color.colorStar));
+                    isFavorite = true;
+                }
+            }
+        });
+    }
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Go to website function -----------------------------------------

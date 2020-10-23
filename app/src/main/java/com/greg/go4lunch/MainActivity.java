@@ -2,6 +2,7 @@ package com.greg.go4lunch;
 
 import android.content.Intent;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -43,7 +44,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.ui.DetailedRestaurant;
+import com.greg.go4lunch.ui.dialog_box.SharedPreferencesDialog;
 import com.greg.go4lunch.ui.home.HomeFragment;
+import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import androidx.drawerlayout.widget.DrawerLayout;
 
@@ -84,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
 
     public NavigationView mNavigationView;
     private HomeFragment mHomeFragment;
+
+    //----------------------------------------------------------------------------------------------
+    public static final String NOTIFICATIONS_PREF = "Notifications preferences";
+    private Workmate mWorkmate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -267,10 +275,12 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.nav_lunch:
                     Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
+                    //showMyLunchPlace();
                     break;
                 case R.id.nav_settings:
                     //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
-                    openLanguagesDialog();
+                    //openLanguagesDialog();
+                    openSettingsDialog();
                     break;
                 case R.id.nav_logout:
                     logOut();
@@ -326,6 +336,39 @@ public class MainActivity extends AppCompatActivity {
             FirebaseAuth.getInstance().removeAuthStateListener(mAuthStateListener);
         }
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Go to your selected restaurant ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //private void showMyLunchPlace(){
+    //   //if (mWorkmate.getJoining()){
+    //   //    Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+    //   //    //goToLunch.putExtra("idPickedRestaurant", mWorkmate.getIdPickedRestaurant());
+    //   //    startActivity(goToLunch);
+    //   //}
+    //   //else{
+    //   //    Toasty.warning(this, getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
+    //   //}
+    //    Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+    //    goToLunch.putExtra("idPickedRestaurant", getCurrentUser().getUid());
+    //    startActivity(goToLunch);
+    //}
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Shared preferences ---------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void openSettingsDialog() {
+        SharedPreferencesDialog sharedPreferencesDialog = new SharedPreferencesDialog();
+        sharedPreferencesDialog.show(getSupportFragmentManager(), "Shared preferences dialog box");
+    }
+
+    //private void upDateSharedPreferences(){
+    //    SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_PREF, MODE_PRIVATE);
+    //    SharedPreferences.Editor editor = sharedPreferences.edit();
+    //
+    //}
 
     // ---------------------------- Language selection ---------------------------------------------
     private void openLanguagesDialog() {

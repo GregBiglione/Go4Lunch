@@ -1,16 +1,12 @@
 package com.greg.go4lunch.notifications;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
-import android.widget.RemoteViews;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -39,7 +35,7 @@ public class NotificationsService extends FirebaseMessagingService {
     //----------------------------- Send notification ----------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    public void sendVisualNotification(String messgeBody){
+    public void sendVisualNotification(String messageBody){
 
         //----------------------------- Create an Intent that will be shown when user will click on the Notification ------
         Intent notificationIntent = new Intent(this, MainActivity.class);
@@ -48,7 +44,7 @@ public class NotificationsService extends FirebaseMessagingService {
         //----------------------------- Create a style for the notification ------------------------
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(getString(R.string.notification_title));
-        inboxStyle.addLine(messgeBody);
+        inboxStyle.addLine(messageBody);
 
         //----------------------------- Create a Channel -------------------------------------------
         String channelId = getString(R.string.default_notification_channel_id);

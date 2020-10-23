@@ -19,7 +19,6 @@ public class SharedViewModel extends ViewModel {
     public List<Restaurant> restaurants = new ArrayList<>();
     private MutableLiveData<ArrayList<Workmate>> workmates;
     private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
-    //1)
     private MutableLiveData<ArrayList<LikedRestaurant>> favorites;
 
     //----------------------------- Get all restaurants --------------------------------------------
@@ -48,7 +47,6 @@ public class SharedViewModel extends ViewModel {
     public LiveData<ArrayList<Workmate>> getJoiningWorkmatesData(){ return joiningWorkmates; }
 
     //----------------------------- Get favorite restaurant ----------------------------------------
-    //2)
     public void initFavoriteRestaurant(Context context, String uid, String idFavoriteRestaurant){
         if (favorites != null){
             return;
@@ -58,6 +56,5 @@ public class SharedViewModel extends ViewModel {
 
     }
 
-    //3)
     public LiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurantData(){ return favorites; }
 }

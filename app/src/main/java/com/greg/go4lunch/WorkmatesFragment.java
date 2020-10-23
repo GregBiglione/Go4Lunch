@@ -51,7 +51,6 @@ public class WorkmatesFragment extends Fragment {
             public void onChanged(ArrayList<Workmate> workmates) {
                 mWorkmateAdapter = new WorkmateAdapter(workmates, getContext());
                 mWorkmateRecyclerView.setAdapter(mWorkmateAdapter);
-                mWorkmateAdapter.notifyDataSetChanged();
             }
         });
     }

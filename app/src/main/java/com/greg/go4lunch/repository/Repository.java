@@ -82,7 +82,6 @@ public class Repository {
     }
 
     //----------------------------- Get favorite restaurant ----------------------------------------
-    //4)
     public MutableLiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurant(String uid, String idLikedRestaurant){
         MutableLiveData<ArrayList<LikedRestaurant>> allFavorites = new MutableLiveData<>();
         db.collection("likedRestaurants")

@@ -31,7 +31,10 @@ public class Repository {
         return instance;
     }
 
+    //----------------------------------------------------------------------------------------------
     //----------------------------- Get all workmates ----------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public MutableLiveData<ArrayList<Workmate>> getAllWorkmates(){
         MutableLiveData<ArrayList<Workmate>> allWorkmates = new MutableLiveData<>();
         db.collection("workmates")
@@ -55,7 +58,10 @@ public class Repository {
         return allWorkmates;
     }
 
+    //----------------------------------------------------------------------------------------------
     //----------------------------- Get joining workmates ------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public MutableLiveData<ArrayList<Workmate>> getJoiningWorkmates(String idPickedRestaurant){
         MutableLiveData<ArrayList<Workmate>> allJoiningWorkmates = new MutableLiveData<>();
         db.collection("workmates")
@@ -81,7 +87,10 @@ public class Repository {
         return allJoiningWorkmates;
     }
 
+    //----------------------------------------------------------------------------------------------
     //----------------------------- Get favorite restaurant ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public MutableLiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurant(String uid, String idLikedRestaurant){
         MutableLiveData<ArrayList<LikedRestaurant>> allFavorites = new MutableLiveData<>();
         db.collection("likedRestaurants")
@@ -109,7 +118,10 @@ public class Repository {
         return allFavorites;
     }
 
+    //----------------------------------------------------------------------------------------------
     //----------------------------- Get picked restaurant ------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
     public MutableLiveData<ArrayList<Workmate>> getPickedRestaurant(String uid, String idPickedRestaurant){
         MutableLiveData<ArrayList<Workmate>> pickedRestaurant = new MutableLiveData<>();
         db.collection("workmates")
@@ -135,5 +147,35 @@ public class Repository {
             }
         });
         return pickedRestaurant;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get selected restaurant for map marker -------------------------
+    //----------------------------------------------------------------------------------------------
+
+    public MutableLiveData<ArrayList<Workmate>> getSelected(String idPickedRestaurant){
+        MutableLiveData<ArrayList<Workmate>> selectedRestaurant = new MutableLiveData<>();
+        db.collection("workmates")
+                .whereEqualTo("idPickedRestaurant", idPickedRestaurant)
+                .whereEqualTo("joining", true)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> selectedList = queryDocumentSnapshots.getDocuments();
+                    ArrayList<Workmate> selected = new ArrayList<>();
+                    for (DocumentSnapshot documentSnapshot : selectedList) {
+                        selected.add(documentSnapshot.toObject(Workmate.class));
+                    }
+                    selectedRestaurant.setValue(selected);
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "Impossible to get selected list", e);
+            }
+        });
+        return selectedRestaurant;
     }
 }

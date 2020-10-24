@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.common.api.ApiException;
@@ -48,8 +49,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
+import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.ui.DetailedRestaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -72,13 +76,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private SharedViewModel mSharedViewModel;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLocation;
+    private boolean isAlreadySelected;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createLocationService();
         mPlacesClient = Places.createClient(getContext());
-        mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        configureViewModel();
     }
 
     @Override
@@ -176,7 +181,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         if (EasyPermissions.hasPermissions(getContext(), perms)){
             Toasty.success(getContext(), getString(R.string.location_granted), Toasty.LENGTH_SHORT).show();
             customFocus();
-            //getDistanceTest2();
         }
         else {
             EasyPermissions.requestPermissions(this,"We need your permission to locate you",
@@ -229,12 +233,36 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
                                 r.setDistanceFromUser(getDistance(r.getLatLng()));
                                 mSharedViewModel.restaurants.add(r);
-                                //mMap.setInfoWindowAdapter(new CustomDetailWindowAdapter(getActivity()));
+                                mSharedViewModel.initSelected(getContext(), placeLikelihood.getPlace().getId());
+                                mSharedViewModel.getSelectedData().observe(getActivity(), new Observer<ArrayList<Workmate>>() {
+                                    @Override
+                                    public void onChanged(ArrayList<Workmate> workmates) {
+                                        if (!workmates.isEmpty()){
+                                            isAlreadySelected = true;
+                                        }
+                                    }
+                                });
+//
+//
                                 //----------------------------- Custom marker ----------------------
-                                BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
-                                mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
-                                       .icon(subwayBitmapDescriptor)
-                                        .title(r.getName()));
+                               //BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
+                               //mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
+                               //       .icon(subwayBitmapDescriptor)
+                               //       .title(r.getName()));
+                                if (!isAlreadySelected){
+                                    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
+                                    mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
+                                            .icon(subwayBitmapDescriptor)
+                                            .title(r.getName()));
+                                    isAlreadySelected = true;
+                                }
+                                else {
+                                    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
+                                    mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
+                                            .icon(subwayBitmapDescriptor)
+                                            .title(r.getName()));
+                                    isAlreadySelected = false;
+                                }
                                 getRestaurantDetails(r);
                             }
 
@@ -298,6 +326,14 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Configure view model -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void configureViewModel(){
+        mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
     }
 
     //----------------------------------------------------------------------------------------------

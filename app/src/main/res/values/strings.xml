@@ -193,5 +193,6 @@
     <string name="notification_message" translatable="false">Notification message</string>
     <string name="no_restaurant_selected">No restaurant selected</string>
     <string name="notifications_settings_dialog_title">Notifications settings</string>
+    <string name="close_hour">Open until</string>
 
 </resources>

@@ -8,10 +8,11 @@ import org.parceler.Parcel;
 
 @Parcel
 public class Restaurant {
-    private String idRestaurant, name, distanceFromUser, address, openingHour, phoneNumber, website;
+    private String idRestaurant, name, distanceFromUser, address, phoneNumber, website;
     private PhotoMetadata restaurantPicture;
     private LatLng latLng;
     private int joiningNumber;
+    private int openingHour;
     private float rating;
     //private List<Workmate> joiningWorkmate;
 
@@ -22,7 +23,7 @@ public class Restaurant {
     public String getName() { return name; }
     public String getDistanceFromUser() { return distanceFromUser; }
     public String getAddress() { return address; }
-    public String getOpeningHour() { return openingHour; }
+    public int getOpeningHour() { return openingHour; }
     public String getPhoneNumber() { return phoneNumber; }
     public String getWebsite() { return website; }
     public PhotoMetadata getRestaurantPicture() { return restaurantPicture; }
@@ -35,7 +36,7 @@ public class Restaurant {
     public void setName(String name) { this.name = name; }
     public void setDistanceFromUser(String distanceFromUser) { this.distanceFromUser = distanceFromUser; }
     public void setAddress(String address) { this.address = address; }
-    public void setOpeningHour(String openingHour) { this.openingHour = openingHour; }
+    public void setOpeningHour(int openingHour) { this.openingHour = openingHour; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
     public void setWebsite(String website) { this.website = website; }
     public void setRestaurantPicture(PhotoMetadata restaurantPicture) { this.restaurantPicture = restaurantPicture; }

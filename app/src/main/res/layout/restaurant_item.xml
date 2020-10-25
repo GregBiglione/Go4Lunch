@@ -22,7 +22,8 @@
                 android:id="@+id/restaurant_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/restaurant_name">
+                android:text="@string/restaurant_name"
+                style="@style/restaurant_name">
             </TextView>
 
             <TextView
@@ -71,7 +72,8 @@
                 android:id="@+id/restaurant_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/open_hour"/>
+                android:text="@string/open_hour"
+                android:textStyle="italic"/>
 
             <RatingBar
                 android:id="@+id/restaurant_rating"

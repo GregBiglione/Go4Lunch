@@ -234,7 +234,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setDistanceFromUser(getDistance(r.getLatLng()));
                                 mSharedViewModel.restaurants.add(r);
                                 mSharedViewModel.initSelected(getContext(), placeLikelihood.getPlace().getId());
-                                mSharedViewModel.getSelectedData().observe(getActivity(), new Observer<ArrayList<Workmate>>() {
+                                mSharedViewModel.getSelectedData().observe(requireActivity(), new Observer<ArrayList<Workmate>>() {
                                     @Override
                                     public void onChanged(ArrayList<Workmate> workmates) {
                                         if (!workmates.isEmpty()){
@@ -242,8 +242,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                         }
                                     }
                                 });
-//
-//
                                 //----------------------------- Custom marker ----------------------
                                //BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
                                //mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
@@ -304,7 +302,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                 Place place = fetchPlaceResponse.getPlace();
                 Log.i(TAG, "Place found: " + place.getName());
-                r.setOpeningHour(place.getOpeningHours().toString());
+                r.setOpeningHour(place.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours()); // <-- heure de fermeture pour vendredi
                 r.setRating(place.getRating().floatValue());
                 r.setPhoneNumber(place.getPhoneNumber());
                 r.setWebsite(place.getWebsiteUri().toString());
@@ -333,7 +331,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //----------------------------------------------------------------------------------------------
 
     private void configureViewModel(){
-        mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     //----------------------------------------------------------------------------------------------

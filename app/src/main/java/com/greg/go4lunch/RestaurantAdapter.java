@@ -37,7 +37,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private List<Restaurant> restaurants;
     private PlacesClient mPlacesClient;
     private Context c;
-    private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
 
     public RestaurantAdapter(List<Restaurant> restaurants, PlacesClient mPlacesClient, Context c) {
         this.restaurants = restaurants;
@@ -60,12 +59,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
        //String joiningWorkmates = String.valueOf(mJoiningWorkmatesAdapter.getItemCount());
        holder.mRestaurantName.setText(r.getName());
        holder.mRestaurantAddress.setText(r.getAddress());
-       //if (mJoiningWorkmatesAdapter.getItemCount() > 0){
-       //    holder.mJoiningWorkmates.setText("(" + joiningWorkmates + ")");
-       //    holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
-       //}
-        //holder.mJoiningWorkmates.setText("(" + joiningWorkmates + ")");
-        //holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
+       holder.mRestaurantHour.setText(c.getString(R.string.close_hour) + " " + r.getOpeningHour() +"h");
        holder.mRestaurantRating.setRating(r.getRating());
        holder.mRestaurantDistance.setText(r.getDistanceFromUser());
        getRestaurantPhoto(holder.mRestaurantPicture, r.getRestaurantPicture());

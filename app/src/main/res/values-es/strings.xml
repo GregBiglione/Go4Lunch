@@ -45,4 +45,7 @@
     <string name="restaurantChosen">está comiendo en</string>
 
     <string name="notification_title" >Mensaje de Go4Lunch</string>
+    <string name="no_restaurant_selected">No seleccionado ningún restaurante</string>
+    <string name="notifications_settings_dialog_title">Configuración de las notificaciones</string>
+    <string name="close_hour">Abierto hasta</string>
 </resources>

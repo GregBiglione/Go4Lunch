@@ -51,7 +51,7 @@ public class ListFragment extends Fragment {
         mRestaurantRecyclerView.setAdapter(new RestaurantAdapter(restaurants, Places.createClient(getContext()), getContext()));
     }
 
-    // ---------------------------- Go to detailed restaurant --------------------------------------
+    //----------------------------- Go to detailed restaurant --------------------------------------
     @Subscribe
     @AllowConcurrentEvents
     public void onDetailedRestaurant(DetailedRestaurantEvent event){

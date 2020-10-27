@@ -46,6 +46,7 @@ import com.greg.go4lunch.viewmodel.SharedViewModel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -77,6 +78,8 @@ public class DetailedRestaurant extends AppCompatActivity {
     private JoiningWorkmatesAdapter mJoiningWorkmatesAdapter;
     private SharedViewModel mSharedViewModel;
 
+    private Restaurant mRestaurant;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +100,8 @@ public class DetailedRestaurant extends AppCompatActivity {
     public void recoverIntent(){
         Intent i = getIntent();
         Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+        mRestaurant = restaurant;
 
-        //String restaurantId = restaurant.getIdRestaurant();
         String restaurantName = restaurant.getName();
         mDetailedName.setText(restaurantName);
         float restaurantRating = restaurant.getRating();
@@ -161,10 +164,8 @@ public class DetailedRestaurant extends AppCompatActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
-                Intent i = getIntent();
-                Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-                String idPickedRestaurant = restaurant.getIdRestaurant();
-                String namePickedRestaurant = restaurant.getName();
+                String idPickedRestaurant = mRestaurant.getIdRestaurant();
+                String namePickedRestaurant = mRestaurant.getName();
                 if (currentWorkmate != null){
                     WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant, true);
                 }
@@ -216,9 +217,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     @AfterPermissionGranted(CALL_REQUEST_CODE)
     private void startCall(){
         String perm = CALL_PHONE;
-        Intent i = getIntent();
-        Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-        String phoneNumber = "tel:" + restaurant.getPhoneNumber();
+        String phoneNumber = "tel:" + mRestaurant.getPhoneNumber();
         if (EasyPermissions.hasPermissions(this, perm)){
             Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
             startActivity(callIntent);
@@ -259,11 +258,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                 Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
                 if (currentWorkmate != null){
                     String uid = currentWorkmate.getUid();
-
-                    Intent i = getIntent();
-                    Restaurant restaurantLiked = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-
-                    String idRestaurant = restaurantLiked.getIdRestaurant();
+                    String idRestaurant = mRestaurant.getIdRestaurant();
 
                     //------------- Create liked restaurant in FireStore ---------------------------
                     WorkmateHelper.createLikedRestaurant(uid, idRestaurant, true);
@@ -310,9 +305,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     void clickOnWebsite(){ goToWebsite(); }
 
     private void goToWebsite(){
-        Intent i = getIntent();
-        Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-        String website = restaurant.getWebsite();
+        String website = mRestaurant.getWebsite();
         Intent websiteIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
         startActivity(websiteIntent);
     }
@@ -343,8 +336,15 @@ public class DetailedRestaurant extends AppCompatActivity {
         mSharedViewModel.getJoiningWorkmatesData().observe(this, new Observer<ArrayList<Workmate>>() {
             @Override
             public void onChanged(ArrayList<Workmate> workmates) {
+                //Intent i = getIntent();
+                //Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
+                //if (!workmates.isEmpty()){
+                //    restaurant.setJoiningNumber(workmates.size());
+                //}
+
                 mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(workmates);
                 mJoiningWorkmatesRecyclerView.setAdapter(mJoiningWorkmatesAdapter);
+
                 //mJoiningWorkmatesAdapter.notifyDataSetChanged();
             }
         });

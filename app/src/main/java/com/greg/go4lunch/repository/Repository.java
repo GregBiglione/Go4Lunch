@@ -20,7 +20,6 @@ import java.util.List;
 public class Repository {
 
     static Repository instance;
-    private ArrayList<Workmate> workmates = new ArrayList<>();
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = "Repository";
 
@@ -43,6 +42,7 @@ public class Repository {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
                     List<DocumentSnapshot> list = queryDocumentSnapshots.getDocuments();
+                    ArrayList<Workmate> workmates = new ArrayList<>();
                     for (DocumentSnapshot documentSnapshot : list) {
                         workmates.add(documentSnapshot.toObject(Workmate.class));
                     }

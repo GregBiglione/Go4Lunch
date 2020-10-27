@@ -78,6 +78,10 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private Location mLocation;
     private boolean isAlreadySelected;
 
+    private String idRestaurant;
+    private Restaurant mRestaurant;
+    private int joiningNumberOfWorkmates;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,21 +236,24 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setAddress(placeLikelihood.getPlace().getAddress());
                                 r.setLatLng(placeLikelihood.getPlace().getLatLng());
                                 r.setDistanceFromUser(getDistance(r.getLatLng()));
+                                //r.setJoiningNumber(getWorkmateJoiningNumber(r.getJoiningNumber()));
+                                //r.setJoiningNumber(getWorkmateJoiningNumber());
                                 mSharedViewModel.restaurants.add(r);
+                                //r.setJoiningNumber(getJoiningNumber());
+                                //----------------------------- Custom marker ----------------------
+                                //addCustomMarker();
                                 mSharedViewModel.initSelected(getContext(), placeLikelihood.getPlace().getId());
                                 mSharedViewModel.getSelectedData().observe(requireActivity(), new Observer<ArrayList<Workmate>>() {
                                     @Override
                                     public void onChanged(ArrayList<Workmate> workmates) {
                                         if (!workmates.isEmpty()){
+                                            //Workmate workmate = new Workmate();
+                                            //workmate.setJoining(true);
                                             isAlreadySelected = true;
                                         }
                                     }
                                 });
-                                //----------------------------- Custom marker ----------------------
-                               //BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
-                               //mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
-                               //       .icon(subwayBitmapDescriptor)
-                               //       .title(r.getName()));
+
                                 if (!isAlreadySelected){
                                     BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
                                     mMap.addMarker(new MarkerOptions().position(placeLikelihood.getPlace().getLatLng())
@@ -261,6 +268,16 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                             .title(r.getName()));
                                     isAlreadySelected = false;
                                 }
+
+                                //----------------------------- Number joining workmates -----------
+                                //mSharedViewModel.getJoiningWorkmatesData().observe(requireActivity(), new Observer<ArrayList<Workmate>>() {
+                                //    @Override
+                                //    public void onChanged(ArrayList<Workmate> workmates) {
+                                //        if(!workmates.isEmpty()){
+                                //            r.setJoiningNumber(workmates.size());
+                                //        }
+                                //    }
+                                //});
                                 getRestaurantDetails(r);
                             }
 
@@ -289,6 +306,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private void getRestaurantDetails(Restaurant r){
         // ---------------------------- Define a place Id ------------------------------------------
         final String placeId = r.getIdRestaurant();
+        idRestaurant = placeId;
+        mRestaurant = r;
 
         // ---------------------------- Specify a field to return ----------------------------------
         final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
@@ -302,7 +321,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                 Place place = fetchPlaceResponse.getPlace();
                 Log.i(TAG, "Place found: " + place.getName());
-                r.setOpeningHour(place.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours()); // <-- heure de fermeture pour vendredi
+                r.setOpeningHour(place.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours());
                 r.setRating(place.getRating().floatValue());
                 r.setPhoneNumber(place.getPhoneNumber());
                 r.setWebsite(place.getWebsiteUri().toString());
@@ -350,5 +369,49 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         double accurateDistance = currentLocation.distanceTo(destination);
         int distance= (int) Math.round(accurateDistance);
         return (distance + "m");
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Custom marker --------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void addCustomMarker(){
+        mSharedViewModel.initSelected(getContext(), idRestaurant);
+        mSharedViewModel.getSelectedData().observe(requireActivity(), new Observer<ArrayList<Workmate>>() {
+            @Override
+            public void onChanged(ArrayList<Workmate> workmates) {
+                if (!workmates.isEmpty()){
+                    //workmates.set(???).setJoining(true);
+                    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
+                    mMap.addMarker(new MarkerOptions().position(mRestaurant.getLatLng())
+                            .icon(subwayBitmapDescriptor)
+                            .title(mRestaurant.getName()));
+                    isAlreadySelected = true;
+                }
+                else{
+                    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
+                    mMap.addMarker(new MarkerOptions().position(mRestaurant.getLatLng())
+                            .icon(subwayBitmapDescriptor)
+                            .title(mRestaurant.getName()));
+                    isAlreadySelected = false;
+                }
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Number joining workmates ---------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void getWorkmateJoiningNumber(){
+        mSharedViewModel.initJoiningWorkmates(getContext(), idRestaurant);
+        mSharedViewModel.getJoiningWorkmatesData().observe(requireActivity(), new Observer<ArrayList<Workmate>>() {
+            @Override
+            public void onChanged(ArrayList<Workmate> workmates) {
+                if(!workmates.isEmpty()){
+                    mRestaurant.setJoiningNumber(workmates.size());
+                }
+            }
+        });
     }
 }

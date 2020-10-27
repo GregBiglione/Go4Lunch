@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,10 +25,14 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPhotoResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.greg.go4lunch.model.Restaurant;
+import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.ui.DetailedRestaurant;
 import com.greg.go4lunch.ui.event.DetailedRestaurantEvent;
+import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -37,6 +43,9 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private List<Restaurant> restaurants;
     private PlacesClient mPlacesClient;
     private Context c;
+    private DetailedRestaurant mDetailedRestaurant;
+    private SharedViewModel mSharedViewModel;
+    private List<Workmate> mWorkmate;
 
     public RestaurantAdapter(List<Restaurant> restaurants, PlacesClient mPlacesClient, Context c) {
         this.restaurants = restaurants;
@@ -49,6 +58,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.restaurant_item, parent, false);
+        //configureRecyclerView();
         return new ViewHolder(view);
     }
 
@@ -59,6 +69,29 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
        //String joiningWorkmates = String.valueOf(mJoiningWorkmatesAdapter.getItemCount());
        holder.mRestaurantName.setText(r.getName());
        holder.mRestaurantAddress.setText(r.getAddress());
+
+       //mSharedViewModel.initJoiningWorkmates(c, r.getIdRestaurant());
+       //mSharedViewModel.getJoiningWorkmatesData().observe((LifecycleOwner) c, new Observer<ArrayList<Workmate>>() {
+       //    @Override
+       //    public void onChanged(ArrayList<Workmate> workmates) {
+       //        r.setJoiningNumber(workmates.size());
+       //    }
+       //});
+        if (r.getJoiningNumber() > 0){
+            holder.mJoiningWorkmates.setText("(" + r.getJoiningNumber() + ")");
+            holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
+        }
+        //holder.mJoiningWorkmates.setText("(" + r.getJoiningNumber() + ")");
+        //holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
+       //holder.mJoiningWorkmates.setText("(" + r.getJoiningNumber() + ")");
+       //holder.mJoiningWorkmates.setVisibility(View.VISIBLE);
+        //mSharedViewModel.initJoiningWorkmates(c, r.getIdRestaurant());
+        //mSharedViewModel.getJoiningWorkmatesData().observe((LifecycleOwner) c, new Observer<ArrayList<Workmate>>() {
+        //    @Override
+        //    public void onChanged(ArrayList<Workmate> workmates) {
+//
+        //    }
+        //});
        holder.mRestaurantHour.setText(c.getString(R.string.close_hour) + " " + r.getOpeningHour() +"h");
        holder.mRestaurantRating.setRating(r.getRating());
        holder.mRestaurantDistance.setText(r.getDistanceFromUser());
@@ -94,6 +127,21 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
     //----------------------------------------------------------------------------------------------
+    //----------------------------- Configure view model -------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //public void configureRecyclerView(){
+    //    mSharedViewModel.initJoiningWorkmates(c, restaurants.get(0).getIdRestaurant());
+    //    mSharedViewModel.getJoiningWorkmatesData().observe((LifecycleOwner) c, new Observer<ArrayList<Workmate>>() {
+    //        @Override
+    //        public void onChanged(ArrayList<Workmate> workmates) {
+    //            mWorkmate = workmates;
+    //            workmates.size();
+    //        }
+    //    });
+    //}
+
+    //----------------------------------------------------------------------------------------------
     //----------------------------- Get restaurants photo ------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -120,4 +168,6 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
             }
         });
     }
+
+
 }

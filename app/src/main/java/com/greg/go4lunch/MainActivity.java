@@ -32,6 +32,8 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -43,6 +45,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.DetailedRestaurant;
 import com.greg.go4lunch.ui.dialog_box.SharedPreferencesDialog;
@@ -60,6 +63,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -88,10 +92,14 @@ public class MainActivity extends AppCompatActivity {
 
     public NavigationView mNavigationView;
     private HomeFragment mHomeFragment;
+    private SharedViewModel mSharedViewModel;
+    private DetailedRestaurant detailedRestaurant;
+
 
     //----------------------------------------------------------------------------------------------
     public static final String NOTIFICATIONS_PREF = "Notifications preferences";
     private Workmate mWorkmate;
+    private List<Restaurant> restaurants;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +130,8 @@ public class MainActivity extends AppCompatActivity {
                                       //   Fb pics not shown
         navigationViewMenu();
         setUpFireBaseListener();
+
+        getCurrentUserFromFireStore();
     }
 
     @Override
@@ -275,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.nav_lunch:
                     Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
-                    //showMyLunchPlace();
+                    goToMyLunchRestaurant();
                     break;
                 case R.id.nav_settings:
                     //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
@@ -354,6 +364,26 @@ public class MainActivity extends AppCompatActivity {
     //    goToLunch.putExtra("idPickedRestaurant", getCurrentUser().getUid());
     //    startActivity(goToLunch);
     //}
+    private void getCurrentUserFromFireStore(){
+        //mSharedViewModel.initJoiningWorkmates(this, );
+    }
+
+    private void goToMyLunchRestaurant(){
+        //Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+        //goToLunch.putExtra("idPickedRestaurant", ????)
+        //startActivity(goToLunch);
+        //restaurants = mSharedViewModel.getRestaurants();
+        //String idRestaurant = restaurants.get(0).getIdRestaurant();
+        //if (getCurrentUser() != null){
+        //    restaurants = mSharedViewModel.getRestaurants();
+        //    String idRestaurant = restaurants.get(0).getIdRestaurant();
+        //    Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+        //    goToLunch.putExtra("idPickedRestaurant", idRestaurant);
+        //    startActivity(goToLunch);
+        //}
+        restaurants = mSharedViewModel.getRestaurants();
+        restaurants.get(0).getIdRestaurant();
+    }
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Shared preferences ---------------------------------------------

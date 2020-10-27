@@ -75,6 +75,7 @@
         <item name="colorPrimaryDark">@color/loginBorderTop</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
+        <item name="android:title">Go4Lunch</item>
         <item name="colorControlNormal">@android:color/darker_gray</item>
         <item name="colorControlActivated">@android:color/darker_gray</item>
         <item name="colorControlHighlight">@android:color/darker_gray</item>

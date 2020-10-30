@@ -46,7 +46,6 @@ import com.greg.go4lunch.viewmodel.SharedViewModel;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,6 +90,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         ButterKnife.bind(this);
 
         recoverIntent();
+        recoverMyLunchIntent();
 
         configureJoiningWorkmatesRecyclerView();
         getFavorite();
@@ -109,6 +109,11 @@ public class DetailedRestaurant extends AppCompatActivity {
         String restaurantAddress = restaurant.getAddress();
         mDetailedAddress.setText(restaurantAddress);
         getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
+    }
+
+    public void recoverMyLunchIntent(){
+        Intent goToMyRestaurantForLunch = getIntent();
+        goToMyRestaurantForLunch.getExtras();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -336,16 +341,8 @@ public class DetailedRestaurant extends AppCompatActivity {
         mSharedViewModel.getJoiningWorkmatesData().observe(this, new Observer<ArrayList<Workmate>>() {
             @Override
             public void onChanged(ArrayList<Workmate> workmates) {
-                //Intent i = getIntent();
-                //Restaurant restaurant = Parcels.unwrap(i.getParcelableExtra("RestaurantDetails"));
-                //if (!workmates.isEmpty()){
-                //    restaurant.setJoiningNumber(workmates.size());
-                //}
-
                 mJoiningWorkmatesAdapter = new JoiningWorkmatesAdapter(workmates);
                 mJoiningWorkmatesRecyclerView.setAdapter(mJoiningWorkmatesAdapter);
-
-                //mJoiningWorkmatesAdapter.notifyDataSetChanged();
             }
         });
     }

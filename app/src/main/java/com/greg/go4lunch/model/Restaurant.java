@@ -14,7 +14,6 @@ public class Restaurant {
     private int joiningNumber;
     private int openingHour;
     private float rating;
-    //private List<Workmate> joiningWorkmate;
 
     public Restaurant(){}
 

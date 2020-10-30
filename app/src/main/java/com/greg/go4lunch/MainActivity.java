@@ -16,10 +16,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
 
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
@@ -69,6 +73,7 @@ import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
@@ -122,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
         navigationBottomMenu();
         initPlaces();
-        autocompleteSupportFragInit();
+        //autocompleteSupportFragInit();
 
                                        //  Twitter ok
         getCurrentUserFromFireBase();  //  Email pics not shown
@@ -130,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
                                       //   Fb pics not shown
         navigationViewMenu();
         setUpFireBaseListener();
-
-        getCurrentUserFromFireStore();
     }
 
     @Override
@@ -209,27 +212,48 @@ public class MainActivity extends AppCompatActivity {
         mPlacesClient = Places.createClient(this);
     }
 
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Autocomplete prediction ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //public void autoCompletePrediction(){
+    //    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+//
+    //    RectangularBounds bounds = RectangularBounds.newInstance(
+    //            new LatLng(),
+    //            new LatLng()
+    //    );
+//
+    //    FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+    //            .setLocationBias(bounds)
+    //            .setTypeFilter(TypeFilter.ESTABLISHMENT)
+    //            .setSessionToken(token)
+    //            .setQuery()
+    //            .build()
+    //}
+
+
     // ---------------------------- Autocomplete support fragment initialization -------------------
-    public void autocompleteSupportFragInit(){
-        AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.autocomplete_fragment);
-
-        autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS));
-
-        autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(@NonNull Place place) {
-                LatLng latLng = place.getLatLng();
-                //Log.i(TAG, "Place: " + latLng.latitude+ "\n" + latLng.longitude);
-                Log.i(TAG, getString(R.string.places) + place.getId() + ", " + place.getLatLng() + ", " + place.getName() + ", " + place.getAddress());
-            }
-
-            @Override
-            public void onError(@NonNull Status status) {
-                Log.i(TAG, getString(R.string.error_occurred) + status);
-            }
-        });
-    }
+    //public void autocompleteSupportFragInit(){
+    //    AutocompleteSupportFragment autocompleteSupportFragment = (AutocompleteSupportFragment) getSupportFragmentManager()
+    //            .findFragmentById(R.id.autocomplete_fragment);
+//
+    //    autocompleteSupportFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.ADDRESS));
+//
+    //    autocompleteSupportFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+    //        @Override
+    //        public void onPlaceSelected(@NonNull Place place) {
+    //            LatLng latLng = place.getLatLng();
+    //            //Log.i(TAG, "Place: " + latLng.latitude+ "\n" + latLng.longitude);
+    //            Log.i(TAG, getString(R.string.places) + place.getId() + ", " + place.getLatLng() + ", " + place.getName() + ", " + place.getAddress());
+    //        }
+//
+    //        @Override
+    //        public void onError(@NonNull Status status) {
+    //            Log.i(TAG, getString(R.string.error_occurred) + status);
+    //        }
+    //    });
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Get user information -------------------------------------------
@@ -239,7 +263,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         if (user != null){
-            //String uid = user.getUid();
+            String uid = user.getUid();
             String name = user.getDisplayName();
             String email = user.getEmail();
             //String photo = user.getPhotoUrl().toString();
@@ -290,7 +314,8 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.nav_settings:
                     //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
                     //openLanguagesDialog();
-                    openSettingsDialog();
+                    //openSettingsDialog();
+                    //upDateSharedPreferences();
                     break;
                 case R.id.nav_logout:
                     logOut();
@@ -351,38 +376,22 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------- Go to your selected restaurant ---------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //private void showMyLunchPlace(){
-    //   //if (mWorkmate.getJoining()){
-    //   //    Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-    //   //    //goToLunch.putExtra("idPickedRestaurant", mWorkmate.getIdPickedRestaurant());
-    //   //    startActivity(goToLunch);
-    //   //}
-    //   //else{
-    //   //    Toasty.warning(this, getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
-    //   //}
-    //    Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-    //    goToLunch.putExtra("idPickedRestaurant", getCurrentUser().getUid());
-    //    startActivity(goToLunch);
-    //}
-    private void getCurrentUserFromFireStore(){
-        //mSharedViewModel.initJoiningWorkmates(this, );
-    }
-
     private void goToMyLunchRestaurant(){
-        //Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-        //goToLunch.putExtra("idPickedRestaurant", ????)
-        //startActivity(goToLunch);
-        //restaurants = mSharedViewModel.getRestaurants();
-        //String idRestaurant = restaurants.get(0).getIdRestaurant();
-        //if (getCurrentUser() != null){
-        //    restaurants = mSharedViewModel.getRestaurants();
-        //    String idRestaurant = restaurants.get(0).getIdRestaurant();
-        //    Intent goToLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-        //    goToLunch.putExtra("idPickedRestaurant", idRestaurant);
-        //    startActivity(goToLunch);
-        //}
-        restaurants = mSharedViewModel.getRestaurants();
-        restaurants.get(0).getIdRestaurant();
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                String idSelectedRestaurant = currentWorkmate.getIdPickedRestaurant();
+                if (idSelectedRestaurant != null){
+                    Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+                    goToMyRestaurantForLunch.putExtra("idPickedRestaurant", idSelectedRestaurant);
+                    startActivity(goToMyRestaurantForLunch);
+                }
+                else{
+                    Toasty.warning(getApplicationContext(), getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     //----------------------------------------------------------------------------------------------
@@ -397,7 +406,8 @@ public class MainActivity extends AppCompatActivity {
     //private void upDateSharedPreferences(){
     //    SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_PREF, MODE_PRIVATE);
     //    SharedPreferences.Editor editor = sharedPreferences.edit();
-    //
+    //    editor.putBoolean("isNotificationActivated", false);
+    //    editor.commit();
     //}
 
     // ---------------------------- Language selection ---------------------------------------------

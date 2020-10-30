@@ -17,7 +17,16 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <!--////////////////////////////// NORMAL SIZE //////////////////////////////////////////////-->
+    <!--////////////////////////////// S SIZE ///////////////////////////////////////////////////-->
+
+    <style name="logo_drawer_style_small">
+        <item name="android:layout_gravity">bottom|center</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:layout_marginBottom">-5dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+    </style>
+
+    <!--////////////////////////////// N SIZE ///////////////////////////////////////////////////-->
 
     <style name="button_margin_top">
         <item name="android:layout_marginTop">10dp</item>
@@ -31,10 +40,14 @@
     <style name="name_style">
         <item name="android:textStyle">bold</item>
         <item name="android:layout_marginLeft">7sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
     </style>
 
     <style name="mail_style">
         <item name="android:layout_marginLeft">5sp</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:lines">1</item>
     </style>
 
     <style name="login_title_style">
@@ -68,6 +81,7 @@
         <item name="android:textColor">@color/black</item>
         <item name="android:layout_gravity">center_vertical</item>
         <item name="android:layout_marginStart">10dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
     </style>
 
     <style name="orange_layout_style">

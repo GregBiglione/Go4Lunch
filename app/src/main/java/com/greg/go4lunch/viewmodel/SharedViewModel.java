@@ -40,9 +40,6 @@ public class SharedViewModel extends ViewModel {
 
     //----------------------------- Get joining workmates ------------------------------------------
     public void initJoiningWorkmates(Context context, String idPickedRestaurant){
-        if (joiningWorkmates != null){
-            return;
-        }
         joiningWorkmates = Repository.getInstance(context).getJoiningWorkmates(idPickedRestaurant);
     }
 
@@ -69,14 +66,4 @@ public class SharedViewModel extends ViewModel {
     }
 
     public LiveData<ArrayList<Workmate>> getPickedRestaurantData(){ return pickedRestaurant; }
-
-    //----------------------------- Get selected restaurant ----------------------------------------
-    public void initSelected(Context context, String idPickedRestaurant){
-        if (selected != null){
-            return;
-        }
-        selected = Repository.getInstance(context).getSelected(idPickedRestaurant);
-    }
-
-    public LiveData<ArrayList<Workmate>> getSelectedData(){ return selected; }
 }

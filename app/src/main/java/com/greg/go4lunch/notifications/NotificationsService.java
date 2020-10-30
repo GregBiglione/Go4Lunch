@@ -9,26 +9,82 @@ import android.media.RingtoneManager;
 import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.greg.go4lunch.MainActivity;
 import com.greg.go4lunch.R;
+import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.viewmodel.SharedViewModel;
+
+import java.util.ArrayList;
 
 public class NotificationsService extends FirebaseMessagingService {
 
     final int NOTIFICATION_ID = 218;
     final String NOTIFICATION_TAG = "FIRE_BASE_GO4LUNCH";
     public static final String TAG = "NotificationsService";
+    private SharedViewModel mSharedViewModel;
+    private String mMessage;
+    private Context context;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         if (remoteMessage.getNotification() != null){
-            String message = remoteMessage.getNotification().getBody();
+            //String message = remoteMessage.getNotification().getBody();
+            mMessage = remoteMessage.getNotification().getBody();
+            //message = mNotification ????
             //----------------------------- Show notification after received message ---------------
-            sendVisualNotification(message);
+            //sendVisualNotification(message);
+            notificationData();
+             // appelr dans in Sucees
+
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Data to send into notification ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    @Nullable
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
+
+    private void notificationData(){
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentUser = documentSnapshot.toObject(Workmate.class);
+                String idRestaurant = currentUser.getIdPickedRestaurant();
+                String restaurant = currentUser.getPickedRestaurant();
+                //String address = currentUser.getAddress(); //<-- Add in Firestore ?
+
+                String notificationMessage = "Today you eat at" + restaurant; //+ ": " + /*Add adresse in workamtes ???*/
+                //" with " +
+                mMessage = notificationMessage;
+                sendVisualNotification(mMessage);
+                //mSharedViewModel.initJoiningWorkmates(NotificationsService.this, idRestaurant);
+                //mSharedViewModel.getJoiningWorkmatesData().observe((LifecycleOwner) getApplication(), new Observer<ArrayList<Workmate>>() {
+                //    @Override
+                //    public void onChanged(ArrayList<Workmate> workmates) {
+                //        if (!workmates.isEmpty()){
+                //            String notificationMessage = "Today you eat at" + restaurant; //+ ": " + /*Add adresse in workamtes ???*/
+                //            //" with " +
+                //           mMessage = notificationMessage;
+                //            sendVisualNotification(mMessage);
+                //        }
+                //    }
+                //});
+            }
+        });
     }
 
     //----------------------------------------------------------------------------------------------
@@ -53,8 +109,9 @@ public class NotificationsService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_logo_go4lunch)
-                        .setContentTitle(getString(R.string.app_name))
-                        .setContentText(getString(R.string.notification_title))
+                        .setContentTitle(getString(R.string.app_name)) ///<----
+                        .setContentText(getString(R.string.notification_title)) //<-- May be change this for notificationMessage
+                        //.setContentText(mNotificationInfo)
                         .setAutoCancel(true)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentIntent(pendingIntent)

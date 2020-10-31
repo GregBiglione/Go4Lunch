@@ -17,7 +17,7 @@ public class Restaurant {
 
     public Restaurant(){}
 
-    // --- Getters ---
+    //----------------------------- Getters --------------------------------------------------------
     public String getIdRestaurant() { return idRestaurant; }
     public String getName() { return name; }
     public String getDistanceFromUser() { return distanceFromUser; }
@@ -30,7 +30,7 @@ public class Restaurant {
     public int getJoiningNumber() { return joiningNumber; }
     public float getRating() { return rating; }
 
-    // --- Setters ---
+    //----------------------------- Setters --------------------------------------------------------
     public void setIdRestaurant(String idRestaurant) { this.idRestaurant = idRestaurant; }
     public void setName(String name) { this.name = name; }
     public void setDistanceFromUser(String distanceFromUser) { this.distanceFromUser = distanceFromUser; }

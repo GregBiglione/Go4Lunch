@@ -7,7 +7,7 @@ public class LikedRestaurant {
     @Nullable private String idPickedRestaurant;
     private boolean favorite;
 
-    // --- Empty constructor for FireBase ---
+    //----------------------------- Empty constructor for Firebase ---------------------------------
     public LikedRestaurant(){ }
 
     public LikedRestaurant(String uid, String idPickedRestaurant, boolean favorite) {
@@ -16,12 +16,12 @@ public class LikedRestaurant {
         this.favorite = favorite;
     }
 
-    // --- Getters ---
+    //----------------------------- Getters --------------------------------------------------------
     public String getWorkmateId() { return uid; }
     public String getRestaurantId() { return idPickedRestaurant; }
     public boolean getIsFavorite() { return favorite; }
 
-    // --- Setters ---
+    //----------------------------- Setters --------------------------------------------------------
     public void setWorkmateId(String workmateId) { this.uid = workmateId; }
     public void setRestaurantId(String restaurantId) { this.idPickedRestaurant = restaurantId; }
     public void setFavorite(boolean favorite) { this.favorite = favorite; }

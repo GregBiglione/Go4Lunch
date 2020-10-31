@@ -13,6 +13,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -36,6 +38,7 @@ public class NotificationsService extends FirebaseMessagingService {
     private SharedViewModel mSharedViewModel;
     private String mMessage;
     private Context context;
+    //String[] listOfJoiningWorkmates;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -65,27 +68,62 @@ public class NotificationsService extends FirebaseMessagingService {
                 Workmate currentUser = documentSnapshot.toObject(Workmate.class);
                 String idRestaurant = currentUser.getIdPickedRestaurant();
                 String restaurant = currentUser.getPickedRestaurant();
-                //String address = currentUser.getAddress(); //<-- Add in Firestore ?
+                String address = currentUser.getAddressRestaurant();
 
-                String notificationMessage = "Today you eat at" + restaurant; //+ ": " + /*Add adresse in workamtes ???*/
-                //" with " +
+                String notificationMessage = "Today you eat at " + restaurant + ": " + address;
                 mMessage = notificationMessage;
                 sendVisualNotification(mMessage);
-                //mSharedViewModel.initJoiningWorkmates(NotificationsService.this, idRestaurant);
-                //mSharedViewModel.getJoiningWorkmatesData().observe((LifecycleOwner) getApplication(), new Observer<ArrayList<Workmate>>() {
+                //-------------------------- Ok until this part ------------------------------------
+                //Context who doesn't work:
+                //getApplication()
+                //getApplicationContext()
+                //NotificationsService.this
+                //context
+                //getBaseContext()
+
+                //mSharedViewModel = new ViewModelProvider().get(SharedViewModel.class);
+                //mSharedViewModel.initJoiningWorkmates(/*NotificationsService.this*/, idRestaurant);
+                //mSharedViewModel.getJoiningWorkmatesData().observe(/*(LifecycleOwner) getApplication()*/, new Observer<ArrayList<Workmate>>() {
                 //    @Override
                 //    public void onChanged(ArrayList<Workmate> workmates) {
                 //        if (!workmates.isEmpty()){
-                //            String notificationMessage = "Today you eat at" + restaurant; //+ ": " + /*Add adresse in workamtes ???*/
-                //            //" with " +
-                //           mMessage = notificationMessage;
+                //            String item = "";
+                //            for(int i = 0; i < workmates.size(); i++){
+                //                item = item + workmates.get(i);
+//
+                //                if (i != workmates.size() - 1){
+                //                    item = item + ", ";
+                //                    String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + workmates;
+                //                    mMessage = notificationMessage;
+                //                    sendVisualNotification(mMessage);
+                //                }
+                //            }
+                //        }
+                //        else{
+                //            String notificationMessage = "Today you eat at " + restaurant + ": " + address;
+                //            mMessage = notificationMessage;
                 //            sendVisualNotification(mMessage);
                 //        }
                 //    }
                 //});
+
             }
         });
     }
+
+    //mSharedViewModel.initJoiningWorkmates(NotificationsService.this, idRestaurant);
+    //mSharedViewModel.getJoiningWorkmatesData().observe((LifecycleOwner) getApplication(), new Observer<ArrayList<Workmate>>() {
+    //    @Override
+    //    public void onChanged(ArrayList<Workmate> workmates) {
+    //        if (!workmates.isEmpty()){
+    //            String notificationMessage = "Today you eat at" + restaurant; //+ ": " + /*Add adresse in workamtes ???*/
+    //            //" with " +
+    //           mMessage = notificationMessage;
+    //            sendVisualNotification(mMessage);
+    //        }
+    //    }
+    //});
+
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Send notification ----------------------------------------------

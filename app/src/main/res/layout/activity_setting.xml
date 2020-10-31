@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.settings.SettingActivity">
+
+    <TextView
+        android:id="@+id/setting_title"
+        android:text="@string/settings_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/setting_title_style">
+
+    </TextView>
+
+    <ImageView
+        android:id="@+id/setting_icon"
+        android:src="@drawable/ic_settings_white_36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/setting_icon_style"/>
+
+    <TextView
+        android:id="@+id/setting_notification"
+        android:text="@string/settings_notifications"
+        app:layout_constraintTop_toBottomOf="@+id/setting_title"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/setting_notification_style"/>
+
+    <CheckBox
+        android:id="@+id/setting_check_box"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setting_title"
+        style="@style/setting_check_box_style"/>
+
+    <View
+        android:id="@+id/setting_line"
+        app:layout_constraintTop_toBottomOf="@+id/setting_notification"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/setting_line_style"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

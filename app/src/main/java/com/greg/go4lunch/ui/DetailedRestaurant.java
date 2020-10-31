@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -90,7 +91,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         ButterKnife.bind(this);
 
         recoverIntent();
-        recoverMyLunchIntent();
+        //recoverMyLunchIntent();
 
         configureJoiningWorkmatesRecyclerView();
         getFavorite();
@@ -109,12 +110,14 @@ public class DetailedRestaurant extends AppCompatActivity {
         String restaurantAddress = restaurant.getAddress();
         mDetailedAddress.setText(restaurantAddress);
         getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
+        int openingHour = restaurant.getOpeningHour();//restaurant.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours();
+
     }
 
-    public void recoverMyLunchIntent(){
-        Intent goToMyRestaurantForLunch = getIntent();
-        goToMyRestaurantForLunch.getExtras();
-    }
+    //public void recoverMyLunchIntent(){
+    //    Intent goToMyRestaurantForLunch = getIntent();
+    //    goToMyRestaurantForLunch.getExtras();
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Click on join button -------------------------------------------
@@ -148,7 +151,10 @@ public class DetailedRestaurant extends AppCompatActivity {
             String photo = user.getPhotoUrl().toString();
 
             //----------------------------- Create workmate in FireStore ---------------------------
-            WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null, false);
+            WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null,
+                    null, 0,null, null,null,
+                      mRestaurant.getJoiningNumber(), 0, false
+            );
         }
     }
 
@@ -171,8 +177,20 @@ public class DetailedRestaurant extends AppCompatActivity {
                 Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
                 String idPickedRestaurant = mRestaurant.getIdRestaurant();
                 String namePickedRestaurant = mRestaurant.getName();
+                String addressPickedRestaurant = mRestaurant.getAddress();
+                PhotoMetadata photoPickedRestaurant = mRestaurant.getRestaurantPicture();
+                float ratingPickedRestaurant = mRestaurant.getRating();
+                String websitePickedRestaurant = mRestaurant.getWebsite();
+                String phonePickedRestaurant = mRestaurant.getPhoneNumber();
+                String distanceFromUserPickedRestaurant = mRestaurant.getDistanceFromUser();
+                LatLng latLngPickedRestaurant = mRestaurant.getLatLng();
+                int joiningNumberPickedRestaurant = mRestaurant.getJoiningNumber();
+                int openingHourPickedRestaurant = mRestaurant.getOpeningHour();
+
                 if (currentWorkmate != null){
-                    WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant, true);
+                    WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant,
+                            addressPickedRestaurant, ratingPickedRestaurant, websitePickedRestaurant,
+                            phonePickedRestaurant, distanceFromUserPickedRestaurant, joiningNumberPickedRestaurant, 0, true);
                 }
             }
         });
@@ -181,7 +199,9 @@ public class DetailedRestaurant extends AppCompatActivity {
     private void updateWorkmateIsNotJoining(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
-            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(),null, null, false);
+            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(), null,null, null,
+                     0,null, null,null,  mRestaurant.getJoiningNumber(), 0,
+                    false);
         }
     }
 

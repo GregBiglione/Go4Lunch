@@ -2,31 +2,18 @@ package com.greg.go4lunch;
 
 import android.content.Intent;
 
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
-
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
-import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FetchPlaceResponse;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.util.Log;
@@ -36,8 +23,6 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -65,18 +50,13 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import org.parceler.Parcels;
+
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 import es.dmoral.toasty.Toasty;
-
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -309,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
             switch (item.getItemId()){
                 case R.id.nav_lunch:
                     Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
-                    goToMyLunchRestaurant();
+                    //goToMyLunchRestaurant();
                     break;
                 case R.id.nav_settings:
                     //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
@@ -376,23 +356,35 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------- Go to your selected restaurant ---------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void goToMyLunchRestaurant(){
-        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
-                String idSelectedRestaurant = currentWorkmate.getIdPickedRestaurant();
-                if (idSelectedRestaurant != null){
-                    Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-                    goToMyRestaurantForLunch.putExtra("idPickedRestaurant", idSelectedRestaurant);
-                    startActivity(goToMyRestaurantForLunch);
-                }
-                else{
-                    Toasty.warning(getApplicationContext(), getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
+    //private void goToMyLunchRestaurant(){
+    //    WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+    //        @Override
+    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
+    //            Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+    //            String idRestaurant = currentWorkmate.getIdPickedRestaurant();
+    //            String nameRestaurant = currentWorkmate.getPickedRestaurant();
+    //            String addressRestaurant = currentWorkmate.getAddressRestaurant();
+    //            PhotoMetadata photoRestaurant =  currentWorkmate.getPhotoRestaurant();
+    //            float ratingRestaurant = currentWorkmate.getRatingRestaurant();
+    //            String websiteRestaurant = currentWorkmate.getWebsiteRestaurant();
+    //            String phoneRestaurant = currentWorkmate.getPhoneRestaurant();
+    //            LatLng latLngRestaurant = currentWorkmate.getLatLng();
+    //            int joiningNumber = currentWorkmate.getJoiningNumber();
+    //            int openingHour = currentWorkmate.getOpeningHour();
+    //            if (currentWorkmate != null){
+    //                Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+    //                Restaurant restaurant = new Restaurant(idRestaurant, nameRestaurant, addressRestaurant,
+    //                        photoRestaurant, ratingRestaurant, websiteRestaurant, phoneRestaurant, latLngRestaurant, joiningNumber,
+    //                        openingHour);
+    //                goToMyRestaurantForLunch.putExtra("RestaurantDetails", Parcels.wrap(restaurant));
+    //                startActivity(goToMyRestaurantForLunch);
+    //            }
+    //            else{
+    //                Toasty.warning(getApplicationContext(), getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
+    //            }
+    //        }
+    //    });
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Shared preferences ---------------------------------------------

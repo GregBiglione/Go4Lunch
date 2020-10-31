@@ -37,8 +37,8 @@ import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.DetailedRestaurant;
-import com.greg.go4lunch.ui.dialog_box.SharedPreferencesDialog;
 import com.greg.go4lunch.ui.home.HomeFragment;
+import com.greg.go4lunch.ui.settings.SettingActivity;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -296,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                     //openLanguagesDialog();
                     //openSettingsDialog();
                     //upDateSharedPreferences();
+                    goToSetting();
                     break;
                 case R.id.nav_logout:
                     logOut();
@@ -387,14 +388,13 @@ public class MainActivity extends AppCompatActivity {
     //}
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Shared preferences ---------------------------------------------
+    //----------------------------- Go to setting activity -----------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void openSettingsDialog() {
-        SharedPreferencesDialog sharedPreferencesDialog = new SharedPreferencesDialog();
-        sharedPreferencesDialog.show(getSupportFragmentManager(), "Shared preferences dialog box");
+    private void goToSetting(){
+        Intent goToSetting = new Intent(MainActivity.this, SettingActivity.class);
+        startActivity(goToSetting);
     }
-
     //private void upDateSharedPreferences(){
     //    SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_PREF, MODE_PRIVATE);
     //    SharedPreferences.Editor editor = sharedPreferences.edit();

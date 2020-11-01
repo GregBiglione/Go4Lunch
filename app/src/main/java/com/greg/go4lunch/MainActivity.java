@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     //----------------------------------------------------------------------------------------------
-    public static final String NOTIFICATIONS_PREF = "Notifications preferences";
     private Workmate mWorkmate;
     private List<Restaurant> restaurants;
 

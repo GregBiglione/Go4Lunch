@@ -35,7 +35,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/setting_notification"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/setting_title"
-        style="@style/setting_check_box_style"/>
+        style="@style/setting_check_box_style"
+        android:checked="true"/>
 
     <View
         android:id="@+id/setting_line"

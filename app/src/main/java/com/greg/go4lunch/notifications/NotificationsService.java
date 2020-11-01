@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.os.Build;
 
@@ -37,20 +38,21 @@ public class NotificationsService extends FirebaseMessagingService {
     public static final String TAG = "NotificationsService";
     private SharedViewModel mSharedViewModel;
     private String mMessage;
-    private Context context;
+    public static final String NOTIFICATIONS_PREF = "Notifications preferences";
+    //private Context context;
     //String[] listOfJoiningWorkmates;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
-        if (remoteMessage.getNotification() != null){
-            //String message = remoteMessage.getNotification().getBody();
-            mMessage = remoteMessage.getNotification().getBody();
-            //message = mNotification ????
-            //----------------------------- Show notification after received message ---------------
-            //sendVisualNotification(message);
-            notificationData();
-             // appelr dans in Sucees
+        SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_PREF, MODE_PRIVATE);
+        boolean receiveNotification = sharedPreferences.getBoolean("silentMode", false);
 
+        if (receiveNotification){
+            if (remoteMessage.getNotification() != null){
+                mMessage = remoteMessage.getNotification().getBody();
+                //----------------------------- Show notification after received message ---------------
+                notificationData();
+            }
         }
     }
 

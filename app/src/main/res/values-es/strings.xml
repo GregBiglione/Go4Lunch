@@ -48,4 +48,8 @@
     <string name="no_restaurant_selected">No seleccionado ningún restaurante</string>
     <string name="notifications_settings_dialog_title">Configuración de las notificaciones</string>
     <string name="close_hour">Abierto hasta</string>
+    <string name="settings_title">Ajustes</string>
+    <string name="settings_notifications">Notificaciones</string>
+    <string name="notifications_on">Notificaciones activadas</string>
+    <string name="notifications_off">Notificaciones desactivadas</string>
 </resources>

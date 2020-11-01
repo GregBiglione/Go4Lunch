@@ -40,7 +40,6 @@ public class NotificationsService extends FirebaseMessagingService {
     private String mMessage;
     public static final String NOTIFICATIONS_PREF = "Notifications preferences";
     //private Context context;
-    //String[] listOfJoiningWorkmates;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -95,7 +94,7 @@ public class NotificationsService extends FirebaseMessagingService {
 //
                 //                if (i != workmates.size() - 1){
                 //                    item = item + ", ";
-                //                    String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + workmates;
+                //                    String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + item;
                 //                    mMessage = notificationMessage;
                 //                    sendVisualNotification(mMessage);
                 //                }

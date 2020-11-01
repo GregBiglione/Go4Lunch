@@ -7,4 +7,12 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="app_bar_height">250dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!--////////////////////////////// S SIZE ///////////////////////////////////////////////////-->
+
+    <dimen name="nav_header_height_small">150dp</dimen>
+    <dimen name="app_bar_height_small">210dp</dimen>
+
+    <!--////////////////////////////// S Land ///////////////////////////////////////////////////-->
+    <dimen name="nav_header_height_small_land">130dp</dimen>
 </resources>

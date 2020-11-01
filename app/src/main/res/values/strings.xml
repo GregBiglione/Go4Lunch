@@ -197,5 +197,7 @@
     <string name="close_hour">Open until</string>
     <string name="settings_title">Settings</string>
     <string name="settings_notifications">Notifications</string>
+    <string name="notifications_on">Notifications enabled</string>
+    <string name="notifications_off">Notifications disabled</string>
 
 </resources>

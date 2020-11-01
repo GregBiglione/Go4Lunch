@@ -48,19 +48,18 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
 
             String name = mWorkmates.get(position).getName();
             String restaurant = mWorkmates.get(position).getPickedRestaurant();
-            //String restaurantNotChosen = String.valueOf(R.string.restaurantNotChosen);
-            //String restaurantChosen = String.valueOf(R.string.restaurantChosen);
+            String restaurantNotChosen = name + " " + context.getString(R.string.restaurantNotChosen);
+            String restaurantChosen = name + " " + context.getString(R.string.restaurantChosen) + " " + restaurant;
 
             if(!mWorkmates.get(position).getJoining()){
-                holder.mMessageTextView.setText(name + " hasn't decide yet ");
+                holder.mMessageTextView.setText(restaurantNotChosen);
                 holder.mMessageTextView.setTextColor(ContextCompat.getColor(context, R.color.isJoiningColor));
                 holder.mMessageTextView.setTypeface(holder.mMessageTextView.getTypeface(), Typeface.ITALIC);
             }
             else{
-                holder.mMessageTextView.setText(name + " is eating at " + restaurant);
+                holder.mMessageTextView.setText(restaurantChosen);
             }
         }
-
     }
 
     @Override

@@ -37,11 +37,11 @@ public class SettingActivity extends AppCompatActivity {
     @OnClick(R.id.setting_check_box)
     void clickOnSettingCheckBox(){
         if (mCheckBox.isChecked()){
-            Toasty.success(this, "Notifications on", Toasty.LENGTH_SHORT).show();
+            Toasty.success(this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
             restorePreferences();
         }
         else{
-            Toasty.warning(this, "Notifications off", Toasty.LENGTH_SHORT).show();
+            Toasty.warning(this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
             upDateSharedPreferences();
         }
     }

@@ -232,7 +232,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 //----------------------------- Get distance to restaurant ---------
                                 r.setDistanceFromUser(getDistance(r.getLatLng()));
                                 //----------------------------- Custom marker & number joining workmates -----------
-                                getJoiningWorkmateNumber(r); // <-- marker & joiningNumber
+                                getJoiningWorkmateNumber(r);
                                 mSharedViewModel.restaurants.add(r);
                                 getRestaurantDetails(r);
                             }
@@ -303,7 +303,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
     private void configureViewModel(){
         mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        //mSharedViewModel.initSelected(getContext(), idRestaurant); //ok
     }
 
     //----------------------------------------------------------------------------------------------

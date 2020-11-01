@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.DetailedRestaurant"
+    tools:showIn="@layout/activity_detailed_restaurant">
+
+    <LinearLayout
+        android:id="@+id/main_container_detailed_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/orange_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            style="@style/orange_layout_style">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/detailed_restaurant_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/restaurant_name"
+                    style="@style/detailed_name_large"/>
+
+
+                <RatingBar
+                    android:id="@+id/detailed_restaurant_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:progressTint="@color/colorStar"
+                    android:numStars="5"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/detailed_restaurant_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/restaurant_address"
+                android:ellipsize="end"
+                android:lines="1"
+                style="@style/detailed_address_large"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp">
+
+            <LinearLayout
+                android:id="@+id/call_Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.33">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_call_orange_24dp"
+                    style="@style/three_items_icon_style"/>
+
+                <TextView
+                    android:id="@+id/detailed_call"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:textAllCaps="true"
+                    android:text="@string/detailed_call"
+                    style="@style/three_items_text_style"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/like_Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.33"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/like_image"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star_orange_24dp"
+                    style="@style/three_items_icon_style"/>
+
+                <TextView
+                    android:id="@+id/detailed_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:textAllCaps="true"
+                    android:text="@string/detailed_like"
+                    style="@style/three_items_text_style"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/website_Layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.33">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_website_website_24dp"
+                    style="@style/three_items_icon_style"/>
+
+                <TextView
+                    android:id="@+id/detailed_website"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:textAllCaps="true"
+                    android:text="@string/detailed_website"
+                    style="@style/three_items_text_style_large"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            style="@style/horizontalLine_style"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/joining_workmates_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

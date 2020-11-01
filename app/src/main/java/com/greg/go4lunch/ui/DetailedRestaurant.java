@@ -91,7 +91,6 @@ public class DetailedRestaurant extends AppCompatActivity {
         ButterKnife.bind(this);
 
         recoverIntent();
-        //recoverMyLunchIntent();
 
         configureJoiningWorkmatesRecyclerView();
         getFavorite();
@@ -113,11 +112,6 @@ public class DetailedRestaurant extends AppCompatActivity {
         int openingHour = restaurant.getOpeningHour();//restaurant.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours();
 
     }
-
-    //public void recoverMyLunchIntent(){
-    //    Intent goToMyRestaurantForLunch = getIntent();
-    //    goToMyRestaurantForLunch.getExtras();
-    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Click on join button -------------------------------------------
@@ -190,7 +184,7 @@ public class DetailedRestaurant extends AppCompatActivity {
                 if (currentWorkmate != null){
                     WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant,
                             addressPickedRestaurant, ratingPickedRestaurant, websitePickedRestaurant,
-                            phonePickedRestaurant, distanceFromUserPickedRestaurant, joiningNumberPickedRestaurant, 0, true);
+                            phonePickedRestaurant, distanceFromUserPickedRestaurant, joiningNumberPickedRestaurant, openingHourPickedRestaurant, true);
                 }
             }
         });
@@ -287,8 +281,6 @@ public class DetailedRestaurant extends AppCompatActivity {
 
                     //------------- Create liked restaurant in FireStore ---------------------------
                     WorkmateHelper.createLikedRestaurant(uid, idRestaurant, true);
-                    Toasty.success(getApplicationContext(), "Favorite restaurant created in Firestore after click on star button",
-                            Toasty.LENGTH_SHORT).show();
                 }
             }
         });
@@ -301,8 +293,6 @@ public class DetailedRestaurant extends AppCompatActivity {
                 LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
                 if(currentLikedRestaurant != null){
                     WorkmateHelper.upDateFavoriteRestaurant(currentLikedRestaurant.getWorkmateId(), null, false);
-                    Toasty.warning(getApplicationContext(), "Favorite restaurant removed from Firestore after click on star button",
-                            Toasty.LENGTH_SHORT).show();
                 }
             }
         });

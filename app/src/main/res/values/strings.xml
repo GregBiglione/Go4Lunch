@@ -199,5 +199,6 @@
     <string name="settings_notifications">Notifications</string>
     <string name="notifications_on">Notifications enabled</string>
     <string name="notifications_off">Notifications disabled</string>
+    <string name="search_restaurants">Search restaurants</string>
 
 </resources>

@@ -82,9 +82,9 @@ public class NotificationsService extends FirebaseMessagingService {
                 //context
                 //getBaseContext()
 
-                //mSharedViewModel = new ViewModelProvider().get(SharedViewModel.class);
-                //mSharedViewModel.initJoiningWorkmates(/*NotificationsService.this*/, idRestaurant);
-                //mSharedViewModel.getJoiningWorkmatesData().observe(/*(LifecycleOwner) getApplication()*/, new Observer<ArrayList<Workmate>>() {
+                //mSharedViewModel = new ViewModelProvider(NotificationsService.this).get(SharedViewModel.class);
+                //mSharedViewModel.initJoiningWorkmates(NotificationsService.this, idRestaurant);
+                //mSharedViewModel.getJoiningWorkmatesData().observe(NotificationsService.this, new Observer<ArrayList<Workmate>>() {
                 //    @Override
                 //    public void onChanged(ArrayList<Workmate> workmates) {
                 //        if (!workmates.isEmpty()){

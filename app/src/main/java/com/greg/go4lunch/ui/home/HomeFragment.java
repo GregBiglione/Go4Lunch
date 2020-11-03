@@ -273,7 +273,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                 Place place = fetchPlaceResponse.getPlace();
                 Log.i(TAG, "Place found: " + place.getName());
-                r.setOpeningHour(place.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours());
+                r.setOpeningHour(place.getOpeningHours().getPeriods().get(4).getClose().getTime().getHours());
                 r.setRating(place.getRating().floatValue());
                 r.setPhoneNumber(place.getPhoneNumber());
                 r.setWebsite(place.getWebsiteUri().toString());

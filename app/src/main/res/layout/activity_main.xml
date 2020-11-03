@@ -41,10 +41,23 @@
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone">
 
-        <fragment android:id="@+id/autocomplete_fragment"
+        <!--<fragment android:id="@+id/autocomplete_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
+            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>-->
+
+        <EditText
+            android:id="@+id/autocomplete_search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:layout_margin="5dp"
+            android:lines="1"
+            android:drawableStart="@drawable/ic_search_grey_24dp"
+            android:hint="@string/search_restaurants"
+            android:imeOptions="actionSearch"/>
 
     </LinearLayout>
 

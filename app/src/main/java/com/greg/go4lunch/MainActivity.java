@@ -1,22 +1,39 @@
 package com.greg.go4lunch;
 
+import android.content.Context;
 import android.content.Intent;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -48,11 +65,16 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -80,6 +102,9 @@ public class MainActivity extends AppCompatActivity {
     private SharedViewModel mSharedViewModel;
     private DetailedRestaurant detailedRestaurant;
 
+    @BindView(R.id.autocomplete_search_bar) EditText mSearchAutocomplete;
+    private GoogleMap mMap;
+    private static final float DEFAULT_ZOOM = 17.0f;
 
     //----------------------------------------------------------------------------------------------
     private Workmate mWorkmate;
@@ -114,6 +139,9 @@ public class MainActivity extends AppCompatActivity {
                                       //   Fb pics not shown
         navigationViewMenu();
         setUpFireBaseListener();
+        //clickOnAutocompleteSearchBar();
+        mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
+        searchBarCustom();
     }
 
     @Override
@@ -124,19 +152,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //----------------------------------------------------------------------------------------------
+    //----------------------------- Hide search bar when not focused -------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //----------------------------------------------------------------------------------------------
     //----------------------------- Search Menu ----------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        View autocompleteBar = findViewById(R.id.autocomplete_linear_layout);
+        View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
         if (item.getItemId() == R.id.search) {
-            autocompleteBar.setVisibility(View.VISIBLE);
+            autocompleteSearchBar.setVisibility(View.VISIBLE);
+            searchBarNotFocused();
         } else {
-            autocompleteBar.setVisibility(View.GONE);
+            autocompleteSearchBar.setVisibility(View.GONE);
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void searchBarNotFocused(){
+        mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
+                if (!hasFocus){
+                    imm.hideSoftInputFromWindow(autocompleteSearchBar.getWindowToken(), 0);
+                    autocompleteSearchBar.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -144,6 +192,109 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get places -----------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    public void initPlaces(){
+        if (!Places.isInitialized()){
+            Places.initialize(getApplicationContext(), API_KEY);
+        }
+        mPlacesClient = Places.createClient(this);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Autocomplete prediction ----------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //private void clickOnAutocompleteSearchBar(){
+    //    mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
+    //    // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest
+    //    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+    //    // Create a RectangularBounds object.
+    //    RectangularBounds bounds = RectangularBounds.newInstance(
+    //            new LatLng(-33.880490, 151.184363),
+    //            new LatLng(-33.858754, 151.229596)
+    //    );
+    //    // Use the builder to create a FindAutocompletePredictionsRequest. And Pass this to FindAutocompletePredictionsRequest,
+    //    // when the user makes a selection (for example when calling fetchPlace()).
+    //    FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+    //            // Call either setLocationBias() OR setLocationRestriction().
+    //            .setLocationBias(bounds)
+    //            .setTypeFilter(TypeFilter.ESTABLISHMENT)
+    //            .setSessionToken(token)
+    //            .setQuery(mSearchAutocomplete.getText().toString())
+    //            .build();
+//
+    //    mPlacesClient.findAutocompletePredictions(request).addOnSuccessListener(new OnSuccessListener<FindAutocompletePredictionsResponse>() {
+    //        @Override
+    //        public void onSuccess(FindAutocompletePredictionsResponse findAutocompletePredictionsResponse) {
+    //            // adapter ??
+    //        }
+    //    }).addOnFailureListener(new OnFailureListener() {
+    //        @Override
+    //        public void onFailure(@NonNull Exception e) {
+    //            if (e instanceof ApiException){
+    //                ApiException apiException = (ApiException) e;
+    //                Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+    //            }
+    //        }
+    //    });
+    //}
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Search bar custom ----------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void searchBarCustom(){
+        mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                    //searchRestaurant();
+                }
+                return false;
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Search restaurant with search bar ------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //public void searchRestaurant(){
+    //    String searchRestaurant = mSearchAutocomplete.getText().toString();
+//
+    //    Geocoder geocoder = new Geocoder(MainActivity.this);
+    //    List<Address> list = new ArrayList<>();
+    //    try {
+    //        list = geocoder.getFromLocationName(searchRestaurant, 1);
+    //    }catch (IOException e){
+    //        Log.e(TAG, "relocate: IOException" + e.getMessage());
+    //    }
+//
+    //    if (list.size() > 0){
+    //        Address address = list.get(0);
+    //        Log.d(TAG, "Location seach in Search bar info:" + address.toString());
+    //        LatLng latLngAddressRestaurant = new LatLng(address.getLatitude(), address.getLongitude());
+    //        moveCameraToSearchedRestaurant(latLngAddressRestaurant, DEFAULT_ZOOM, address.getAddressLine(0));
+    //    }
+    //}
+//
+    ////----------------------------------------------------------------------------------------------
+    ////----------------------------- Move Camera to search location ---------------------------------
+    ////----------------------------------------------------------------------------------------------
+//
+    //private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
+    //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    //    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
+    //    mMap.addMarker(new MarkerOptions().position(latLng)
+    //            .icon(subwayBitmapDescriptor)
+    //            .title(title));
+    //}
+
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Bottom Navigation Menu -----------------------------------------
@@ -179,21 +330,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Get places -----------------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    public void initPlaces(){
-        if (!Places.isInitialized()){
-            Places.initialize(getApplicationContext(), API_KEY);
-        }
-        mPlacesClient = Places.createClient(this);
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Autocomplete prediction ----------------------------------------
-    //----------------------------------------------------------------------------------------------
 
     //public void autoCompletePrediction(){
     //    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
@@ -394,12 +530,6 @@ public class MainActivity extends AppCompatActivity {
         Intent goToSetting = new Intent(MainActivity.this, SettingActivity.class);
         startActivity(goToSetting);
     }
-    //private void upDateSharedPreferences(){
-    //    SharedPreferences sharedPreferences = getSharedPreferences(NOTIFICATIONS_PREF, MODE_PRIVATE);
-    //    SharedPreferences.Editor editor = sharedPreferences.edit();
-    //    editor.putBoolean("isNotificationActivated", false);
-    //    editor.commit();
-    //}
 
     // ---------------------------- Language selection ---------------------------------------------
     private void openLanguagesDialog() {

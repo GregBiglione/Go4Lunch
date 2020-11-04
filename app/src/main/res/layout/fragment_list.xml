@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:id="@+id/list_fragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/restaurant_recycler_view"

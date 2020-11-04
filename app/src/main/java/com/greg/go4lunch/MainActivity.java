@@ -22,6 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 
@@ -105,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.autocomplete_search_bar) EditText mSearchAutocomplete;
     private GoogleMap mMap;
     private static final float DEFAULT_ZOOM = 17.0f;
+    //private StringBuilder mResult;
 
     //----------------------------------------------------------------------------------------------
     private Workmate mWorkmate;
@@ -152,10 +154,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Hide search bar when not focused -------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    //----------------------------------------------------------------------------------------------
     //----------------------------- Search Menu ----------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
@@ -170,6 +168,10 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Hide search bar when not focused -------------------------------
+    //----------------------------------------------------------------------------------------------
 
     private void searchBarNotFocused(){
         mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -231,6 +233,12 @@ public class MainActivity extends AppCompatActivity {
     //        @Override
     //        public void onSuccess(FindAutocompletePredictionsResponse findAutocompletePredictionsResponse) {
     //            // adapter ??
+    //            //mResult = new StringBuilder();
+    //            for (AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
+    //                //mResult.append(" ").append(prediction.getFullText(null) + "\n");
+    //                //Log.i(TAG, prediction.getPlaceId());
+    //                //Log.i(TAG, prediction.getPrimaryText(null).toString());
+    //            }
     //        }
     //    }).addOnFailureListener(new OnFailureListener() {
     //        @Override
@@ -265,21 +273,21 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
 
     //public void searchRestaurant(){
-    //    String searchRestaurant = mSearchAutocomplete.getText().toString();
+    //    String restaurantSearched = mSearchAutocomplete.getText().toString();
 //
     //    Geocoder geocoder = new Geocoder(MainActivity.this);
     //    List<Address> list = new ArrayList<>();
     //    try {
-    //        list = geocoder.getFromLocationName(searchRestaurant, 1);
+    //        list = geocoder.getFromLocationName(restaurantSearched, 1);
     //    }catch (IOException e){
     //        Log.e(TAG, "relocate: IOException" + e.getMessage());
     //    }
 //
     //    if (list.size() > 0){
     //        Address address = list.get(0);
-    //        Log.d(TAG, "Location seach in Search bar info:" + address.toString());
+    //        Log.i(TAG, "Location search in Search bar info:" + address.toString());
     //        LatLng latLngAddressRestaurant = new LatLng(address.getLatitude(), address.getLongitude());
-    //        moveCameraToSearchedRestaurant(latLngAddressRestaurant, DEFAULT_ZOOM, address.getAddressLine(0));
+    //        //moveCameraToSearchedRestaurant(latLngAddressRestaurant, DEFAULT_ZOOM, address.getAddressLine(0));
     //    }
     //}
 //
@@ -294,7 +302,6 @@ public class MainActivity extends AppCompatActivity {
     //            .icon(subwayBitmapDescriptor)
     //            .title(title));
     //}
-
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Bottom Navigation Menu -----------------------------------------

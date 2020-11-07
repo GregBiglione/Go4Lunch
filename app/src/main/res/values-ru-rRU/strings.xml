@@ -50,6 +50,10 @@
     <string name="close_hour">Открыт до</string>
     <string name="settings_title">Настройки</string>
     <string name="settings_notifications">Уведомления</string>
-    <string name="notifications_on">Notifications on</string>
-    <string name="notifications_off">Notifications off</string>
+    <string name="notifications_on">Активированы уведомления</string>
+    <string name="notifications_off">Уведомления деактивированы</string>
+    <string name="search_restaurants">Поиск ресторанов</string>
+    <string name="today_you_eat_at">Сегодня вы едите в</string>
+    <string name="with">с участием</string>
+    <string name="workmates_notification">коллеги</string>
 </resources>

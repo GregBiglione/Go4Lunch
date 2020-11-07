@@ -145,10 +145,7 @@ public class DetailedRestaurant extends AppCompatActivity {
             String photo = user.getPhotoUrl().toString();
 
             //----------------------------- Create workmate in FireStore ---------------------------
-            WorkmateHelper.createWorkmate(uid, photo, name, email, null,  null,
-                    null, 0,null, null,null,
-                      mRestaurant.getJoiningNumber(), 0, false
-            );
+            WorkmateHelper.createWorkmate(uid, photo, name, email, null, null, null, false);
         }
     }
 
@@ -172,19 +169,10 @@ public class DetailedRestaurant extends AppCompatActivity {
                 String idPickedRestaurant = mRestaurant.getIdRestaurant();
                 String namePickedRestaurant = mRestaurant.getName();
                 String addressPickedRestaurant = mRestaurant.getAddress();
-                PhotoMetadata photoPickedRestaurant = mRestaurant.getRestaurantPicture();
-                float ratingPickedRestaurant = mRestaurant.getRating();
-                String websitePickedRestaurant = mRestaurant.getWebsite();
-                String phonePickedRestaurant = mRestaurant.getPhoneNumber();
-                String distanceFromUserPickedRestaurant = mRestaurant.getDistanceFromUser();
-                LatLng latLngPickedRestaurant = mRestaurant.getLatLng();
-                int joiningNumberPickedRestaurant = mRestaurant.getJoiningNumber();
-                int openingHourPickedRestaurant = mRestaurant.getOpeningHour();
 
                 if (currentWorkmate != null){
                     WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant,
-                            addressPickedRestaurant, ratingPickedRestaurant, websitePickedRestaurant,
-                            phonePickedRestaurant, distanceFromUserPickedRestaurant, joiningNumberPickedRestaurant, openingHourPickedRestaurant, true);
+                            addressPickedRestaurant, true);
                 }
             }
         });
@@ -193,9 +181,7 @@ public class DetailedRestaurant extends AppCompatActivity {
     private void updateWorkmateIsNotJoining(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
-            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(), null,null, null,
-                     0,null, null,null,  mRestaurant.getJoiningNumber(), 0,
-                    false);
+            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(), null, null, null, false);
         }
     }
 

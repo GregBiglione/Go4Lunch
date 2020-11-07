@@ -200,5 +200,8 @@
     <string name="notifications_on">Notifications enabled</string>
     <string name="notifications_off">Notifications disabled</string>
     <string name="search_restaurants">Search restaurants</string>
+    <string name="today_you_eat_at">Today you eat at</string>
+    <string name="with">with</string>
+    <string name="workmates_notification">workmates</string>
 
 </resources>

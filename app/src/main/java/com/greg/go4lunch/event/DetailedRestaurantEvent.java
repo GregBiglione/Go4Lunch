@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.event;
+package com.greg.go4lunch.event;
 
 import com.greg.go4lunch.model.Restaurant;
 

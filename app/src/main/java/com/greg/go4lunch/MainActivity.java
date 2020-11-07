@@ -41,6 +41,7 @@ import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -111,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     private Workmate mWorkmate;
     private List<Restaurant> restaurants;
+    NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,14 +121,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_list, R.id.nav_workmates)
                 .setDrawerLayout(drawer)
                 .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         getSupportActionBar().setTitle(getString(R.string.ImHungry));
@@ -315,25 +318,24 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
-            Fragment selectedFragment = null;
 
             switch (item.getItemId()){
                 case R.id.nav_maps:
-                    selectedFragment = new NavHostFragment();
                     getSupportActionBar().setTitle(getString(R.string.ImHungry));
+                    navController.navigate(R.id.nav_home);
                     break;
                 case R.id.nav_list:
-                    selectedFragment = new ListFragment();
                     getSupportActionBar().setTitle(getString(R.string.ImHungry));
+                    navController.navigate(R.id.nav_list);
                     break;
                 case R.id.nav_workmates:
-                    selectedFragment = new WorkmatesFragment();
                     getSupportActionBar().setTitle(getString(R.string.AvailableWorkmates));
+                    navController.navigate(R.id.nav_workmates);
                     break;
             }
 
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment)
-                    .commit();
+            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment)
+            //        .commit();
             return true;
         }
     };
@@ -430,7 +432,6 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()){
                 case R.id.nav_lunch:
-                    Toasty.success(MainActivity.this, "Click on menu icon", Toasty.LENGTH_SHORT).show();
                     //goToMyLunchRestaurant();
                     break;
                 case R.id.nav_settings:
@@ -505,25 +506,12 @@ public class MainActivity extends AppCompatActivity {
     //        public void onSuccess(DocumentSnapshot documentSnapshot) {
     //            Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
     //            String idRestaurant = currentWorkmate.getIdPickedRestaurant();
-    //            String nameRestaurant = currentWorkmate.getPickedRestaurant();
-    //            String addressRestaurant = currentWorkmate.getAddressRestaurant();
-    //            PhotoMetadata photoRestaurant =  currentWorkmate.getPhotoRestaurant();
-    //            float ratingRestaurant = currentWorkmate.getRatingRestaurant();
-    //            String websiteRestaurant = currentWorkmate.getWebsiteRestaurant();
-    //            String phoneRestaurant = currentWorkmate.getPhoneRestaurant();
-    //            LatLng latLngRestaurant = currentWorkmate.getLatLng();
-    //            int joiningNumber = currentWorkmate.getJoiningNumber();
-    //            int openingHour = currentWorkmate.getOpeningHour();
-    //            if (currentWorkmate != null){
-    //                Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-    //                Restaurant restaurant = new Restaurant(idRestaurant, nameRestaurant, addressRestaurant,
-    //                        photoRestaurant, ratingRestaurant, websiteRestaurant, phoneRestaurant, latLngRestaurant, joiningNumber,
-    //                        openingHour);
-    //                goToMyRestaurantForLunch.putExtra("RestaurantDetails", Parcels.wrap(restaurant));
-    //                startActivity(goToMyRestaurantForLunch);
-    //            }
-    //            else{
-    //                Toasty.warning(getApplicationContext(), getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
+    //            for (Restaurant r: mSharedViewModel.getRestaurants()) {
+    //                if (r.getIdRestaurant().equals(idRestaurant)){
+    //                    Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+    //                    goToMyRestaurantForLunch.putExtra("RestaurantDetails", Parcels.wrap(r));
+    //                    startActivity(goToMyRestaurantForLunch);
+    //                }
     //            }
     //        }
     //    });

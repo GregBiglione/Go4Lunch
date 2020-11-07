@@ -25,13 +25,9 @@ public class WorkmateHelper {
 
     //----------------------------- Create workmate ------------------------------------------------
     public static Task<Void> createWorkmate(String uid, String picture, String name, String email, String idPickedRestaurant,
-                                            String pickedRestaurant, String addressRestaurant, /*PhotoMetadata photoRestaurant,*/
-                                            float ratingRestaurant, String websiteRestaurant,
-                                            String phoneRestaurant, String distanceFromUser, /*LatLng latLng,*/ int joiningNumber,
-            int openingHour, boolean joining){
+                                            String pickedRestaurant, String addressRestaurant, boolean joining){
         Workmate workmateToCreate = new Workmate(uid, picture, name, email, pickedRestaurant, idPickedRestaurant,
-                addressRestaurant, /*photoRestaurant,*/ ratingRestaurant, websiteRestaurant, phoneRestaurant, distanceFromUser, /*latLng,*/ joiningNumber, openingHour,
-                joining);
+                addressRestaurant, joining);
         return WorkmateHelper.getWorkmatesCollection().document(uid).set(workmateToCreate);
     }
 
@@ -41,14 +37,9 @@ public class WorkmateHelper {
     }
 
     public static Task<Void> updatePickedRestaurantAndIsJoining(String uid,  String idPickedRestaurant, String pickedRestaurant,
-                                                                String addressRestaurant, /*PhotoMetadata photoRestaurant,*/
-                                                                float ratingRestaurant,
-                                                                String websiteRestaurant, String phoneRestaurant, String distanceFromUser, /*LatLng latLng,*/
-            int joiningNumber, int openingHour, boolean joining){
+                                                                String addressRestaurant, boolean joining){
         return WorkmateHelper.getWorkmatesCollection().document(uid).update("idPickedRestaurant", idPickedRestaurant,
-                "pickedRestaurant", pickedRestaurant,"addressRestaurant", addressRestaurant, /*"photoRestaurant", photoRestaurant,*/
-                "ratingRestaurant", ratingRestaurant, "websiteRestaurant", websiteRestaurant, "phoneRestaurant", phoneRestaurant, "distanceFromUser",
-                distanceFromUser, /*"latLng", latLng,*/ "joiningNumber", joiningNumber, "openingHour", openingHour,"joining", joining);
+                "pickedRestaurant", pickedRestaurant,"addressRestaurant", addressRestaurant, "joining", joining);
     }
 
     //----------------------------------------------------------------------------------------------

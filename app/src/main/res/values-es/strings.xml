@@ -52,4 +52,8 @@
     <string name="settings_notifications">Notificaciones</string>
     <string name="notifications_on">Notificaciones activadas</string>
     <string name="notifications_off">Notificaciones desactivadas</string>
+    <string name="search_restaurants">Buscar restaurantes</string>
+    <string name="today_you_eat_at">Hoy comes en</string>
+    <string name="with">con</string>
+    <string name="workmates_notification">compañeros de trabajo</string>
 </resources>

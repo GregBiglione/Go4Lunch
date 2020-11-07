@@ -22,7 +22,7 @@ import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPhotoResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.greg.go4lunch.model.Restaurant;
-import com.greg.go4lunch.ui.event.DetailedRestaurantEvent;
+import com.greg.go4lunch.event.DetailedRestaurantEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

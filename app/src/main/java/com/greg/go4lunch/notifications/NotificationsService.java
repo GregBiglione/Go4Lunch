@@ -12,16 +12,12 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.greg.go4lunch.MainActivity;
@@ -29,20 +25,14 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.repository.Repository;
-import com.greg.go4lunch.viewmodel.SharedViewModel;
-
-import java.util.ArrayList;
 
 public class NotificationsService extends FirebaseMessagingService {
 
     final int NOTIFICATION_ID = 218;
     final String NOTIFICATION_TAG = "FIRE_BASE_GO4LUNCH";
     public static final String TAG = "NotificationsService";
-    private SharedViewModel mSharedViewModel;
     private String mMessage;
     public static final String NOTIFICATIONS_PREF = "Notifications preferences";
-    //private Context context;
-    private Repository mRepository;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
@@ -74,113 +64,23 @@ public class NotificationsService extends FirebaseMessagingService {
                 String restaurant = currentUser.getPickedRestaurant();
                 String address = currentUser.getAddressRestaurant();
 
-                //String notificationMessage = "Today you eat at " + restaurant + ": " + address;
-                //mMessage = notificationMessage;
-                //sendVisualNotification(mMessage);
-                //-------------------------- Ok until this part ------------------------------------
-                //Repository.getInstance(NotificationsService.this).getJoiningWorkmates(idRestaurant)
-                //        .observe((LifecycleOwner) NotificationsService.this, new Observer<ArrayList<Workmate>>() {
-                //    @Override
-                //    public void onChanged(ArrayList<Workmate> workmates) {
-                //        if (!workmates.isEmpty()){
-                //            //String item = "";
-                //            //for (int i = 0; i < workmates.size(); i++){
-                //            //    item = item + workmates.get(i);
-////
-                //            //    if (i != workmates.size() - 1){
-                //            //        item = item + ", ";
-                //            //        String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + item;
-                //            //        mMessage = notificationMessage;
-                //            //        sendVisualNotification(mMessage);
-                //            //    }
-                //            //}
-                //            String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + workmates;
-                //            mMessage = notificationMessage;
-                //            sendVisualNotification(mMessage);
-                //        }
-                //        else{
-                //            String notificationMessage = "Today you eat at " + restaurant + ": " + address;
-                //            mMessage = notificationMessage;
-                //            sendVisualNotification(mMessage);
-                //        }
-                //    }
-                //});
-
-
-                //Repository.getJoiningWorkmates(idRestaurant).observe((LifecycleOwner) NotificationsService.this, new Observer<ArrayList<Workmate>>() {
-                //    @Override
-                //    public void onChanged(ArrayList<Workmate> workmates) {
-                //        if (!workmates.isEmpty()){
-                //            String item = "";
-                //            for (int i = 0; i < workmates.size(); i++){
-                //                item = item + workmates.get(i);
-//
-                //                if (i != workmates.size() - 1){
-                //                    item = item + ", ";
-                //                    String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + item;
-                //                    mMessage = notificationMessage;
-                //                    sendVisualNotification(mMessage);
-                //                }
-                //            }
-                //        }
-                //        else{
-                //            String notificationMessage = "Today you eat at " + restaurant + ": " + address;
-                //            mMessage = notificationMessage;
-                //            sendVisualNotification(mMessage);
-                //        }
-                //    }
-                //});
-
-                //if (joiningWorkmates != null){
-                //    String item = "";
-                //    for(int i = 0; i < joiningWorkmates; i++){
-                //        item = item + workmates.get(i);
-                //        if (i != workmates.size() - 1){
-                //            item = item + ", ";
-                //            notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + item;
-                //            mMessage = notificationMessage;
-                //            sendVisualNotification(mMessage);
-                //        }
-                //    }
-                //}
-                //else{
-                //    notificationMessage = "Today you eat at " + restaurant + ": " + address;
-                //    mMessage = notificationMessage;
-                //    sendVisualNotification(mMessage);
-                //}
-                //Context who doesn't work:
-                //getApplication()
-                //getApplicationContext()
-                //NotificationsService.this
-                //context
-                //getBaseContext()
-
-                //mSharedViewModel = new ViewModelProvider(NotificationsService.this).get(SharedViewModel.class);
-                //mSharedViewModel.initJoiningWorkmates(NotificationsService.this, idRestaurant);
-                //mSharedViewModel.getJoiningWorkmatesData().observe(NotificationsService.this, new Observer<ArrayList<Workmate>>() {
-                //    @Override
-                //    public void onChanged(ArrayList<Workmate> workmates) {
-                //        if (!workmates.isEmpty()){
-                //            String item = "";
-                //            for(int i = 0; i < workmates.size(); i++){
-                //                item = item + workmates.get(i);
-//
-                //                if (i != workmates.size() - 1){
-                //                    item = item + ", ";
-                //                    String notificationMessage = "Today you eat at" + restaurant + ": " + address + " with " + item;
-                //                    mMessage = notificationMessage;
-                //                    sendVisualNotification(mMessage);
-                //                }
-                //            }
-                //        }
-                //        else{
-                //            String notificationMessage = "Today you eat at " + restaurant + ": " + address;
-                //            mMessage = notificationMessage;
-                //            sendVisualNotification(mMessage);
-                //        }
-                //    }
-                //});
-
+                Repository.getInstance(NotificationsService.this).getJoiningWorkmatesNotification(idRestaurant)
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        if (!queryDocumentSnapshots.isEmpty()){
+                            String notificationMessage = getString(R.string.today_you_eat_at) + " " + restaurant + ": " + address
+                                    + getString(R.string.with) + queryDocumentSnapshots.size() + getString(R.string.workmates_notification);
+                            mMessage = notificationMessage;
+                            sendVisualNotification(mMessage);
+                        }
+                        else{
+                            String notificationMessage = "Today you eat at " + restaurant + ": " + address;
+                            mMessage = notificationMessage;
+                            sendVisualNotification(mMessage);
+                        }
+                    }
+                });
             }
         });
     }
@@ -207,9 +107,8 @@ public class NotificationsService extends FirebaseMessagingService {
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_logo_go4lunch)
-                        .setContentTitle(getString(R.string.app_name)) ///<----
-                        .setContentText(getString(R.string.notification_title)) //<-- May be change this for notificationMessage
-                        //.setContentText(mNotificationInfo)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(mMessage)
                         .setAutoCancel(true)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentIntent(pendingIntent)

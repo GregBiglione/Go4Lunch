@@ -16,7 +16,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.ui.DetailedRestaurant;
-import com.greg.go4lunch.ui.event.DetailedRestaurantEvent;
+import com.greg.go4lunch.event.DetailedRestaurantEvent;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.greenrobot.eventbus.EventBus;

@@ -12,15 +12,15 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.greg.go4lunch.ui.gallery.GalleryFragment"
+        android:id="@+id/nav_list"
+        android:name="com.greg.go4lunch.ListFragment"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        tools:layout="@layout/fragment_list" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.greg.go4lunch.ui.slideshow.SlideshowFragment"
+        android:id="@+id/nav_workmates"
+        android:name="com.greg.go4lunch.WorkmatesFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_workmates" />
 
 </navigation>

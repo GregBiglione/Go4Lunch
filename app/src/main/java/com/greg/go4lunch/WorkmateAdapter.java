@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -71,6 +72,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
 
         @BindView(R.id.workmates_photo)CircleImageView mCircleImageView;
         @BindView(R.id.workmate_message) TextView mMessageTextView;
+        @BindView(R.id.item_relative_Lyt) RelativeLayout mButtonWorkmateToDetailedRestaurant;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

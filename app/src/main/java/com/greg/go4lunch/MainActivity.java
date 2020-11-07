@@ -121,7 +121,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        //mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+        configureViewModel();
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -432,7 +433,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()){
                 case R.id.nav_lunch:
-                    //goToMyLunchRestaurant();
+                    goToMyLunchRestaurant();
                     break;
                 case R.id.nav_settings:
                     //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
@@ -500,22 +501,29 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------- Go to your selected restaurant ---------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //private void goToMyLunchRestaurant(){
-    //    WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-    //        @Override
-    //        public void onSuccess(DocumentSnapshot documentSnapshot) {
-    //            Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
-    //            String idRestaurant = currentWorkmate.getIdPickedRestaurant();
-    //            for (Restaurant r: mSharedViewModel.getRestaurants()) {
-    //                if (r.getIdRestaurant().equals(idRestaurant)){
-    //                    Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
-    //                    goToMyRestaurantForLunch.putExtra("RestaurantDetails", Parcels.wrap(r));
-    //                    startActivity(goToMyRestaurantForLunch);
-    //                }
-    //            }
-    //        }
-    //    });
-    //}
+    private void goToMyLunchRestaurant(){
+        WorkmateHelper.getWorkmate(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Workmate currentWorkmate = documentSnapshot.toObject(Workmate.class);
+                String idRestaurant = currentWorkmate.getIdPickedRestaurant();
+                for (Restaurant r: mSharedViewModel.getRestaurants()) {
+                    if (r.getIdRestaurant().equals(idRestaurant)){
+                        Intent goToMyRestaurantForLunch = new Intent(MainActivity.this, DetailedRestaurant.class);
+                        goToMyRestaurantForLunch.putExtra("RestaurantDetails", Parcels.wrap(r));
+                        startActivity(goToMyRestaurantForLunch);
+                    }
+                    else if (idRestaurant == null){
+                        Toasty.warning(MainActivity.this, getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+    }
+
+    private void configureViewModel(){
+        mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+    }
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Go to setting activity -----------------------------------------

@@ -35,35 +35,35 @@ public class SettingActivity extends AppCompatActivity {
     //----------------------------- Click on checkbox ----------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //@OnClick(R.id.setting_check_box)
-    //void clickOnSettingCheckBox(){
-    //    if (mCheckBox.isChecked()){
-    //        Toasty.success(this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
-    //        restorePreferences();
-    //        mCheckBox.isChecked();
-    //    }
-    //    else{
-    //        Toasty.warning(this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
-    //        upDateSharedPreferences();
-    //    }
-    //}
     @OnClick(R.id.setting_check_box)
     void clickOnSettingCheckBox(){
-       mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-           @Override
-           public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-               if (buttonView.isChecked()){
-                   Toasty.success(SettingActivity.this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
-                   restorePreferences();
-               }
-               else{
-                   Toasty.warning(SettingActivity.this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
-                   upDateSharedPreferences();
-                   //mCheckBox.setChecked(false);
-               }
-           }
-       });
+        if (mCheckBox.isChecked()){
+            Toasty.success(this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
+            restorePreferences();
+            mCheckBox.isChecked();
+        }
+        else{
+            Toasty.warning(this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
+            upDateSharedPreferences();
+        }
     }
+    //@OnClick(R.id.setting_check_box)
+    //void clickOnSettingCheckBox(){
+    //   mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    //       @Override
+    //       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+    //           if (buttonView.isChecked()){
+    //               Toasty.success(SettingActivity.this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
+    //               restorePreferences();
+    //           }
+    //           else{
+    //               Toasty.warning(SettingActivity.this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
+    //               upDateSharedPreferences();
+    //               //mCheckBox.setChecked(false);
+    //           }
+    //       }
+    //   });
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Shared preferences ---------------------------------------------

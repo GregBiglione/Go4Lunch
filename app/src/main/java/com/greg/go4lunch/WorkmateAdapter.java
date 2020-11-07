@@ -1,6 +1,7 @@
 package com.greg.go4lunch;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,22 +10,37 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.ui.DetailedRestaurant;
+import com.greg.go4lunch.viewmodel.SharedViewModel;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import es.dmoral.toasty.Toasty;
 
 public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHolder> {
 
     private List<Workmate> mWorkmates;
     private Context context;
+    private SharedViewModel mSharedViewModel;
 
     public WorkmateAdapter(List<Workmate> mWorkmates, Context context) {
         this.mWorkmates = mWorkmates;
@@ -61,7 +77,35 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
                 holder.mMessageTextView.setText(restaurantChosen);
             }
         }
+
+        holder.mButtonWorkmateToDetailedRestaurant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                configureViewModel();
+                String idRestaurant = mWorkmates.get(position).getIdPickedRestaurant();
+                if (idRestaurant != null){
+                    for (Restaurant r: mSharedViewModel.getRestaurants()) {
+                        if (r.getIdRestaurant().equals(idRestaurant)){
+                            Intent goToMyRestaurantForLunch = new Intent(context, DetailedRestaurant.class);
+                            goToMyRestaurantForLunch.putExtra("RestaurantDetails", Parcels.wrap(r));
+                            context.startActivity(goToMyRestaurantForLunch);
+                        }
+                    }
+                }
+                else{
+                    Toasty.warning(context, context.getString(R.string.no_restaurant_selected), Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
+
+    private void configureViewModel(){
+        mSharedViewModel = new ViewModelProvider((ViewModelStoreOwner) context).get(SharedViewModel.class);
+    }
+
+    //----------------------------- Get current user -----------------------------------------------
+    @Nullable
+    protected FirebaseUser getCurrentUser(){ return FirebaseAuth.getInstance().getCurrentUser(); }
 
     @Override
     public int getItemCount() {
@@ -79,4 +123,6 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
             ButterKnife.bind(this, itemView);
         }
     }
+
+
 }

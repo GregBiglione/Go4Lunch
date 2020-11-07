@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        getSupportActionBar().setTitle(getString(R.string.ImHungry));
+        //getSupportActionBar().setTitle(getString(R.string.ImHungry));
 
         navigationBottomMenu();
         initPlaces();
@@ -322,15 +322,15 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()){
                 case R.id.nav_maps:
-                    getSupportActionBar().setTitle(getString(R.string.ImHungry));
+                    //getSupportActionBar().setTitle(getString(R.string.ImHungry));
                     navController.navigate(R.id.nav_home);
                     break;
                 case R.id.nav_list:
-                    getSupportActionBar().setTitle(getString(R.string.ImHungry));
+                    //getSupportActionBar().setTitle(getString(R.string.ImHungry));
                     navController.navigate(R.id.nav_list);
                     break;
                 case R.id.nav_workmates:
-                    getSupportActionBar().setTitle(getString(R.string.AvailableWorkmates));
+                    //getSupportActionBar().setTitle(getString(R.string.AvailableWorkmates));
                     navController.navigate(R.id.nav_workmates);
                     break;
             }

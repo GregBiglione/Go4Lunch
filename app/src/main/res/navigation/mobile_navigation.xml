@@ -8,19 +8,19 @@
     <fragment
         android:id="@+id/nav_home"
         android:name="com.greg.go4lunch.ui.home.HomeFragment"
-        android:label="@string/menu_home"
+        android:label="@string/ImHungry"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_list"
         android:name="com.greg.go4lunch.ListFragment"
-        android:label="@string/menu_gallery"
+        android:label="@string/ImHungry"
         tools:layout="@layout/fragment_list" />
 
     <fragment
         android:id="@+id/nav_workmates"
         android:name="com.greg.go4lunch.WorkmatesFragment"
-        android:label="@string/menu_slideshow"
+        android:label="@string/AvailableWorkmates"
         tools:layout="@layout/fragment_workmates" />
 
 </navigation>

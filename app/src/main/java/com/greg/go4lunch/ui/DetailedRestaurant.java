@@ -107,6 +107,7 @@ public class DetailedRestaurant extends AppCompatActivity {
         float restaurantRating = restaurant.getRating();
         mDetailedRating.setRating(restaurantRating);
         String restaurantAddress = restaurant.getAddress();
+        PhotoMetadata photoRestaurant = restaurant.getRestaurantPicture();
         mDetailedAddress.setText(restaurantAddress);
         getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
         int openingHour = restaurant.getOpeningHour();//restaurant.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours();

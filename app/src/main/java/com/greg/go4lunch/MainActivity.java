@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        //mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
         configureViewModel();
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -393,6 +392,8 @@ public class MainActivity extends AppCompatActivity {
             String email = user.getEmail();
             //String photo = user.getPhotoUrl().toString();
             Uri photo = Uri.parse(String.valueOf(user.getPhotoUrl()));
+            Uri anonymous =  Uri.parse("https://avante.biz/wp-content/uploads/Imagenes-De-Anonymous-Wallpapers/Imagenes-De-Anonymous-Wallpapers-001.jpg");
+
 
             NavigationView navigationView = findViewById(R.id.nav_view);
             View headerView = navigationView.getHeaderView(0);
@@ -411,6 +412,13 @@ public class MainActivity extends AppCompatActivity {
                         .load(photo)
                         .apply(RequestOptions.circleCropTransform())
                         .into(mPhoto);
+            }
+            else{
+                //Glide.with(MainActivity.this)
+                //        .load(anonymous)
+                //        .apply(RequestOptions.circleCropTransform())
+                //        .into(mPhoto);
+                mPhoto.setImageURI(anonymous);
             }
         }
     }

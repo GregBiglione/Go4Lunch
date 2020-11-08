@@ -17,6 +17,11 @@ public class Restaurant {
 
     public Restaurant(){}
 
+    public Restaurant(String idPickedRestaurant, String pickedRestaurant, String distanceFromUser, String addressRestaurant,
+                      String phoneNumber, String website, PhotoMetadata restaurantPicture, LatLng latLng,
+                      int joiningNumber, int openingHour, float rating) {
+    }
+
     //----------------------------- Getters --------------------------------------------------------
     public String getIdRestaurant() { return idRestaurant; }
     public String getName() { return name; }

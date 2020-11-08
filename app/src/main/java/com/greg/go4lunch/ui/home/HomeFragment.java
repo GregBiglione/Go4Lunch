@@ -1,6 +1,7 @@
 package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
@@ -30,6 +31,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -50,7 +52,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
+import com.greg.go4lunch.ui.DetailedRestaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -235,6 +240,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 getJoiningWorkmateNumber(r);
                                 mSharedViewModel.restaurants.add(r);
                                 getRestaurantDetails(r);
+                                clickOnMarker();
                             }
                         }
                     }
@@ -328,7 +334,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //----------------------------------------------------------------------------------------------
 
     private void restaurantIsChosenOrNot(Restaurant r){
-        if (r.getJoiningNumber() > 0){
+        if(r.getJoiningNumber() > 0){
             BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_green);
             mMap.addMarker(new MarkerOptions().position(r.getLatLng())
                     .icon(subwayBitmapDescriptor)
@@ -340,6 +346,28 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     .icon(subwayBitmapDescriptor)
                     .title(r.getName()));
         }
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Click on marker ------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void clickOnMarker(){
+       mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+           @Override
+           public boolean onMarkerClick(Marker marker) {
+               String restaurantTitle = marker.getTitle();
+               for (Restaurant r : mSharedViewModel.getRestaurants()) {
+                   if (r.getName().equals(restaurantTitle)){
+                       Intent goToDetailedRestaurant = new Intent(getContext(), DetailedRestaurant.class);
+                       goToDetailedRestaurant.putExtra("RestaurantDetails", Parcels.wrap(r));
+                       startActivity(goToDetailedRestaurant);
+                   }
+               }
+               return false;
+           }
+       });
     }
 
     //----------------------------------------------------------------------------------------------

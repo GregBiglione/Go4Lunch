@@ -38,6 +38,7 @@
         android:id="@+id/autocomplete_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone">
 
@@ -58,6 +59,12 @@
             android:drawableStart="@drawable/ic_search_grey_24dp"
             android:hint="@string/search_restaurants"
             android:imeOptions="actionSearch"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/autocomplete_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"/>
 
     </LinearLayout>
 

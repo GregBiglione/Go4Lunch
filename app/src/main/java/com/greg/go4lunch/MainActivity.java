@@ -33,6 +33,8 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -107,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.autocomplete_search_bar) EditText mSearchAutocomplete;
     private GoogleMap mMap;
     private static final float DEFAULT_ZOOM = 17.0f;
-    //private StringBuilder mResult;
+    private StringBuilder mResult;
 
     //----------------------------------------------------------------------------------------------
     private Workmate mWorkmate;
@@ -146,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         setUpFireBaseListener();
         //clickOnAutocompleteSearchBar();
         mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
-        searchBarCustom();
+        //searchBarCustom();
     }
 
     @Override
@@ -213,44 +215,57 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------- Autocomplete prediction ----------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //private void clickOnAutocompleteSearchBar(){
-    //    mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
-    //    // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest
-    //    AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
-    //    // Create a RectangularBounds object.
-    //    RectangularBounds bounds = RectangularBounds.newInstance(
-    //            new LatLng(-33.880490, 151.184363),
-    //            new LatLng(-33.858754, 151.229596)
-    //    );
-    //    // Use the builder to create a FindAutocompletePredictionsRequest. And Pass this to FindAutocompletePredictionsRequest,
-    //    // when the user makes a selection (for example when calling fetchPlace()).
-    //    FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-    //            // Call either setLocationBias() OR setLocationRestriction().
-    //            .setLocationBias(bounds)
-    //            .setTypeFilter(TypeFilter.ESTABLISHMENT)
-    //            .setSessionToken(token)
-    //            .setQuery(mSearchAutocomplete.getText().toString())
-    //            .build();
-//
-    //    mPlacesClient.findAutocompletePredictions(request).addOnSuccessListener(new OnSuccessListener<FindAutocompletePredictionsResponse>() {
+    private void clickOnAutocompleteSearchBar(){
+        mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
+        // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest
+        AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
+        // Create a RectangularBounds object.
+        RectangularBounds bounds = RectangularBounds.newInstance(
+                new LatLng(-33.880490, 151.184363),
+                new LatLng(-33.858754, 151.229596)
+        );
+        // Use the builder to create a FindAutocompletePredictionsRequest. And Pass this to FindAutocompletePredictionsRequest,
+        // when the user makes a selection (for example when calling fetchPlace()).
+        FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
+                // Call either setLocationBias() OR setLocationRestriction().
+                .setLocationBias(bounds)
+                .setTypeFilter(TypeFilter.ESTABLISHMENT)
+                .setSessionToken(token)
+                .setQuery(mSearchAutocomplete.getText().toString())
+                .build();
+
+        mPlacesClient.findAutocompletePredictions(request).addOnSuccessListener(new OnSuccessListener<FindAutocompletePredictionsResponse>() {
+            @Override
+            public void onSuccess(FindAutocompletePredictionsResponse findAutocompletePredictionsResponse) {
+                // adapter ??
+                //mResult = new StringBuilder();
+                for (AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
+                    mResult.append(" ").append(prediction.getFullText(null) + "\n");
+                    Log.i(TAG, prediction.getPlaceId());
+                    Log.i(TAG, prediction.getPrimaryText(null).toString());
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ApiException){
+                    ApiException apiException = (ApiException) e;
+                    Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+                }
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Launch search after 3 characters -------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //private void launchSearchAfterThreeCharacters(){
+    //    mSearchAutocomplete.addTextChangedListener(new TextWatcher() {
     //        @Override
-    //        public void onSuccess(FindAutocompletePredictionsResponse findAutocompletePredictionsResponse) {
-    //            // adapter ??
-    //            //mResult = new StringBuilder();
-    //            for (AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
-    //                //mResult.append(" ").append(prediction.getFullText(null) + "\n");
-    //                //Log.i(TAG, prediction.getPlaceId());
-    //                //Log.i(TAG, prediction.getPrimaryText(null).toString());
-    //            }
-    //        }
-    //    }).addOnFailureListener(new OnFailureListener() {
-    //        @Override
-    //        public void onFailure(@NonNull Exception e) {
-    //            if (e instanceof ApiException){
-    //                ApiException apiException = (ApiException) e;
-    //                Log.e(TAG, "Place not found: " + apiException.getStatusCode());
-    //            }
-    //        }
+    //        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+    //        @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
+    //        @Override public void afterTextChanged(Editable s) { }
     //    });
     //}
 
@@ -258,18 +273,18 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------- Search bar custom ----------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void searchBarCustom(){
-        mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    //searchRestaurant();
-                }
-                return false;
-            }
-        });
-    }
+    //private void searchBarCustom(){
+    //    mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    //        @Override
+    //        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    //            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+    //                    || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+    //                searchRestaurant();
+    //            }
+    //            return false;
+    //        }
+    //    });
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Search restaurant with search bar ------------------------------
@@ -293,11 +308,11 @@ public class MainActivity extends AppCompatActivity {
     //        //moveCameraToSearchedRestaurant(latLngAddressRestaurant, DEFAULT_ZOOM, address.getAddressLine(0));
     //    }
     //}
-//
-    ////----------------------------------------------------------------------------------------------
-    ////----------------------------- Move Camera to search location ---------------------------------
-    ////----------------------------------------------------------------------------------------------
-//
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Move Camera to search location ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
     //private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
     //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     //    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);

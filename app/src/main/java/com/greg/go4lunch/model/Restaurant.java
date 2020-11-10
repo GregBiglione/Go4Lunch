@@ -22,6 +22,9 @@ public class Restaurant {
                       int joiningNumber, int openingHour, float rating) {
     }
 
+    //public Restaurant(String placeId, String toString, String toString1) {
+    //}
+
     //----------------------------- Getters --------------------------------------------------------
     public String getIdRestaurant() { return idRestaurant; }
     public String getName() { return name; }

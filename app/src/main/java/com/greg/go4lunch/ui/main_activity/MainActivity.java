@@ -291,10 +291,6 @@ public class MainActivity extends AppCompatActivity {
                     goToMyLunchRestaurant();
                     break;
                 case R.id.nav_settings:
-                    //Toasty.success(MainActivity.this, getString(R.string.language_changed), Toasty.LENGTH_SHORT).show();
-                    //openLanguagesDialog();
-                    //openSettingsDialog();
-                    //upDateSharedPreferences();
                     goToSetting();
                     break;
                 case R.id.nav_logout:
@@ -443,11 +439,5 @@ public class MainActivity extends AppCompatActivity {
         mMap.addMarker(new MarkerOptions().position(latLng)
                 .icon(subwayBitmapDescriptor)
                 .title(title));
-    }
-
-    // ---------------------------- Language selection ---------------------------------------------
-    private void openLanguagesDialog() {
-        LanguagesDialog languagesDialog = new LanguagesDialog();
-        languagesDialog.show(getSupportFragmentManager(),"languages dialog");
     }
 }

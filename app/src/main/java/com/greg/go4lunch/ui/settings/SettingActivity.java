@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -28,7 +29,7 @@ public class SettingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ButterKnife.bind(this);
 
-        clickOnSettingCheckBox();
+        updateCheckBoxPreference();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -38,35 +39,15 @@ public class SettingActivity extends AppCompatActivity {
     @OnClick(R.id.setting_check_box)
     void clickOnSettingCheckBox(){
         if (mCheckBox.isChecked()){
-            Toasty.success(this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
             restorePreferences();
-            mCheckBox.isChecked();
         }
         else{
-            Toasty.warning(this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
             upDateSharedPreferences();
         }
     }
-    //@OnClick(R.id.setting_check_box)
-    //void clickOnSettingCheckBox(){
-    //   mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-    //       @Override
-    //       public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-    //           if (buttonView.isChecked()){
-    //               Toasty.success(SettingActivity.this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
-    //               restorePreferences();
-    //           }
-    //           else{
-    //               Toasty.warning(SettingActivity.this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
-    //               upDateSharedPreferences();
-    //               //mCheckBox.setChecked(false);
-    //           }
-    //       }
-    //   });
-    //}
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Shared preferences ---------------------------------------------
+    //----------------------------- Shared notification preferences --------------------------------
     //----------------------------------------------------------------------------------------------
 
     private void upDateSharedPreferences(){
@@ -81,9 +62,39 @@ public class SettingActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("silentMode", true);
         editor.commit();
-
     }
 
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Shared checkbox preferences ------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void updateCheckBoxPreference(){
+        mCheckBox = findViewById(R.id.setting_check_box);
+        SharedPreferences checkBoxPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor checkBoxEditor = checkBoxPreferences.edit();
+        if (checkBoxPreferences.contains("checked") && checkBoxPreferences.getBoolean("checked", false)){
+            mCheckBox.setChecked(true);
+        }
+        else{
+            mCheckBox.setChecked(false);
+        }
+
+        mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (mCheckBox.isChecked()){
+                    checkBoxEditor.putBoolean("checked", true);
+                    checkBoxEditor.apply();
+                    Toasty.success(SettingActivity.this, getString(R.string.notifications_on), Toasty.LENGTH_SHORT).show();
+                }
+                else {
+                    checkBoxEditor.putBoolean("checked", false);
+                    checkBoxEditor.apply();
+                    Toasty.warning(SettingActivity.this, getString(R.string.notifications_off), Toasty.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Back to Main Activity ------------------------------------------

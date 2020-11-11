@@ -2,6 +2,7 @@ package com.greg.go4lunch.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.text.style.CharacterStyle;
 import android.text.style.StyleSpan;
@@ -14,10 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -25,12 +33,15 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
@@ -47,6 +58,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static androidx.test.InstrumentationRegistry.getContext;
+
 public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.ViewHolder> {
 
     public static final String TAG = "PlacesAutoCompleteAdapter";
@@ -57,12 +71,15 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     private CharacterStyle STYLE_NORMAL;
     private final PlacesClient mPlacesClient;
     private ClickListener clickListener;
+    private GoogleMap mMap;
+    private static final float DEFAULT_ZOOM = 17.0f;
 
-    public PlacesAutoCompleteAdapter(Context mContext) {
+    public PlacesAutoCompleteAdapter(Context mContext, GoogleMap mMap) {
         this.mContext = mContext;
         STYLE_BOLD = new StyleSpan(Typeface.BOLD);
         STYLE_NORMAL = new StyleSpan(Typeface.NORMAL);
         mPlacesClient = com.google.android.libraries.places.api.Places.createClient(mContext);
+        this.mMap = mMap;
     }
 
     //----------------------------------------------------------------------------------------------
@@ -212,22 +229,73 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                 String restaurantId = (String) item.restaurantId;
 
                 List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.LAT_LNG);
-                FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
-                mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                    @Override
-                    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                        Place place = fetchPlaceResponse.getPlace();
-                        clickListener.click(place);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof ApiException){
-                            Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
+                //FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
+                //mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                //    @Override
+                //    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                //        Place place = fetchPlaceResponse.getPlace();
+                //        clickListener.click(place);
+                //    }
+                //}).addOnFailureListener(new OnFailureListener() {
+                //    @Override
+                //    public void onFailure(@NonNull Exception e) {
+                //        if (e instanceof ApiException){
+                //            Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
+                //        }
+                //    }
+                //});
+                // test only restaurant in results
+                FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+                if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED){
+                    Task<FindCurrentPlaceResponse> placeResponse = mPlacesClient.findCurrentPlace(request);
+                    placeResponse.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
+                        @Override
+                        public void onComplete(@NonNull Task<FindCurrentPlaceResponse> task) {
+                           if (task.isSuccessful()){
+                               FindCurrentPlaceResponse response = task.getResult();
+                               assert response != null;
+
+                               for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+                                   placeLikelihood.getPlace();
+                                   placeLikelihood.getLikelihood();
+
+                                   if (placeLikelihood.getPlace().getTypes().contains(Place.Type.RESTAURANT)){
+                                       FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
+                                       mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                                           @Override
+                                           public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                                               Place place = fetchPlaceResponse.getPlace();
+                                               clickListener.click(place);
+                                               moveCameraToSearchedRestaurant(placeLikelihood.getPlace().getLatLng(), DEFAULT_ZOOM,
+                                                       placeLikelihood.getPlace().getName());
+                                           }
+                                       }).addOnFailureListener(new OnFailureListener() {
+                                           @Override
+                                           public void onFailure(@NonNull Exception e) {
+                                               if (e instanceof ApiException){
+                                                   Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
+                                               }
+                                           }
+                                       });
+                                   }
+                               }
+                           }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Move Camera to search location ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
+        mMap.addMarker(new MarkerOptions().position(latLng)
+                .icon(subwayBitmapDescriptor)
+                .title(title));
     }
 }

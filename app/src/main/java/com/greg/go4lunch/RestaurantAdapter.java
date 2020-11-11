@@ -7,10 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -89,7 +89,8 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         @BindView(R.id.restaurant_hour) TextView mRestaurantHour;
         @BindView(R.id.restaurant_rating) RatingBar mRestaurantRating;
         @BindView(R.id.restaurant_picture) ImageView mRestaurantPicture;
-        @BindView(R.id.button_to_detailed_restaurant) RelativeLayout mButtonDetailedRestaurant;
+        //@BindView(R.id.button_to_detailed_restaurant) RelativeLayout mButtonDetailedRestaurant;
+        @BindView(R.id.button_to_detailed_restaurant) ConstraintLayout mButtonDetailedRestaurant;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);

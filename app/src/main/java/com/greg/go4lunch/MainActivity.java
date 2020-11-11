@@ -134,11 +134,9 @@ public class MainActivity extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-        //getSupportActionBar().setTitle(getString(R.string.ImHungry));
 
         navigationBottomMenu();
         initPlaces();
-        //autocompleteSupportFragInit();
 
                                        //  Twitter ok
         getCurrentUserFromFireBase();  //  Email pics not shown
@@ -146,9 +144,8 @@ public class MainActivity extends AppCompatActivity {
                                       //   Fb pics not shown
         navigationViewMenu();
         setUpFireBaseListener();
-        //clickOnAutocompleteSearchBar();
         mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
-        //searchBarCustom();
+        mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
         configureAutocompleteRecyclerView();
         configureSearchBar();
     }
@@ -415,9 +412,9 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
 
     private void configureAutocompleteRecyclerView() {
-        mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
-        mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this);
-        mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
+        mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, mMap);
+        //mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
         mAutoCompleteAdapter.notifyDataSetChanged();
     }
@@ -433,7 +430,9 @@ public class MainActivity extends AppCompatActivity {
             if (!s.toString().equals("")){
                 mAutoCompleteAdapter.getFilter().filter(s.toString());
                 if (mAutocompleteRecyclerView.getVisibility() == View.GONE){
-                    mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
+                    if (s.length() >= 3){
+                        mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
+                    }
                 }
                 else{
                     if(mAutocompleteRecyclerView.getVisibility() == View.VISIBLE){

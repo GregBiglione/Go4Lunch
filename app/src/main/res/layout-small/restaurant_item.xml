@@ -1,96 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/button_to_detailed_restaurant">
 
-    <LinearLayout
-        android:id="@+id/restaurant_main_linear_layout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/restaurant_name"
+        android:text="@string/restaurant_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/restaurant_name_new_small"/>
+
+    <TextView
+        android:id="@+id/restaurant_distance"
+        android:text="@string/distance"
+        app:layout_constraintEnd_toStartOf="@+id/restaurant_picture"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/restaurant_distance_new_small"/>
+
+    <TextView
+        android:id="@+id/restaurant_address"
+        android:text="@string/restaurant_address"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_name"
+        style="@style/restaurant_address_new_small"/>
+
+    <TextView
+        android:id="@+id/workmates_joining_number"
+        android:drawableStart="@drawable/ic_baseline_person_outline_black_16"
+        android:text="@string/workmates_joining"
+        app:layout_constraintEnd_toStartOf="@+id/restaurant_picture"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_distance"
+        style="@style/restaurant_workmates_joining_number_new_small"/>
+
+    <TextView
+        android:id="@+id/restaurant_hour"
+        android:text="@string/open_hour"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_address"
+        style="@style/restaurant_hour_new_small"/>
+
+    <RatingBar
+        android:id="@+id/restaurant_rating"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:id="@+id/restaurant_layout_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            style="@style/horizontal_restaurant_item_layout_small">
-
-            <TextView
-                android:id="@+id/restaurant_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/restaurant_name"
-                style="@style/restaurant_name_small">
-            </TextView>
-
-            <TextView
-                android:id="@+id/restaurant_distance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/distance"
-                style="@style/restaurant_item_distance_small"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/restaurant_layout_address"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            style="@style/horizontal_restaurant_item_layout_small">
-
-            <TextView
-                android:id="@+id/restaurant_address"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="1"
-                android:text="@string/restaurant_address"
-                android:layout_weight="0.5"/>
-            <TextView
-                android:id="@+id/workmates_joining_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/workmates_joining"
-                android:textAlignment="textEnd"
-                android:drawableStart="@drawable/ic_person_outline_black_24dp"
-                android:visibility="gone"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/restaurant_layout_hour"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            style="@style/horizontal_restaurant_item_layout_small">
-
-            <TextView
-                android:id="@+id/restaurant_hour"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/open_hour"
-                android:textStyle="italic"/>
-
-            <RatingBar
-                android:id="@+id/restaurant_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:attr/ratingBarStyleSmall"
-                android:progressTint="@color/colorStar"
-                android:numStars="5"
-                android:layout_gravity="center_vertical"/>
-        </LinearLayout>
-
-        <View
-            style="@style/restaurant_horizontalLine_style"/>
-    </LinearLayout>
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="6dp"
+        android:numStars="5"
+        android:progressTint="@color/colorStar"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurant_picture"
+        app:layout_constraintEnd_toStartOf="@+id/restaurant_picture" />
 
     <ImageView
         android:id="@+id/restaurant_picture"
-        style="@style/image_restaurant_item_small"/>
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/image_restaurant_item_new_small"/>
 
-</RelativeLayout>
+    <View
+        app:layout_constraintTop_toBottomOf="@+id/restaurant_picture"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        style="@style/restaurant_horizontalLine_style_new"/>
 
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.greg.go4lunch;
+package com.greg.go4lunch.ui.workmates;
 
 import android.os.Bundle;
 
@@ -12,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.greg.go4lunch.R;
+import com.greg.go4lunch.adapters.WorkmateAdapter;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 

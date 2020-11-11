@@ -1,4 +1,4 @@
-package com.greg.go4lunch;
+package com.greg.go4lunch.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Workmate;
 
 import java.util.List;

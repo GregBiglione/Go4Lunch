@@ -1,4 +1,4 @@
-package com.greg.go4lunch;
+package com.greg.go4lunch.ui.list;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,8 +14,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.libraries.places.api.Places;
 import com.google.common.eventbus.AllowConcurrentEvents;
+import com.greg.go4lunch.R;
+import com.greg.go4lunch.adapters.RestaurantAdapter;
 import com.greg.go4lunch.model.Restaurant;
-import com.greg.go4lunch.ui.DetailedRestaurant;
+import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
 import com.greg.go4lunch.event.DetailedRestaurantEvent;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 

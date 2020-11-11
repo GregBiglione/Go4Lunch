@@ -1,52 +1,37 @@
-package com.greg.go4lunch;
+package com.greg.go4lunch.ui.main_activity;
 
 import android.content.Context;
 import android.content.Intent;
 
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
-import com.google.android.libraries.places.api.model.PhotoMetadata;
 
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -54,12 +39,15 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.greg.go4lunch.BuildConfig;
+import com.greg.go4lunch.R;
 import com.greg.go4lunch.adapters.PlacesAutoCompleteAdapter;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
-import com.greg.go4lunch.ui.DetailedRestaurant;
+import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
 import com.greg.go4lunch.ui.home.HomeFragment;
+import com.greg.go4lunch.ui.login.LoginRegisterActivity;
 import com.greg.go4lunch.ui.settings.SettingActivity;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
@@ -67,22 +55,16 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;

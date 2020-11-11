@@ -1,4 +1,4 @@
-package com.greg.go4lunch;
+package com.greg.go4lunch.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,14 +17,12 @@ import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
-import com.greg.go4lunch.ui.DetailedRestaurant;
+import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;

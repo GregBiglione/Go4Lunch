@@ -1,11 +1,9 @@
 package com.greg.go4lunch;
 
-import android.content.Context;
-
-import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
+
+import com.greg.go4lunch.ui.main_activity.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -16,7 +14,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;

@@ -1,4 +1,4 @@
-package com.greg.go4lunch;
+package com.greg.go4lunch.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -21,6 +21,7 @@ import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.net.FetchPhotoRequest;
 import com.google.android.libraries.places.api.net.FetchPhotoResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
+import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.event.DetailedRestaurantEvent;
 

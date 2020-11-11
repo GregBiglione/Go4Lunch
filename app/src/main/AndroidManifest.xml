@@ -20,11 +20,11 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ui.settings.SettingActivity"></activity>
         <activity
-            android:name=".ui.DetailedRestaurant"
+            android:name=".ui.detailled_restaurant.DetailedRestaurant"
             android:label="@string/title_activity_detailed_restaurant"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main_activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -36,7 +36,7 @@
             tools:replace="android:value" />
 
         <activity
-            android:name=".LoginRegisterActivity"
+            android:name=".ui.login.LoginRegisterActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

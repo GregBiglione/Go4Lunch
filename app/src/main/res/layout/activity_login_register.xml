@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LoginRegisterActivity"
+    tools:context=".ui.login.LoginRegisterActivity"
     style="@style/login_activity_bkg"
     android:visibility="gone"> <!--delete android:visibility="gone" -->
 

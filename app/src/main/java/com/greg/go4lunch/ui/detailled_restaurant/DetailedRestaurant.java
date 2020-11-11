@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui;
+package com.greg.go4lunch.ui.detailled_restaurant;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -36,7 +35,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.greg.go4lunch.JoiningWorkmatesAdapter;
+import com.greg.go4lunch.adapters.JoiningWorkmatesAdapter;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.LikedRestaurant;

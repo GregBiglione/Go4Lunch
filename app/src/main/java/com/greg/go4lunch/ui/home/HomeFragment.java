@@ -280,7 +280,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                 Place place = fetchPlaceResponse.getPlace();
                 Log.i(TAG, "Place found: " + place.getName());
                 r.setOpeningHour(place.getOpeningHours().getPeriods().get(4).getClose().getTime().getHours());
-                r.setRating(place.getRating().floatValue());
+                if (place.getRating() != null){
+                    r.setRating(place.getRating().floatValue());
+                }
                 r.setPhoneNumber(place.getPhoneNumber());
                 r.setWebsite(place.getWebsiteUri().toString());
                 final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
@@ -384,4 +386,13 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Lock fragment in portrait orientation --------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //@Override
+    //public void setUserVisibleHint(boolean isVisibleToUser) {
+    //    super.setUserVisibleHint(isVisibleToUser);
+    //}
 }

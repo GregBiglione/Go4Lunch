@@ -98,7 +98,7 @@ public class LoginRegisterActivity extends AppCompatActivity {
                                 new AuthUI.IdpConfig.FacebookBuilder().build(),
                                 new AuthUI.IdpConfig.TwitterBuilder().build()))
                 .setIsSmartLockEnabled(false, true)
-                .setLogo(R.drawable.ic_logo_go4lunch)
+                .setLogo(R.drawable.ic_logo_go4lunch_login)
                 .build(),
                 RC_SIGN_IN);
     }

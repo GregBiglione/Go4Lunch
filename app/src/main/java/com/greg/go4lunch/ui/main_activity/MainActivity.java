@@ -3,6 +3,8 @@ package com.greg.go4lunch.ui.main_activity;
 import android.content.Context;
 import android.content.Intent;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -24,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -55,16 +58,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.parceler.Parcels;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
@@ -126,8 +135,6 @@ public class MainActivity extends AppCompatActivity {
                                       //   Fb pics not shown
         navigationViewMenu();
         setUpFireBaseListener();
-        mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
-        mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
         configureAutocompleteRecyclerView();
         configureSearchBar();
     }
@@ -148,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
         if (item.getItemId() == R.id.search) {
             autocompleteSearchBar.setVisibility(View.VISIBLE);
-            searchBarNotFocused();
+            //hideSearchBarNotFocused();
         } else {
             autocompleteSearchBar.setVisibility(View.GONE);
         }
@@ -159,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------- Hide search bar when not focused -------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void searchBarNotFocused(){
+    private void hideSearchBarNotFocused(){
         mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -172,7 +179,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -204,24 +210,17 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView.OnNavigationItemSelectedListener navListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(MenuItem item) {
-
             switch (item.getItemId()){
                 case R.id.nav_maps:
-                    //getSupportActionBar().setTitle(getString(R.string.ImHungry));
                     navController.navigate(R.id.nav_home);
                     break;
                 case R.id.nav_list:
-                    //getSupportActionBar().setTitle(getString(R.string.ImHungry));
                     navController.navigate(R.id.nav_list);
                     break;
                 case R.id.nav_workmates:
-                    //getSupportActionBar().setTitle(getString(R.string.AvailableWorkmates));
                     navController.navigate(R.id.nav_workmates);
                     break;
             }
-
-            //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment)
-            //        .commit();
             return true;
         }
     };
@@ -240,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
             //String photo = user.getPhotoUrl().toString();
             Uri photo = Uri.parse(String.valueOf(user.getPhotoUrl()));
             Uri anonymous =  Uri.parse("https://avante.biz/wp-content/uploads/Imagenes-De-Anonymous-Wallpapers/Imagenes-De-Anonymous-Wallpapers-001.jpg");
-
 
             NavigationView navigationView = findViewById(R.id.nav_view);
             View headerView = navigationView.getHeaderView(0);
@@ -261,11 +259,11 @@ public class MainActivity extends AppCompatActivity {
                         .into(mPhoto);
             }
             else{
-                //Glide.with(MainActivity.this)
-                //        .load(anonymous)
-                //        .apply(RequestOptions.circleCropTransform())
-                //        .into(mPhoto);
-                mPhoto.setImageURI(anonymous);
+                Glide.with(MainActivity.this)
+                        .load(anonymous)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(mPhoto);
+                //mPhoto.setImageURI(anonymous);
             }
         }
     }
@@ -390,9 +388,9 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
 
     private void configureAutocompleteRecyclerView() {
-        //mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
+        mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, mMap);
-        //mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
         mAutoCompleteAdapter.notifyDataSetChanged();
     }
@@ -426,18 +424,35 @@ public class MainActivity extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
 
     private void configureSearchBar(){
+        mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
         mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
+        //searchBarAction();
     }
+
+    //private void searchBarAction(){
+    //    mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    //        @Override
+    //        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    //            if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+    //                    || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+    //                // Execute search method
+    //                Toasty.success(MainActivity.this, "Click on item ", Toasty.LENGTH_SHORT).show();
+    //            }
+    //            return false;
+    //        }
+    //    });
+    //}
+
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Move Camera to search location ---------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-        BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
-        mMap.addMarker(new MarkerOptions().position(latLng)
-                .icon(subwayBitmapDescriptor)
-                .title(title));
-    }
+    //private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
+    //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+    //    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
+    //    mMap.addMarker(new MarkerOptions().position(latLng)
+    //            .icon(subwayBitmapDescriptor)
+    //            .title(title));
+    //}
 }

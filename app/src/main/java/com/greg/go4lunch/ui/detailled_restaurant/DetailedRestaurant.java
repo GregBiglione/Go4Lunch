@@ -109,8 +109,6 @@ public class DetailedRestaurant extends AppCompatActivity {
         PhotoMetadata photoRestaurant = restaurant.getRestaurantPicture();
         mDetailedAddress.setText(restaurantAddress);
         getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
-        int openingHour = restaurant.getOpeningHour();//restaurant.getOpeningHours().getPeriods().get(5).getClose().getTime().getHours();
-
     }
 
     //----------------------------------------------------------------------------------------------
@@ -142,10 +140,16 @@ public class DetailedRestaurant extends AppCompatActivity {
             String uid = user.getUid();
             String name = user.getDisplayName();
             String email = user.getEmail();
-            String photo = user.getPhotoUrl().toString();
+            if (user.getPhotoUrl() != null){
+                String photo = user.getPhotoUrl().toString();
+                WorkmateHelper.createWorkmate(uid, photo, name, email, null, null, null, false);
+            }
+            else{
+                WorkmateHelper.createWorkmate(uid, null, name, email, null, null, null, false);
+            }
 
-            //----------------------------- Create workmate in FireStore ---------------------------
-            WorkmateHelper.createWorkmate(uid, photo, name, email, null, null, null, false);
+            ////----------------------------- Create workmate in FireStore ---------------------------
+            //WorkmateHelper.createWorkmate(uid, photo, name, email, null, null, null, false);
         }
     }
 

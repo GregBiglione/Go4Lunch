@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
             String uid = user.getUid();
             String name = user.getDisplayName();
             String email = user.getEmail();
-            //String photo = user.getPhotoUrl().toString();
+            //String photoEmail = user.getPhotoUrl().toString();
             Uri photo = Uri.parse(String.valueOf(user.getPhotoUrl()));
             Uri anonymous =  Uri.parse("https://avante.biz/wp-content/uploads/Imagenes-De-Anonymous-Wallpapers/Imagenes-De-Anonymous-Wallpapers-001.jpg");
 
@@ -263,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
                         .load(anonymous)
                         .apply(RequestOptions.circleCropTransform())
                         .into(mPhoto);
-                //mPhoto.setImageURI(anonymous);
             }
         }
     }

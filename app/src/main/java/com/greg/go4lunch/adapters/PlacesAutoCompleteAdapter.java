@@ -78,6 +78,8 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     private GoogleMap mMap;
     private static final float DEFAULT_ZOOM = 17.0f;
     private Location mLocation;
+    private PlaceLikelihood mPlaceLikelihood;
+    //private LatLng mLatLng;
 
     public PlacesAutoCompleteAdapter(Context mContext, GoogleMap mMap) {
         this.mContext = mContext;
@@ -105,12 +107,13 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
     public class RestaurantAutocomplete {
         public CharSequence restaurantId, name, address;
-        private LatLng latLng;
+        public LatLng latLng;
 
         public RestaurantAutocomplete(CharSequence restaurantId, CharSequence name, CharSequence address) {
             this.restaurantId = restaurantId;
             this.name = name;
             this.address = address;
+            latLng = mPlaceLikelihood.getPlace().getLatLng();
         }
     }
 
@@ -207,19 +210,19 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name = (String) mAutocompleteRestaurant.get(position).name;
         String address = (String) mAutocompleteRestaurant.get(position).address;
-        //LatLng latLng = mAutocompleteRestaurant.get(position).
+        //LatLng latLng = mPlaceLikelihood.getPlace().getLatLng();
+        //LatLng latLng = mAutocompleteRestaurant.get(position).latLng;
         holder.mAutocompleteRestaurantName.setText(name);
         holder.mAutocompleteRestaurantAddress.setText(address);
 
-        //holder.mAutoCompleteRelativeLyt.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        //Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
-        //        // <------------------- latLng null
-        //        //moveCameraToSearchedRestaurant(latLng, DEFAULT_ZOOM, name);
-        //        setClickListener(clickListener);
-        //    }
-        //});
+        holder.mAutoCompleteRelativeLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" /*+ latLng*/, Toasty.LENGTH_SHORT).show();
+                setClickListener(clickListener);
+                //moveCameraToSearchedRestaurant(latLng, DEFAULT_ZOOM, name);
+            }
+        });
     }
 
     @Override
@@ -293,7 +296,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                                            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                                                Place place = fetchPlaceResponse.getPlace();
                                                clickListener.click(place);
-                                               //mPlaceLikelihood = placeLikelihood;
+                                               mPlaceLikelihood = placeLikelihood;
                                                Toasty.success(mContext, "Click on" + placeLikelihood.getPlace().getName() + "\n"
                                                        + placeLikelihood.getPlace().getAddress() + "\n"
                                                        + placeLikelihood.getPlace().getLatLng(), Toasty.LENGTH_SHORT).show();

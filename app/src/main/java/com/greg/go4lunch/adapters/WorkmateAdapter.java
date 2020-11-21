@@ -112,7 +112,7 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        @BindView(R.id.workmates_photo)CircleImageView mCircleImageView;
+        @BindView(R.id.workmates_photo) CircleImageView mCircleImageView;
         @BindView(R.id.workmate_message) TextView mMessageTextView;
         @BindView(R.id.item_relative_Lyt) RelativeLayout mButtonWorkmateToDetailedRestaurant;
 
@@ -121,6 +121,4 @@ public class WorkmateAdapter extends RecyclerView.Adapter<WorkmateAdapter.ViewHo
             ButterKnife.bind(this, itemView);
         }
     }
-
-
 }

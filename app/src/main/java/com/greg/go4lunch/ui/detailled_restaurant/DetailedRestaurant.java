@@ -91,7 +91,7 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         recoverIntent();
 
-        configureJoiningWorkmatesRecyclerView();
+        //configureJoiningWorkmatesRecyclerView();
         getFavorite();
         getSelectedRestaurant();
     }
@@ -333,6 +333,12 @@ public class DetailedRestaurant extends AppCompatActivity {
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure recycler view ----------------------------------------
     //----------------------------------------------------------------------------------------------
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        configureJoiningWorkmatesRecyclerView();
+    }
 
     private void configureJoiningWorkmatesRecyclerView() {
         mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);

@@ -1,7 +1,10 @@
 package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
@@ -42,6 +45,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
@@ -53,6 +57,7 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
+import com.greg.go4lunch.utils.CalculateBounds;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
@@ -125,6 +130,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
     }
 
+    @SuppressLint("MissingPermission")
     public void locationAccuracy(){
         mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
             @Override
@@ -286,7 +292,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                     r.setRating(place.getRating().floatValue());
                 }
                 r.setPhoneNumber(place.getPhoneNumber());
-                r.setWebsite(place.getWebsiteUri().toString());
+                if (place.getWebsiteUri() != null){
+                    r.setWebsite(place.getWebsiteUri().toString());
+                }
                 final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
                 if (metadata == null || metadata.isEmpty()) {
                     Log.w(TAG, "No photo metadata.");
@@ -389,6 +397,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
+
+
+
     //----------------------------------------------------------------------------------------------
     //----------------------------- Lock fragment in portrait orientation --------------------------
     //----------------------------------------------------------------------------------------------
@@ -396,5 +407,27 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     //@Override
     //public void setUserVisibleHint(boolean isVisibleToUser) {
     //    super.setUserVisibleHint(isVisibleToUser);
+    //    if (isVisibleToUser){
+    //        Activity a = getActivity();
+    //        if (a != null){
+    //            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    //        }
+    //    }
+    //}
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Lock fragment in portrait orientation --------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //@Override
+    //public void onResume() {
+    //    super.onResume();
+    //    lockFragmentOrientation();
+    //}
+//
+    //private void lockFragmentOrientation(){
+    //    if (getActivity() != null){
+    //        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    //    }
     //}
 }

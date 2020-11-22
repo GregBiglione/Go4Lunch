@@ -2,9 +2,7 @@ package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 
@@ -57,7 +55,6 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
-import com.greg.go4lunch.utils.CalculateBounds;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;
@@ -360,7 +357,6 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-
     //----------------------------------------------------------------------------------------------
     //----------------------------- Click on marker ------------------------------------------------
     //----------------------------------------------------------------------------------------------
@@ -396,38 +392,4 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
-
-
-
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Lock fragment in portrait orientation --------------------------
-    //----------------------------------------------------------------------------------------------
-
-    //@Override
-    //public void setUserVisibleHint(boolean isVisibleToUser) {
-    //    super.setUserVisibleHint(isVisibleToUser);
-    //    if (isVisibleToUser){
-    //        Activity a = getActivity();
-    //        if (a != null){
-    //            a.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    //        }
-    //    }
-    //}
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Lock fragment in portrait orientation --------------------------
-    //----------------------------------------------------------------------------------------------
-
-    //@Override
-    //public void onResume() {
-    //    super.onResume();
-    //    lockFragmentOrientation();
-    //}
-//
-    //private void lockFragmentOrientation(){
-    //    if (getActivity() != null){
-    //        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-    //    }
-    //}
 }

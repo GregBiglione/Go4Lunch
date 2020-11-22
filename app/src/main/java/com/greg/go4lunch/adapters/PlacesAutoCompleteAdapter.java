@@ -17,7 +17,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
+
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.ApiException;
@@ -42,13 +42,10 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.greg.go4lunch.R;
-import com.greg.go4lunch.model.Restaurant;
-import com.greg.go4lunch.ui.home.HomeFragment;
-import com.greg.go4lunch.utils.CalculateBounds;
+
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -63,8 +60,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
-import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static androidx.test.InstrumentationRegistry.getContext;
 
 public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.ViewHolder> {
 
@@ -76,14 +71,8 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     private CharacterStyle STYLE_NORMAL;
     private final PlacesClient mPlacesClient;
     private ClickListener clickListener;
-    //private GoogleMap mMap;
-    //private static final float DEFAULT_ZOOM = 17.0f;
-    //private Location mLocation;
-    //private PlaceLikelihood mPlaceLikelihood;
-    //private LatLng mLatLng;
-    //private HomeFragment mHome;
     private Location mLocation;
-    private final Float radius = 500.0f;
+    private final Float radius = 100.0f;
 
     public PlacesAutoCompleteAdapter(Context mContext, Location location) {
         this.mContext = mContext;
@@ -113,12 +102,10 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         public CharSequence restaurantId, name, address;
         public LatLng latLng;
 
-        public RestaurantAutocomplete(CharSequence restaurantId, CharSequence name, CharSequence address/*, LatLng latLng*/) {
+        public RestaurantAutocomplete(CharSequence restaurantId, CharSequence name, CharSequence address) {
             this.restaurantId = restaurantId;
             this.name = name;
             this.address = address;
-            //this.latLng = latLng;
-            //latLng = mPlaceLikelihood.getPlace().getLatLng(); // = null
         }
     }
 
@@ -132,17 +119,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         // Create a new token for the autocomplete session. Pass this to FindAutocompletePredictionsRequest
         AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
         // Create a RectangularBounds object.
-       //RectangularBounds bounds = RectangularBounds.newInstance(
-       //        new LatLng(34.041893, -118.266793),
-       //        new LatLng(34.048758, -118.255346)
-       //);
-
-        //----------------------------- Last try for bounds ----------------------------------------
         RectangularBounds bounds = RectangularBounds.newInstance(getRectangularBoundsA(), getRectangularBoundsB());
-        //------------------------------------------------------------------------------------------
-        //LatLng currentLocation = new LatLng(mLocation.getLatitude(), mLocation.getLongitude());
-        //List<LatLng> latLngBounds = CalculateBounds.calculateRectangularBounds(radius, currentLocation);
-        //RectangularBounds bounds = RectangularBounds.newInstance(latLngBounds.get(0), latLngBounds.get(1));
         // Use the builder to create a FindAutocompletePredictionsRequest. And Pass this to FindAutocompletePredictionsRequest,
         // when the user makes a selection (for example when calling fetchPlace()).
         FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
@@ -167,10 +144,10 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
             if (findAutocompletePredictionsResponse != null){
                 for (AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
                     Log.i(TAG, prediction.getPlaceId());
-                    resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(STYLE_NORMAL).toString(),
-                            prediction.getFullText(STYLE_BOLD).toString()/*, mPlaceLikelihood.getPlace().getLatLng()*/));
-                    //resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(STYLE_NORMAL).toString(),
-                    //        prediction.getFullText(STYLE_BOLD).toString()));
+                    if (prediction.getPlaceTypes().contains(Place.Type.RESTAURANT)){
+                        resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(STYLE_NORMAL).toString(),
+                                prediction.getFullText(STYLE_BOLD).toString()));
+                    }
                 }
                 return resultList;
             }
@@ -219,7 +196,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         String name = (String) mAutocompleteRestaurant.get(position).name;
         String address = (String) mAutocompleteRestaurant.get(position).address;
         //LatLng latLng = mPlaceLikelihood.getPlace().getLatLng();
-        LatLng latLng = mAutocompleteRestaurant.get(position).latLng;
+        //LatLng latLng = mAutocompleteRestaurant.get(position).latLng;
         holder.mAutocompleteRestaurantName.setText(name);
         holder.mAutocompleteRestaurantAddress.setText(address);
 
@@ -268,67 +245,21 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
                 List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
                         Place.Field.LAT_LNG);
-                //FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
-                //mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                //    @Override
-                //    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                //        Place place = fetchPlaceResponse.getPlace();
-                //        clickListener.click(place);
-                //    }
-                //}).addOnFailureListener(new OnFailureListener() {
-                //    @Override
-                //    public void onFailure(@NonNull Exception e) {
-                //        if (e instanceof ApiException){
-                //            Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
-                //        }
-                //    }
-                //});
-                // test only restaurant in results
-                FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
-                if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED){
-                    Task<FindCurrentPlaceResponse> placeResponse = mPlacesClient.findCurrentPlace(request);
-                    placeResponse.addOnCompleteListener(new OnCompleteListener<FindCurrentPlaceResponse>() {
-                        @SuppressLint("LongLogTag")
-                        @Override
-                        public void onComplete(@NonNull Task<FindCurrentPlaceResponse> task) {
-                           if (task.isSuccessful()){
-                               FindCurrentPlaceResponse response = task.getResult();
-                               assert response != null;
-
-                               final String placeId = response.getPlaceLikelihoods().get(0).getPlace().getId();
-                               for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
-                                   Log.i(TAG, String.format("Place '%s' has likelihood: '%f' ",
-                                           placeLikelihood.getPlace().getName(),
-                                           placeLikelihood.getLikelihood()));
-
-                                   if (placeLikelihood.getPlace().getTypes().contains(Place.Type.RESTAURANT)){
-                                       FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
-                                       mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                                           @Override
-                                           public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                                               Place place = fetchPlaceResponse.getPlace();
-                                               clickListener.click(place);
-                                               //mPlaceLikelihood = placeLikelihood;
-                                               //Toasty.success(mContext, "Click on" + placeLikelihood.getPlace().getName() + "\n"
-                                               //        + placeLikelihood.getPlace().getAddress() + "\n"
-                                               //        + placeLikelihood.getPlace().getLatLng(), Toasty.LENGTH_SHORT).show();
-                                               //moveCameraToSearchedRestaurant(placeLikelihood.getPlace().getLatLng(), DEFAULT_ZOOM,
-                                               //        placeLikelihood.getPlace().getName());
-                                           }
-                                       }).addOnFailureListener(new OnFailureListener() {
-                                           @Override
-                                           public void onFailure(@NonNull Exception e) {
-                                               if (e instanceof ApiException){
-                                                   Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
-                                               }
-                                           }
-                                       });
-                                   }
-                               }
-                           }
+                FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
+                mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                    @Override
+                    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                        Place place = fetchPlaceResponse.getPlace();
+                        clickListener.click(place);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof ApiException){
+                            Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
                         }
-                    });
-                }
+                    }
+                });
             }
         }
     }

@@ -406,9 +406,9 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
 
     private void configureAutocompleteRecyclerView() {
         mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
-        if (mSearchAutocomplete != null) {
-            mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
-        }
+        //if (mSearchAutocomplete != null) {
+        //    mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
+        //}
 
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, mLocation);
         mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));

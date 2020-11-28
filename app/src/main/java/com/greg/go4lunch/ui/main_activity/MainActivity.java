@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,12 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 
@@ -32,7 +25,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -49,6 +41,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.type.LatLng;
 import com.greg.go4lunch.BuildConfig;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.adapters.PlacesAutoCompleteAdapter;
@@ -86,7 +79,7 @@ import java.util.List;
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
 
-public class MainActivity extends AppCompatActivity implements PlacesAutoCompleteAdapter.ClickListener {
+public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompleteAdapter.ClickListener*/ {
 
     private AppBarConfiguration mAppBarConfiguration;
     public BottomNavigationView mBottomNavigationView;
@@ -409,10 +402,11 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
         //if (mSearchAutocomplete != null) {
         //    mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
         //}
+        //mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
 
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, mLocation);
         mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAutoCompleteAdapter.setClickListener(this);
+        //mAutoCompleteAdapter.setClickListener(this);
         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
         mAutoCompleteAdapter.notifyDataSetChanged();
     }
@@ -471,12 +465,12 @@ public class MainActivity extends AppCompatActivity implements PlacesAutoComplet
         //searchBarAction();
     }
 
-    @Override
-    public void click(Place place) {
-        Toasty.success(this, place.getAddress()+", "+place.getLatLng().latitude+place.getLatLng().longitude,
-                Toast.LENGTH_SHORT).show();
-        //mAutoCompleteAdapter.getItem(0);
-    }
+    //@Override
+    //public void click(Place place) {
+    //    Toasty.success(this, place.getAddress()+", "+place.getLatLng().latitude+place.getLatLng().longitude,
+    //            Toast.LENGTH_SHORT).show();
+    //    //mAutoCompleteAdapter.getItem(0);
+    //}
 
     //private void searchBarAction(){
     //    mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {

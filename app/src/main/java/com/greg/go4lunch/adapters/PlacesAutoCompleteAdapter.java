@@ -45,7 +45,11 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.greg.go4lunch.R;
+import com.greg.go4lunch.event.SearchRestaurantEvent;
+import com.greg.go4lunch.model.Restaurant;
 
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -70,7 +74,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     private CharacterStyle STYLE_BOLD;
     private CharacterStyle STYLE_NORMAL;
     private final PlacesClient mPlacesClient;
-    private ClickListener clickListener;
+    //private ClickListener clickListener;
     private Location mLocation;
     private final Float radius = 100.0f;
 
@@ -86,13 +90,13 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     //----------------------------- Click listener -------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    public void setClickListener(ClickListener clickListener) {
-        this.clickListener = clickListener;
-    }
-
-    public interface ClickListener{
-        void click(Place place);
-    }
+    //public void setClickListener(ClickListener clickListener) {
+    //    this.clickListener = clickListener;
+    //}
+//
+    //public interface ClickListener{
+    //    void click(Place place);
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Geo Data Autocomplete API results ------------------------------
@@ -102,10 +106,11 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         public CharSequence restaurantId, name, address;
         public LatLng latLng;
 
-        public RestaurantAutocomplete(CharSequence restaurantId, CharSequence name, CharSequence address) {
+        public RestaurantAutocomplete(CharSequence restaurantId, CharSequence name, CharSequence address, LatLng latLng) {
             this.restaurantId = restaurantId;
             this.name = name;
             this.address = address;
+            this.latLng = latLng;
         }
     }
 
@@ -131,7 +136,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                 .build();
 
         Task<FindAutocompletePredictionsResponse> autocompletePredictionsResponse = mPlacesClient.findAutocompletePredictions(request);
-
         // Block and wait for at most 60s for a result from the API
         try{
            Tasks.await(autocompletePredictionsResponse, 60, TimeUnit.SECONDS);
@@ -142,11 +146,33 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         if (autocompletePredictionsResponse.isSuccessful()){
             FindAutocompletePredictionsResponse findAutocompletePredictionsResponse = autocompletePredictionsResponse.getResult();
             if (findAutocompletePredictionsResponse != null){
+
                 for (AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
                     Log.i(TAG, prediction.getPlaceId());
                     if (prediction.getPlaceTypes().contains(Place.Type.RESTAURANT)){
-                        resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(), prediction.getPrimaryText(STYLE_NORMAL).toString(),
-                                prediction.getFullText(STYLE_BOLD).toString()));
+
+                        //----------------------------- Get LatLng ---------------------------------
+                        String restaurantId = prediction.getPlaceId();
+                        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
+                                Place.Field.LAT_LNG);
+                        FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(restaurantId, placeFields).build();
+                        mPlacesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                            @Override
+                            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                                Place place = fetchPlaceResponse.getPlace();
+                                LatLng latLng = place.getLatLng();
+                                resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(),
+                                        prediction.getPrimaryText(STYLE_NORMAL).toString(),
+                                        prediction.getFullText(STYLE_BOLD).toString(), latLng));
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                if (e instanceof ApiException){
+                                    Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 }
                 return resultList;
@@ -195,19 +221,20 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name = (String) mAutocompleteRestaurant.get(position).name;
         String address = (String) mAutocompleteRestaurant.get(position).address;
-        //LatLng latLng = mPlaceLikelihood.getPlace().getLatLng();
-        //LatLng latLng = mAutocompleteRestaurant.get(position).latLng;
+        LatLng latLng = mAutocompleteRestaurant.get(position).latLng;
         holder.mAutocompleteRestaurantName.setText(name);
         holder.mAutocompleteRestaurantAddress.setText(address);
 
-        //holder.mAutoCompleteRelativeLyt.setOnClickListener(new View.OnClickListener() {
-        //    @Override
-        //    public void onClick(View v) {
-        //        Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
-        //        setClickListener(clickListener);
-        //        //moveCameraToSearchedRestaurant(latLng, DEFAULT_ZOOM, name);
-        //    }
-        //});
+        holder.mAutoCompleteRelativeLyt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Restaurant r = new Restaurant();
+                r.setName(name);
+                r.setAddress(address);
+                Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new SearchRestaurantEvent(r));
+            }
+        });
     }
 
     @Override
@@ -215,11 +242,11 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         return mAutocompleteRestaurant.size();
     }
 
-    public RestaurantAutocomplete getItem(int restaurantPosition){
-        return mAutocompleteRestaurant.get(restaurantPosition);
-    }
+    //public RestaurantAutocomplete getItem(int restaurantPosition){
+    //    return mAutocompleteRestaurant.get(restaurantPosition);
+    //}
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/{
 
         @BindView(R.id.autocomplete_linear_lyt) LinearLayout mAutocompleteRestaurantLyt;
         @BindView(R.id.autocomplete_restaurant_name) TextView mAutocompleteRestaurantName;
@@ -229,39 +256,40 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            itemView.setOnClickListener(this);
         }
 
         //------------------------------------------------------------------------------------------
         //----------------------------- Click on searched restaurant -------------------------------
         //------------------------------------------------------------------------------------------
 
-        @Override
-        public void onClick(View v) {
-            RestaurantAutocomplete item = mAutocompleteRestaurant.get(getAdapterPosition());
-
-            if (v.getId() == R.id.autocomplete_linear_lyt){
-                String restaurantId = (String) item.restaurantId;
-
-                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
-                        Place.Field.LAT_LNG);
-                FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
-                mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                    @Override
-                    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                        Place place = fetchPlaceResponse.getPlace();
-                        clickListener.click(place);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        if (e instanceof ApiException){
-                            Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }
+        //@Override
+        //public void onClick(View v) {
+        //    RestaurantAutocomplete item = mAutocompleteRestaurant.get(getAdapterPosition());
+//
+        //    if (v.getId() == R.id.autocomplete_linear_lyt){
+        //        String restaurantId = (String) item.restaurantId;
+//
+        //        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
+        //                Place.Field.LAT_LNG);
+        //        FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
+        //        mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+        //            @Override
+        //            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+        //                Place place = fetchPlaceResponse.getPlace();
+        //                //clickListener.click(place);
+        //                LatLng latLng = place.getLatLng();
+        //                mLatLng = latLng;
+        //            }
+        //        }).addOnFailureListener(new OnFailureListener() {
+        //            @Override
+        //            public void onFailure(@NonNull Exception e) {
+        //                if (e instanceof ApiException){
+        //                    Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
+        //                }
+        //            }
+        //        });
+        //    }
+        //}
     }
 
     //----------------------------------------------------------------------------------------------

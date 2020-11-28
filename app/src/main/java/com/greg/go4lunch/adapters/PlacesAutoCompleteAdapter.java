@@ -2,7 +2,6 @@ package com.greg.go4lunch.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.text.style.CharacterStyle;
@@ -21,13 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -35,7 +28,6 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
@@ -51,11 +43,9 @@ import com.greg.go4lunch.model.Restaurant;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -74,7 +64,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     private CharacterStyle STYLE_BOLD;
     private CharacterStyle STYLE_NORMAL;
     private final PlacesClient mPlacesClient;
-    //private ClickListener clickListener;
     private Location mLocation;
     private final Float radius = 100.0f;
 
@@ -85,18 +74,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         mPlacesClient = com.google.android.libraries.places.api.Places.createClient(mContext);
         this.mLocation = location;
     }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Click listener -------------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    //public void setClickListener(ClickListener clickListener) {
-    //    this.clickListener = clickListener;
-    //}
-//
-    //public interface ClickListener{
-    //    void click(Place place);
-    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Geo Data Autocomplete API results ------------------------------
@@ -231,6 +208,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                 Restaurant r = new Restaurant();
                 r.setName(name);
                 r.setAddress(address);
+                r.setLatLng(latLng);
                 Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
                 EventBus.getDefault().post(new SearchRestaurantEvent(r));
             }
@@ -241,10 +219,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     public int getItemCount() {
         return mAutocompleteRestaurant.size();
     }
-
-    //public RestaurantAutocomplete getItem(int restaurantPosition){
-    //    return mAutocompleteRestaurant.get(restaurantPosition);
-    //}
 
     public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/{
 
@@ -257,39 +231,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
-
-        //------------------------------------------------------------------------------------------
-        //----------------------------- Click on searched restaurant -------------------------------
-        //------------------------------------------------------------------------------------------
-
-        //@Override
-        //public void onClick(View v) {
-        //    RestaurantAutocomplete item = mAutocompleteRestaurant.get(getAdapterPosition());
-//
-        //    if (v.getId() == R.id.autocomplete_linear_lyt){
-        //        String restaurantId = (String) item.restaurantId;
-//
-        //        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
-        //                Place.Field.LAT_LNG);
-        //        FetchPlaceRequest request = FetchPlaceRequest.builder(restaurantId, placeFields).build();
-        //        mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-        //            @Override
-        //            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-        //                Place place = fetchPlaceResponse.getPlace();
-        //                //clickListener.click(place);
-        //                LatLng latLng = place.getLatLng();
-        //                mLatLng = latLng;
-        //            }
-        //        }).addOnFailureListener(new OnFailureListener() {
-        //            @Override
-        //            public void onFailure(@NonNull Exception e) {
-        //                if (e instanceof ApiException){
-        //                    Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
-        //                }
-        //            }
-        //        });
-        //    }
-        //}
     }
 
     //----------------------------------------------------------------------------------------------
@@ -311,16 +252,4 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
         return pointB;
     }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Move Camera to search location ---------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    //private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
-    //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-    //    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
-    //    mMap.addMarker(new MarkerOptions().position(latLng)
-    //            .icon(subwayBitmapDescriptor)
-    //            .title(title));
-    //}
 }

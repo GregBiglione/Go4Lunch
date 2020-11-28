@@ -120,6 +120,8 @@ public class DetailedRestaurant extends AppCompatActivity {
         if (!isJoining){
             mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
             updateWorkmateIsJoining();
+            configureJoiningWorkmatesRecyclerView();
+            //Event
             isJoining = true;
         }
         else{

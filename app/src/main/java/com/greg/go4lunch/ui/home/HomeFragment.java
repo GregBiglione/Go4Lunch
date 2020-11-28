@@ -43,7 +43,6 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.net.FetchPlaceRequest;
 import com.google.android.libraries.places.api.net.FetchPlaceResponse;
 import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
@@ -52,11 +51,14 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.greg.go4lunch.R;
+import com.greg.go4lunch.event.SearchRestaurantEvent;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -392,4 +394,35 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Autocomplete search event --------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    @Subscribe
+    public void onAutocompleteSearch(SearchRestaurantEvent event){
+        moveCameraToSearchedRestaurant(event.restaurant.getLatLng(), DEFAULT_ZOOM, event.restaurant.getName(), event.restaurant);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Move Camera to search location ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title, Restaurant r){
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+        restaurantIsChosenOrNot(r);
+    }
+
 }

@@ -402,6 +402,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Subscribe
     public void onAutocompleteSearch(SearchRestaurantEvent event){
         moveCameraToSearchedRestaurant(event.restaurant.getLatLng(), DEFAULT_ZOOM, event.restaurant.getName(), event.restaurant);
+        mSharedViewModel.restaurants.add(event.restaurant);
+        //only name, address & latLng lack the rest
     }
 
     @Override

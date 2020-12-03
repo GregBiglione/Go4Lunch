@@ -222,7 +222,6 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
 
     public class ViewHolder extends RecyclerView.ViewHolder /*implements View.OnClickListener*/{
 
-        @BindView(R.id.autocomplete_linear_lyt) LinearLayout mAutocompleteRestaurantLyt;
         @BindView(R.id.autocomplete_restaurant_name) TextView mAutocompleteRestaurantName;
         @BindView(R.id.autocomplete_restaurant_address) TextView mAutocompleteRestaurantAddress;
         @BindView(R.id.autocomplete_relative_Lyt) RelativeLayout mAutoCompleteRelativeLyt;

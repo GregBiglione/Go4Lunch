@@ -21,7 +21,6 @@ public class SharedViewModel extends ViewModel {
     private MutableLiveData<ArrayList<Workmate>> joiningWorkmates;
     private MutableLiveData<ArrayList<LikedRestaurant>> favorites;
     private MutableLiveData<ArrayList<Workmate>> pickedRestaurant;
-    private MutableLiveData<ArrayList<Workmate>> selected;
 
     //----------------------------- Get all restaurants --------------------------------------------
     public List<Restaurant> getRestaurants(){ return restaurants; }

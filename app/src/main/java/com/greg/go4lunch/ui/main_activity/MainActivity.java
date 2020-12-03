@@ -14,17 +14,16 @@ import com.bumptech.glide.request.RequestOptions;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 
-import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -62,24 +61,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.parceler.Parcels;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import es.dmoral.toasty.Toasty;
 
-public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompleteAdapter.ClickListener*/ {
+public class MainActivity extends AppCompatActivity{
 
     private AppBarConfiguration mAppBarConfiguration;
     public BottomNavigationView mBottomNavigationView;
@@ -88,7 +83,6 @@ public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompl
 
     public static final String TAG = "MainActivity";
 
-    private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     @BindView(R.id.user_name)
     TextView mName;
@@ -98,16 +92,9 @@ public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompl
     ImageView mPhoto;
 
     public NavigationView mNavigationView;
-    private HomeFragment mHomeFragment;
     private SharedViewModel mSharedViewModel;
-    private DetailedRestaurant detailedRestaurant;
 
-    @BindView(R.id.autocomplete_search_bar)
-    EditText mSearchAutocomplete;
-    private GoogleMap mMap;
-    private static final float DEFAULT_ZOOM = 17.0f;
-    private StringBuilder mResult;
-    private HomeFragment mHome;
+    @BindView(R.id.autocomplete_search_bar) EditText mSearchAutocomplete;
 
     NavController navController;
     @BindView(R.id.autocomplete_recycler_view)
@@ -149,47 +136,7 @@ public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompl
         createLocationService();
         locationAccuracy();
         configureSearchBar();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-        return true;
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Search Menu ----------------------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
-        if (item.getItemId() == R.id.search) {
-            autocompleteSearchBar.setVisibility(View.VISIBLE);
-            hideSearchBarNotFocused();
-        } else {
-            autocompleteSearchBar.setVisibility(View.GONE);
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Hide search bar when not focused -------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    private void hideSearchBarNotFocused() {
-        mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
-                if (!hasFocus) {
-                    imm.hideSoftInputFromWindow(autocompleteSearchBar.getWindowToken(), 0);
-                    autocompleteSearchBar.setVisibility(View.GONE);
-                }
-            }
-        });
+        searchBarAction();
     }
 
     @Override
@@ -399,16 +346,11 @@ public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompl
 
     private void configureAutocompleteRecyclerView() {
         mAutocompleteRecyclerView = findViewById(R.id.autocomplete_recycler_view);
-        //if (mSearchAutocomplete != null) {
-        //    mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
-        //}
-        //mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
-
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, mLocation);
         mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //mAutoCompleteAdapter.setClickListener(this);
         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
         mAutoCompleteAdapter.notifyDataSetChanged();
+        //hideKeyboardAndRecyclerViewOnclick();
     }
 
     //----------------------------- Location service -----------------------------------------------
@@ -444,6 +386,7 @@ public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompl
                 if (mAutocompleteRecyclerView.getVisibility() == View.GONE){
                     if (s.length() >= 3){
                         mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
+                        //searchBarAction();
                     }
                 }
                 else{
@@ -462,41 +405,80 @@ public class MainActivity extends AppCompatActivity /*implements PlacesAutoCompl
     private void configureSearchBar(){
         mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
         mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
-        //searchBarAction();
     }
 
-    //@Override
-    //public void click(Place place) {
-    //    Toasty.success(this, place.getAddress()+", "+place.getLatLng().latitude+place.getLatLng().longitude,
-    //            Toast.LENGTH_SHORT).show();
-    //    //mAutoCompleteAdapter.getItem(0);
-    //}
-
-    //private void searchBarAction(){
-    //    mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-    //        @Override
-    //        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-    //            if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-    //                    || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
-    //                // Execute search method
-    //                Toasty.success(MainActivity.this, "Click on item ", Toasty.LENGTH_SHORT).show();
-    //            }
-    //            return false;
-    //        }
-    //    });
-    //}
-
+    /// Doesn't work
+    private void searchBarAction(){
+        mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+                        || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+                    // Execute search method
+                    hideKeyboard();
+                    // Shown clicking enter on PC keyboard
+                    Toasty.success(MainActivity.this, "Click on item search bar message", Toasty.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+    }
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Move Camera to search location ---------------------------------
+    //----------------------------- Search Menu ----------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    //private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title){
-    //    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-    //    BitmapDescriptor subwayBitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_orange);
-    //    mMap.addMarker(new MarkerOptions().position(latLng)
-    //            .icon(subwayBitmapDescriptor)
-    //            .title(title));
-    //}
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
+        if (item.getItemId() == R.id.search) {
+            autocompleteSearchBar.setVisibility(View.VISIBLE);
+            //hideKeyboard();
+            //configureSearchBar();
+        } else {
+            autocompleteSearchBar.setVisibility(View.GONE);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Hide search bar when not focused -------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void hideKeyboard() {
+        mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
+                if (!hasFocus) {
+                    imm.hideSoftInputFromWindow(autocompleteSearchBar.getWindowToken(), 0);
+                    autocompleteSearchBar.setVisibility(View.GONE);
+                    mAutocompleteRecyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Hide search bar and Recycler view clicking on item -------------
+    //----------------------------------------------------------------------------------------------
+
+    private void hideKeyboardAndRecyclerViewOnclick(){
+        mAutocompleteRecyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        });
+    }
 
 }

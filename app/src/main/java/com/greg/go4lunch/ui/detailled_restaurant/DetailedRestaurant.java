@@ -38,11 +38,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.adapters.JoiningWorkmatesAdapter;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.api.WorkmateHelper;
+import com.greg.go4lunch.event.ReloadWorkmatesEvent;
 import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
@@ -120,14 +123,15 @@ public class DetailedRestaurant extends AppCompatActivity {
         if (!isJoining){
             mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
             updateWorkmateIsJoining();
-            configureJoiningWorkmatesRecyclerView();
             //Event
             isJoining = true;
+            //configureJoiningWorkmatesRecyclerView();
         }
         else{
             mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
             updateWorkmateIsNotJoining();
             isJoining = false;
+            //configureJoiningWorkmatesRecyclerView();
         }
     }
 
@@ -395,5 +399,26 @@ public class DetailedRestaurant extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Reload workmates list after modification -----------------------
+    //----------------------------------------------------------------------------------------------
+
+    @Subscribe
+    public void onModificationRestaurantPicked(ReloadWorkmatesEvent event){
+        mSharedViewModel.initAllWorkmates(event.context);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

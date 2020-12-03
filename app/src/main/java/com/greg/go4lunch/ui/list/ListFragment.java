@@ -16,9 +16,11 @@ import com.google.android.libraries.places.api.Places;
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.adapters.RestaurantAdapter;
+import com.greg.go4lunch.event.SearchRestaurantEvent;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
 import com.greg.go4lunch.event.DetailedRestaurantEvent;
+import com.greg.go4lunch.ui.main_activity.MainActivity;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,6 +30,7 @@ import org.parceler.Parcels;
 import java.util.List;
 
 import butterknife.BindView;
+import es.dmoral.toasty.Toasty;
 
 public class ListFragment extends Fragment {
 
@@ -77,4 +80,15 @@ public class ListFragment extends Fragment {
         super.onStop();
         EventBus.getDefault().unregister(this);
     }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Autocomplete search event --------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    //@Subscribe
+    //public void onAutocompleteSearch(SearchRestaurantEvent event){
+    //    mSharedViewModel.restaurants.add(event.restaurant);
+    //    initList();
+    //    Toasty.warning(getContext(), "Click on item search bar message in ListFragment", Toasty.LENGTH_SHORT).show();
+    //}
 }

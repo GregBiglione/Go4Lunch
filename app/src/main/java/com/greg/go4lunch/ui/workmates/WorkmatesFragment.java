@@ -17,6 +17,8 @@ import com.greg.go4lunch.adapters.WorkmateAdapter;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -55,6 +57,22 @@ public class WorkmatesFragment extends Fragment {
                 mWorkmateRecyclerView.setAdapter(mWorkmateAdapter);
             }
         });
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Reload workmates list after modification -----------------------
+    //----------------------------------------------------------------------------------------------
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
 

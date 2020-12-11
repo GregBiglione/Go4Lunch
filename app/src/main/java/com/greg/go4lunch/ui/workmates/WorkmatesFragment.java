@@ -16,9 +16,6 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.adapters.WorkmateAdapter;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
-
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -33,11 +30,9 @@ public class WorkmatesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        mSharedViewModel.initAllWorkmates(getContext());
 
         View view = inflater.inflate(R.layout.fragment_workmates, container, false);
         mWorkmateRecyclerView = view.findViewById(R.id.workmates_recycler_view);
-        //configureRecyclerView();
         return view;
     }
 
@@ -48,8 +43,10 @@ public class WorkmatesFragment extends Fragment {
     }
 
     private void configureRecyclerView(){
+        mSharedViewModel.initAllWorkmates(getContext());
         mWorkmateRecyclerView.setHasFixedSize(true);
         mWorkmateRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         mSharedViewModel.getAllWorkmatesData().observe(getViewLifecycleOwner(), new Observer<ArrayList<Workmate>>() {
             @Override
             public void onChanged(ArrayList<Workmate> workmates) {
@@ -57,22 +54,6 @@ public class WorkmatesFragment extends Fragment {
                 mWorkmateRecyclerView.setAdapter(mWorkmateAdapter);
             }
         });
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Reload workmates list after modification -----------------------
-    //----------------------------------------------------------------------------------------------
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 }
 

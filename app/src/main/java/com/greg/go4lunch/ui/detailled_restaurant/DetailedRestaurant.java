@@ -123,15 +123,12 @@ public class DetailedRestaurant extends AppCompatActivity {
         if (!isJoining){
             mPickButton.setImageResource(R.drawable.ic_check_circle_green_24dp);
             updateWorkmateIsJoining();
-            //Event
             isJoining = true;
-            //configureJoiningWorkmatesRecyclerView();
         }
         else{
             mPickButton.setImageResource(R.drawable.ic_check_circle_white_24dp);
             updateWorkmateIsNotJoining();
             isJoining = false;
-            //configureJoiningWorkmatesRecyclerView();
         }
     }
 
@@ -153,9 +150,6 @@ public class DetailedRestaurant extends AppCompatActivity {
             else{
                 WorkmateHelper.createWorkmate(uid, null, name, email, null, null, null, false);
             }
-
-            ////----------------------------- Create workmate in FireStore ---------------------------
-            //WorkmateHelper.createWorkmate(uid, photo, name, email, null, null, null, false);
         }
     }
 
@@ -182,7 +176,13 @@ public class DetailedRestaurant extends AppCompatActivity {
 
                 if (currentWorkmate != null){
                     WorkmateHelper.updatePickedRestaurantAndIsJoining(currentWorkmate.getUid(), idPickedRestaurant, namePickedRestaurant,
-                            addressPickedRestaurant, true);
+                            addressPickedRestaurant, true)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    configureJoiningWorkmatesRecyclerView();
+                                }
+                            });
                 }
             }
         });
@@ -191,7 +191,13 @@ public class DetailedRestaurant extends AppCompatActivity {
     private void updateWorkmateIsNotJoining(){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null){
-            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(), null, null, null, false);
+            WorkmateHelper.updatePickedRestaurantAndIsJoining(user.getUid(), null, null,
+                    null, false).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    configureJoiningWorkmatesRecyclerView();
+                }
+            });
         }
     }
 
@@ -331,7 +337,6 @@ public class DetailedRestaurant extends AppCompatActivity {
         String restaurantId = restaurant.getIdRestaurant();
 
         mSharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        mSharedViewModel.initJoiningWorkmates(this, restaurantId);
         mSharedViewModel.initFavoriteRestaurant(this, getCurrentUser().getUid(), restaurantId);
         mSharedViewModel.initPickedRestaurant(this, getCurrentUser().getUid(), restaurantId);
     }
@@ -348,7 +353,7 @@ public class DetailedRestaurant extends AppCompatActivity {
 
     private void configureJoiningWorkmatesRecyclerView() {
         mJoiningWorkmatesRecyclerView = findViewById(R.id.joining_workmates_recycler);
-        //mJoiningWorkmatesRecyclerView.setHasFixedSize(true);
+        mSharedViewModel.initJoiningWorkmates(this, mRestaurant.getIdRestaurant());
         mJoiningWorkmatesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mSharedViewModel.getJoiningWorkmatesData().observe(this, new Observer<ArrayList<Workmate>>() {
             @Override
@@ -399,26 +404,5 @@ public class DetailedRestaurant extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Reload workmates list after modification -----------------------
-    //----------------------------------------------------------------------------------------------
-
-    @Subscribe
-    public void onModificationRestaurantPicked(ReloadWorkmatesEvent event){
-        mSharedViewModel.initAllWorkmates(event.context);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 }

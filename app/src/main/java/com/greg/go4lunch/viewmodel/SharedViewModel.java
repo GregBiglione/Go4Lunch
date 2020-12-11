@@ -27,9 +27,6 @@ public class SharedViewModel extends ViewModel {
 
     //----------------------------- Get all workmates ----------------------------------------------
     public void initAllWorkmates(Context context){
-        if (workmates != null){
-            return;
-        }
         workmates = Repository.getInstance(context).getAllWorkmates();
     }
 

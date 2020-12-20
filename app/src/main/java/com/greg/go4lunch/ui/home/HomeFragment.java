@@ -2,6 +2,7 @@ package com.greg.go4lunch.ui.home;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -55,6 +57,7 @@ import com.greg.go4lunch.event.SearchRestaurantEvent;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
+import com.greg.go4lunch.ui.main_activity.MainActivity;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -411,6 +414,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         //getNearbyPlaces();
         mSharedViewModel.restaurants.add(event.restaurant);
         //only name, address & latLng lack the rest
+        hideKeyboard(); //<--
     }
 
     @Override
@@ -434,4 +438,15 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         restaurantIsChosenOrNot(r);
     }
 
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Hide keyboard on click on item ---------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private void hideKeyboard(){
+        View view = getView();
+        if (view != null){
+            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
 }

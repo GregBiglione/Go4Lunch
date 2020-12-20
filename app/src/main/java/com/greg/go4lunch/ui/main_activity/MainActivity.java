@@ -1,6 +1,7 @@
 package com.greg.go4lunch.ui.main_activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
@@ -58,6 +59,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,6 +95,7 @@ public class MainActivity extends AppCompatActivity{
 
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private Location mLocation;
+    private SearchView mSearchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -372,6 +375,7 @@ public class MainActivity extends AppCompatActivity{
         menuInflater.inflate(R.menu.search_menu, menu);
         MenuItem searchItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) searchItem.getActionView();
+        mSearchView = searchView;
         searchView.setQueryHint(getString(R.string.search_restaurants));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -383,13 +387,10 @@ public class MainActivity extends AppCompatActivity{
             public boolean onQueryTextChange(String s) {
                 if (!s.equals("")){
                     if (s.length() >= 3){
-                        //mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
                         mAutoCompleteAdapter.getFilter().filter(s);
                         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
-                        //searchBarAction();
                     }
                     else{
-                        //mAutocompleteRecyclerView.setVisibility(View.GONE);
                         mAutocompleteRecyclerView.setAdapter(null);
                     }
                 }
@@ -399,6 +400,12 @@ public class MainActivity extends AppCompatActivity{
         return true;
     }
 
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure Search bar -------------------------------------------

@@ -42,17 +42,17 @@ public class ListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mSharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         mRestaurantRecyclerView = view.findViewById(R.id.restaurant_recycler_view);
-        mRestaurantRecyclerView.setHasFixedSize(true);
-        mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        initList();
         return view;
     }
 
     // ---------------------------- Get all restaurants --------------------------------------------
     private void initList() {
         restaurants = mSharedViewModel.getRestaurants();
+        mRestaurantRecyclerView.setHasFixedSize(true);
+        mRestaurantRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mRestaurantRecyclerView.setAdapter(new RestaurantAdapter(restaurants, Places.createClient(getContext()), getContext()));
     }
 
@@ -81,14 +81,9 @@ public class ListFragment extends Fragment {
         EventBus.getDefault().unregister(this);
     }
 
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Autocomplete search event --------------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    //@Subscribe
-    //public void onAutocompleteSearch(SearchRestaurantEvent event){
-    //    mSharedViewModel.restaurants.add(event.restaurant);
-    //    initList();
-    //    Toasty.warning(getContext(), "Click on item search bar message in ListFragment", Toasty.LENGTH_SHORT).show();
-    //}
+    @Override
+    public void onResume() {
+        super.onResume();
+        initList();
+    }
 }

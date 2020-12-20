@@ -71,6 +71,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
+import static com.greg.go4lunch.ui.main_activity.MainActivity.API_KEY;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 
@@ -89,6 +90,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         createLocationService();
+        if (!Places.isInitialized()) {
+            Places.initialize(getContext(), API_KEY);
+        }
         mPlacesClient = Places.createClient(getContext());
         configureViewModel();
     }
@@ -391,6 +395,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
             public void onChanged(ArrayList<Workmate> workmates) {
                     r.setJoiningNumber(workmates.size());
                     restaurantIsChosenOrNot(r);
+                    //async task in onSuccessListener to update real time
             }
         });
     }
@@ -402,6 +407,8 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Subscribe
     public void onAutocompleteSearch(SearchRestaurantEvent event){
         moveCameraToSearchedRestaurant(event.restaurant.getLatLng(), DEFAULT_ZOOM, event.restaurant.getName(), event.restaurant);
+        //getRestaurantDetails(event.restaurant);
+        //getNearbyPlaces();
         mSharedViewModel.restaurants.add(event.restaurant);
         //only name, address & latLng lack the rest
     }

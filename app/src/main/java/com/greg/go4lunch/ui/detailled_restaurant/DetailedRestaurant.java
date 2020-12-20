@@ -38,14 +38,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.greg.go4lunch.adapters.JoiningWorkmatesAdapter;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.api.WorkmateHelper;
-import com.greg.go4lunch.event.ReloadWorkmatesEvent;
 import com.greg.go4lunch.model.LikedRestaurant;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;

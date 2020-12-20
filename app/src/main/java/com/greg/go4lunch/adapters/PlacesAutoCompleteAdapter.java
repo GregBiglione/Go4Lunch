@@ -11,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
-import android.widget.LinearLayout;
+import android.widget.Filterable;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -40,7 +40,6 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.event.SearchRestaurantEvent;
 import com.greg.go4lunch.model.Restaurant;
 
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ import butterknife.ButterKnife;
 import es.dmoral.toasty.Toasty;
 
 
-public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.ViewHolder> {
+public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCompleteAdapter.ViewHolder> implements Filterable {
 
     public static final String TAG = "PlacesAutoCompleteAdapter";
     private ArrayList<RestaurantAutocomplete> mAutocompleteRestaurant = new ArrayList<>();
@@ -66,6 +65,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     private final PlacesClient mPlacesClient;
     private Location mLocation;
     private final Float radius = 100.0f;
+    private Filter mFilter;
 
     public PlacesAutoCompleteAdapter(Context mContext, Location location) {
         this.mContext = mContext;
@@ -73,6 +73,30 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         STYLE_NORMAL = new StyleSpan(Typeface.NORMAL);
         mPlacesClient = com.google.android.libraries.places.api.Places.createClient(mContext);
         this.mLocation = location;
+
+        this.mFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                //--------- Skip the autocomplete query if no constraints are given ----------------
+                if (constraint != null){
+                    //----- Query the autocomplete API for the (constraint) search string ----------
+                    List predictions = getPredictions(constraint);
+                    results.count = predictions.size();
+                    results.values = predictions;
+
+                }
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                if (results != null && results.count > 0){
+                    mAutocompleteRestaurant = (ArrayList<RestaurantAutocomplete>) results.values;
+                    notifyDataSetChanged();
+                }
+            }
+        };
     }
 
     //----------------------------------------------------------------------------------------------
@@ -80,14 +104,12 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     //----------------------------------------------------------------------------------------------
 
     public class RestaurantAutocomplete {
-        public CharSequence restaurantId, name, address;
-        public LatLng latLng;
+        public String restaurantId, name, address;
 
-        public RestaurantAutocomplete(CharSequence restaurantId, CharSequence name, CharSequence address, LatLng latLng) {
+        public RestaurantAutocomplete(String restaurantId, String name, String address) {
             this.restaurantId = restaurantId;
             this.name = name;
             this.address = address;
-            this.latLng = latLng;
         }
     }
 
@@ -127,29 +149,9 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                 for (AutocompletePrediction prediction : findAutocompletePredictionsResponse.getAutocompletePredictions()) {
                     Log.i(TAG, prediction.getPlaceId());
                     if (prediction.getPlaceTypes().contains(Place.Type.RESTAURANT)){
-
-                        //----------------------------- Get LatLng ---------------------------------
-                        String restaurantId = prediction.getPlaceId();
-                        List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
-                                Place.Field.LAT_LNG);
-                        FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(restaurantId, placeFields).build();
-                        mPlacesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
-                            @Override
-                            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
-                                Place place = fetchPlaceResponse.getPlace();
-                                LatLng latLng = place.getLatLng();
-                                resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(),
-                                        prediction.getPrimaryText(STYLE_NORMAL).toString(),
-                                        prediction.getFullText(STYLE_BOLD).toString(), latLng));
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                if (e instanceof ApiException){
-                                    Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+                        resultList.add(new RestaurantAutocomplete(prediction.getPlaceId(),
+                                prediction.getPrimaryText(STYLE_NORMAL).toString(),
+                                prediction.getFullText(STYLE_BOLD).toString()));
                     }
                 }
                 return resultList;
@@ -162,29 +164,8 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     //----------------------------- Filter for the current set of autocomplete results -------------
     //----------------------------------------------------------------------------------------------
 
-    //@Override
     public Filter getFilter(){
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                FilterResults results = new FilterResults();
-                //--------- Skip the autocomplete query if no constraints are given ----------------
-                if (constraint != null){
-                    //----- Query the autocomplete API for the (constraint) search string ----------
-                    mAutocompleteRestaurant = getPredictions(constraint);
-                    results.values = mAutocompleteRestaurant;
-                    results.count = mAutocompleteRestaurant.size();
-                }
-                return results;
-            }
-
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                if (results != null && results.count > 0){
-                    notifyDataSetChanged();
-                }
-            }
-        };
+        return mFilter;
     }
 
     @Override
@@ -198,19 +179,37 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
     public void onBindViewHolder(ViewHolder holder, int position) {
         String name = (String) mAutocompleteRestaurant.get(position).name;
         String address = (String) mAutocompleteRestaurant.get(position).address;
-        LatLng latLng = mAutocompleteRestaurant.get(position).latLng;
         holder.mAutocompleteRestaurantName.setText(name);
         holder.mAutocompleteRestaurantAddress.setText(address);
 
         holder.mAutoCompleteRelativeLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Restaurant r = new Restaurant();
-                r.setName(name);
-                r.setAddress(address);
-                r.setLatLng(latLng);
-                Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
-                EventBus.getDefault().post(new SearchRestaurantEvent(r));
+                //----------------------------- Get LatLng ---------------------------------
+                String restaurantId = mAutocompleteRestaurant.get(position).restaurantId;
+                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
+                        Place.Field.LAT_LNG);
+                FetchPlaceRequest fetchPlaceRequest = FetchPlaceRequest.builder(restaurantId, placeFields).build();
+                mPlacesClient.fetchPlace(fetchPlaceRequest).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                    @Override
+                    public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                        Place place = fetchPlaceResponse.getPlace();
+                        LatLng latLng = place.getLatLng();
+                        Restaurant r = new Restaurant();
+                        r.setName(name);
+                        r.setAddress(address);
+                        r.setLatLng(latLng);
+                        Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(new SearchRestaurantEvent(r));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        if (e instanceof ApiException){
+                            Toasty.error(mContext, e.getMessage() + "", Toasty.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
     }

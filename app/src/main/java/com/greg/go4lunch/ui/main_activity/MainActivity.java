@@ -1,7 +1,6 @@
 package com.greg.go4lunch.ui.main_activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 
 import android.content.pm.PackageManager;
@@ -20,15 +19,14 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -40,7 +38,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.type.LatLng;
 import com.greg.go4lunch.BuildConfig;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.adapters.PlacesAutoCompleteAdapter;
@@ -48,7 +45,6 @@ import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
 import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
-import com.greg.go4lunch.ui.home.HomeFragment;
 import com.greg.go4lunch.ui.login.LoginRegisterActivity;
 import com.greg.go4lunch.ui.settings.SettingActivity;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
@@ -61,11 +57,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -93,8 +85,6 @@ public class MainActivity extends AppCompatActivity{
 
     public NavigationView mNavigationView;
     private SharedViewModel mSharedViewModel;
-
-    @BindView(R.id.autocomplete_search_bar) EditText mSearchAutocomplete;
 
     NavController navController;
     @BindView(R.id.autocomplete_recycler_view)
@@ -135,8 +125,8 @@ public class MainActivity extends AppCompatActivity{
         //configureAutocompleteRecyclerView();
         createLocationService();
         locationAccuracy();
-        configureSearchBar();
-        searchBarAction();
+        //configureSearchBar();
+        //searchBarAction();
     }
 
     @Override
@@ -349,8 +339,6 @@ public class MainActivity extends AppCompatActivity{
         mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(this, mLocation);
         mAutocompleteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
-        mAutoCompleteAdapter.notifyDataSetChanged();
-        //hideKeyboardAndRecyclerViewOnclick();
     }
 
     //----------------------------- Location service -----------------------------------------------
@@ -359,7 +347,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     public void locationAccuracy() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -374,111 +363,132 @@ public class MainActivity extends AppCompatActivity{
     }
 
     //----------------------------------------------------------------------------------------------
-    //----------------------------- Autocomplete recyclerview visibility ---------------------------
+    //----------------------------- Search view ----------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private TextWatcher filterTextWatcher = new TextWatcher() {
-        @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-        @Override public void onTextChanged(CharSequence s, int start, int before, int count) { }
-        @Override public void afterTextChanged(Editable s) {
-            if (!s.toString().equals("")){
-                mAutoCompleteAdapter.getFilter().filter(s.toString());
-                if (mAutocompleteRecyclerView.getVisibility() == View.GONE){
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.search_menu, menu);
+        MenuItem searchItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setQueryHint(getString(R.string.search_restaurants));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if (!s.equals("")){
                     if (s.length() >= 3){
-                        mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
+                        //mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
+                        mAutoCompleteAdapter.getFilter().filter(s);
+                        mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
                         //searchBarAction();
                     }
-                }
-                else{
-                    if(mAutocompleteRecyclerView.getVisibility() == View.VISIBLE){
-                        mAutocompleteRecyclerView.setVisibility(View.GONE);
+                    else{
+                        //mAutocompleteRecyclerView.setVisibility(View.GONE);
+                        mAutocompleteRecyclerView.setAdapter(null);
                     }
                 }
+                return true;
             }
-        }
-    };
+        });
+        return true;
+    }
+
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Configure Search bar -------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void configureSearchBar(){
-        mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
-        mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
-    }
+    //private void configureSearchBar(){
+    //    mSearchAutocomplete = findViewById(R.id.autocomplete_search_bar);
+    //    mSearchAutocomplete.addTextChangedListener(filterTextWatcher);
+    //}
 
     /// Doesn't work
-    private void searchBarAction(){
-        mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
-                        || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
-                    // Execute search method
-                    hideKeyboard();
-                    // Shown clicking enter on PC keyboard
-                    Toasty.success(MainActivity.this, "Click on item search bar message", Toasty.LENGTH_SHORT).show();
-                }
-                return false;
-            }
-        });
-    }
+    //private void searchBarAction(){
+    //    mSearchAutocomplete.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+    //        @Override
+    //        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+    //            if(actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE
+    //                    || event.getAction() == KeyEvent.ACTION_DOWN || event.getAction() == KeyEvent.KEYCODE_ENTER){
+    //                // Execute search method
+    //                //hideKeyboard();
+    //                // Shown clicking enter on PC keyboard
+    //                Toasty.success(MainActivity.this, "Click on item search bar message", Toasty.LENGTH_SHORT).show();
+    //            }
+    //            return false;
+    //        }
+    //    });
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Search Menu ----------------------------------------------------
     //----------------------------------------------------------------------------------------------
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
-        if (item.getItemId() == R.id.search) {
-            autocompleteSearchBar.setVisibility(View.VISIBLE);
-            //hideKeyboard();
-            //configureSearchBar();
-        } else {
-            autocompleteSearchBar.setVisibility(View.GONE);
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    //@Override
+    //public boolean onCreateOptionsMenu(Menu menu) {
+    //    // Inflate the menu this adds items to the action bar if it is present.
+    //    getMenuInflater().inflate(R.menu.search_menu, menu);
+    //    return true;
+    //}
+//
+    //@Override
+    //public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    //    View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
+    //    if (item.getItemId() == R.id.search) {
+    //        autocompleteSearchBar.setVisibility(View.VISIBLE);
+    //        //hideKeyboard();
+    //        //configureSearchBar();
+    //    } else {
+    //        autocompleteSearchBar.setVisibility(View.GONE);
+    //    }
+    //    return super.onOptionsItemSelected(item);
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Hide search bar when not focused -------------------------------
     //----------------------------------------------------------------------------------------------
 
-    private void hideKeyboard() {
-        mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
-                if (!hasFocus) {
-                    imm.hideSoftInputFromWindow(autocompleteSearchBar.getWindowToken(), 0);
-                    autocompleteSearchBar.setVisibility(View.GONE);
-                    mAutocompleteRecyclerView.setVisibility(View.GONE);
-                }
-            }
-        });
-    }
+    //private void hideKeyboard() {
+    //    mSearchAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+    //        @Override
+    //        public void onFocusChange(View v, boolean hasFocus) {
+    //            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    //            View autocompleteSearchBar = findViewById(R.id.autocomplete_linear_layout);
+    //            if (!hasFocus) {
+    //                imm.hideSoftInputFromWindow(autocompleteSearchBar.getWindowToken(), 0);
+    //                autocompleteSearchBar.setVisibility(View.GONE);
+    //                mAutocompleteRecyclerView.setVisibility(View.GONE);
+    //            }
+    //        }
+    //    });
+    //    mAutocompleteRecyclerView.setOnClickListener(new View.OnClickListener() {
+    //        @Override
+    //        public void onClick(View v) {
+    //            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    //            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    //            mAutocompleteRecyclerView.setVisibility(View.GONE);
+    //        }
+    //    });
+    //}
 
     //----------------------------------------------------------------------------------------------
     //----------------------------- Hide search bar and Recycler view clicking on item -------------
     //----------------------------------------------------------------------------------------------
 
-    private void hideKeyboardAndRecyclerViewOnclick(){
-        mAutocompleteRecyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-            }
-        });
-    }
+    //private void hideKeyboardAndRecyclerViewOnclick(){
+    //    mAutocompleteRecyclerView.setOnClickListener(new View.OnClickListener() {
+    //        @Override
+    //        public void onClick(View v) {
+    //            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    //            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    //        }
+    //    });
+    //}
 
 }

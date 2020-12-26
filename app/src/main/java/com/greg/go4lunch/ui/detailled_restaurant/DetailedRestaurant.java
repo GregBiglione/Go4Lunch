@@ -108,7 +108,9 @@ public class DetailedRestaurant extends AppCompatActivity {
         String restaurantAddress = restaurant.getAddress();
         PhotoMetadata photoRestaurant = restaurant.getRestaurantPicture();
         mDetailedAddress.setText(restaurantAddress);
-        getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
+        if (photoRestaurant != null){
+            getRestaurantPhoto(mDetailedPicture, restaurant.getRestaurantPicture());
+        }
     }
 
     //----------------------------------------------------------------------------------------------

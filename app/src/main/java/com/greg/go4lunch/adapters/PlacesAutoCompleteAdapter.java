@@ -185,6 +185,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         holder.mAutoCompleteRelativeLyt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //----------------------------- Get LatLng ---------------------------------
                 String restaurantId = mAutocompleteRestaurant.get(position).restaurantId;
                 List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS, Place.Field.TYPES,
@@ -196,6 +197,7 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                         Place place = fetchPlaceResponse.getPlace();
                         LatLng latLng = place.getLatLng();
                         Restaurant r = new Restaurant();
+                        r.setIdRestaurant(restaurantId);
                         r.setName(name);
                         r.setAddress(address);
                         r.setLatLng(latLng);

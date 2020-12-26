@@ -1,5 +1,7 @@
 package com.greg.go4lunch.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.libraries.places.api.model.PhotoMetadata;
 
@@ -50,4 +52,13 @@ public class Restaurant {
     public void setLatLng(LatLng latLng) { this.latLng = latLng; }
     public void setJoiningNumber(int joiningNumber) { this.joiningNumber = joiningNumber; }
     public void setRating(float rating) { this.rating = rating; }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Restaurant r = (Restaurant) obj;
+        if (idRestaurant.equals(r.getIdRestaurant())){
+            return true;
+        }
+        return false;
+    }
 }

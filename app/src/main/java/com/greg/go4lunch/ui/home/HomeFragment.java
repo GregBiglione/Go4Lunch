@@ -250,7 +250,9 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
                                 r.setDistanceFromUser(getDistance(r.getLatLng()));
                                 //----------------------------- Custom marker & number joining workmates -----------
                                 getJoiningWorkmateNumber(r);
-                                mSharedViewModel.restaurants.add(r);
+                                if (!mSharedViewModel.restaurants.contains(r)){
+                                    mSharedViewModel.restaurants.add(r);
+                                }
                                 getRestaurantDetails(r);
                                 clickOnMarker();
                             }
@@ -414,7 +416,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
         //getNearbyPlaces();
         mSharedViewModel.restaurants.add(event.restaurant);
         //only name, address & latLng lack the rest
-        hideKeyboard(); //<--
+        //hideKeyboard(); //<--
     }
 
     @Override

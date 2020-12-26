@@ -412,11 +412,7 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     @Subscribe
     public void onAutocompleteSearch(SearchRestaurantEvent event){
         moveCameraToSearchedRestaurant(event.restaurant.getLatLng(), DEFAULT_ZOOM, event.restaurant.getName(), event.restaurant);
-        //getRestaurantDetails(event.restaurant);
-        //getNearbyPlaces();
         mSharedViewModel.restaurants.add(event.restaurant);
-        //only name, address & latLng lack the rest
-        //hideKeyboard(); //<--
     }
 
     @Override
@@ -438,17 +434,5 @@ public class HomeFragment extends Fragment implements OnMapReadyCallback {
     private void moveCameraToSearchedRestaurant(LatLng latLng, float zoom, String title, Restaurant r){
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
         restaurantIsChosenOrNot(r);
-    }
-
-    //----------------------------------------------------------------------------------------------
-    //----------------------------- Hide keyboard on click on item ---------------------------------
-    //----------------------------------------------------------------------------------------------
-
-    private void hideKeyboard(){
-        View view = getView();
-        if (view != null){
-            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
     }
 }

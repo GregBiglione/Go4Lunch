@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.libraries.places.api.model.AutocompletePrediction;
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
 import com.google.android.libraries.places.api.model.TypeFilter;
@@ -201,8 +202,41 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
                         r.setName(name);
                         r.setAddress(address);
                         r.setLatLng(latLng);
-                        Toasty.success(mContext, "Click on" + name + "\n" + address + "\n" + latLng, Toasty.LENGTH_SHORT).show();
-                        EventBus.getDefault().post(new SearchRestaurantEvent(r));
+
+                        final String placeId = r.getIdRestaurant();
+
+                        final List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS,
+                                Place.Field.OPENING_HOURS, Place.Field.RATING, Place.Field.PHONE_NUMBER, Place.Field.WEBSITE_URI, Place.Field.PHOTO_METADATAS);
+
+                        // ---------------------------- Construct a request object, passing the place ID and fields array -----------------
+                        final FetchPlaceRequest request = FetchPlaceRequest.newInstance(placeId, placeFields);
+
+                        mPlacesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                            @Override
+                            public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
+                                Place place = fetchPlaceResponse.getPlace();
+
+                                if (place.getOpeningHours() != null){
+                                    r.setOpeningHour(place.getOpeningHours().getPeriods().get(4).getClose().getTime().getHours());
+                                }
+                                if (place.getRating() != null){
+                                    r.setRating(place.getRating().floatValue());
+                                }
+                                r.setPhoneNumber(place.getPhoneNumber());
+                                if (place.getWebsiteUri() != null){
+                                    r.setWebsite(place.getWebsiteUri().toString());
+                                }
+                                final List<PhotoMetadata> metadata = place.getPhotoMetadatas();
+                                if (metadata == null || metadata.isEmpty()) {
+                                    //Log.w(TAG, "No photo metadata.");
+                                    return;
+                                }
+                                final PhotoMetadata photoMetadata = metadata.get(0);
+                                r.setRestaurantPicture(photoMetadata);
+                                r.setDistanceFromUser(getDistance(r.getLatLng()));
+                                EventBus.getDefault().post(new SearchRestaurantEvent(r));
+                            }
+                        });
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -251,5 +285,23 @@ public class PlacesAutoCompleteAdapter extends RecyclerView.Adapter<PlacesAutoCo
         LatLng pointB = new LatLng(latB, lngB);
 
         return pointB;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------- Get distance to restaurant -------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    private String getDistance(LatLng restaurantLocation){
+        Location currentLocation = new Location("locationA");
+        currentLocation.setLatitude(mLocation.getLatitude());
+        currentLocation.setLongitude(mLocation.getLongitude());
+
+        Location destination = new Location("locationB");
+        destination.setLatitude(restaurantLocation.latitude);
+        destination.setLongitude(restaurantLocation.longitude);
+
+        double accurateDistance = currentLocation.distanceTo(destination);
+        int distance= (int) Math.round(accurateDistance);
+        return (distance + "m");
     }
 }

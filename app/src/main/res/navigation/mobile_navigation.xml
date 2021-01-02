@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.greg.go4lunch.ui.home.HomeFragment"
+        android:name="com.greg.go4lunch.ui.fragments.HomeFragment"
         android:label="@string/ImHungry"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/nav_list"
-        android:name="com.greg.go4lunch.ui.list.ListFragment"
+        android:name="com.greg.go4lunch.ui.fragments.ListFragment"
         android:label="@string/ImHungry"
         tools:layout="@layout/fragment_list" />
 
     <fragment
         android:id="@+id/nav_workmates"
-        android:name="com.greg.go4lunch.ui.workmates.WorkmatesFragment"
+        android:name="com.greg.go4lunch.ui.fragments.WorkmatesFragment"
         android:label="@string/AvailableWorkmates"
         tools:layout="@layout/fragment_workmates" />
 

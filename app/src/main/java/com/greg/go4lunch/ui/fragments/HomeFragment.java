@@ -1,8 +1,7 @@
-package com.greg.go4lunch.ui.home;
+package com.greg.go4lunch.ui.fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -13,7 +12,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -56,8 +54,7 @@ import com.greg.go4lunch.R;
 import com.greg.go4lunch.event.SearchRestaurantEvent;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
-import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
-import com.greg.go4lunch.ui.main_activity.MainActivity;
+import com.greg.go4lunch.ui.activities.DetailedRestaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.greenrobot.eventbus.EventBus;
@@ -74,7 +71,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static com.greg.go4lunch.ui.main_activity.MainActivity.API_KEY;
+import static com.greg.go4lunch.ui.activities.MainActivity.API_KEY;
 
 public class HomeFragment extends Fragment implements OnMapReadyCallback {
 

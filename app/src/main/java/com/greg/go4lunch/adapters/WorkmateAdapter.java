@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
-import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
+import com.greg.go4lunch.ui.activities.DetailedRestaurant;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import org.parceler.Parcels;

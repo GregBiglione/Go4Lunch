@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/workmates_joining_number"
-        android:drawableStart="@drawable/ic_baseline_person_outline_black_16"
+        android:drawableStart="@drawable/ic_baseline_person_24"
         android:text="@string/workmates_joining"
         app:layout_constraintEnd_toStartOf="@+id/restaurant_picture"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_distance"

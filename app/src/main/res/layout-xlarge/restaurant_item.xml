@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -28,11 +29,12 @@
 
     <TextView
         android:id="@+id/workmates_joining_number"
-        android:drawableStart="@drawable/ic_person_outline_black_24dp"
+        android:drawableStart="@drawable/ic_baseline_person_24"
         android:text="@string/workmates_joining"
         app:layout_constraintEnd_toStartOf="@+id/restaurant_picture"
         app:layout_constraintTop_toBottomOf="@+id/restaurant_distance"
-        style="@style/restaurant_workmates_joining_number_new_large"/>
+        style="@style/restaurant_workmates_joining_number_new_large"
+        tools:ignore="UseCompatTextViewDrawableXml" />
 
     <TextView
         android:id="@+id/restaurant_hour"

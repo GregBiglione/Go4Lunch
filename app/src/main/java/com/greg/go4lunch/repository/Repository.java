@@ -78,7 +78,7 @@ public class Repository {
                     }
                     allJoiningWorkmates.setValue(joiningWorkmates);
                 }
-                else{ // <-- on rajoute le else
+                else{
                     allJoiningWorkmates.setValue(new ArrayList<>());
                 }
             }

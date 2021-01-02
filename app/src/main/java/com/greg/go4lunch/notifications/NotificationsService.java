@@ -20,7 +20,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.greg.go4lunch.ui.main_activity.MainActivity;
+import com.greg.go4lunch.ui.activities.MainActivity;
 import com.greg.go4lunch.R;
 import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.model.Workmate;

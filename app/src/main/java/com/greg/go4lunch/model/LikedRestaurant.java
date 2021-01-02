@@ -17,12 +17,8 @@ public class LikedRestaurant {
     }
 
     //----------------------------- Getters --------------------------------------------------------
-    public String getWorkmateId() { return uid; }
-    public String getRestaurantId() { return idPickedRestaurant; }
-    public boolean getIsFavorite() { return favorite; }
-
-    //----------------------------- Setters --------------------------------------------------------
-    public void setWorkmateId(String workmateId) { this.uid = workmateId; }
-    public void setRestaurantId(String restaurantId) { this.idPickedRestaurant = restaurantId; }
-    public void setFavorite(boolean favorite) { this.favorite = favorite; }
+    public String getUid() { return uid; }
+    @Nullable
+    public String getIdPickedRestaurant() { return idPickedRestaurant; }
+    public boolean isFavorite() { return favorite; }
 }

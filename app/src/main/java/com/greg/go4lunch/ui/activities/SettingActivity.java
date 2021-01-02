@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.settings;
+package com.greg.go4lunch.ui.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

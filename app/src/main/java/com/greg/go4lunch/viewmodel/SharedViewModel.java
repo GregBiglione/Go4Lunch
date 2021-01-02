@@ -46,9 +46,7 @@ public class SharedViewModel extends ViewModel {
         if (favorites != null){
             return;
         }
-        //6)
         favorites = Repository.getInstance(context).getFavoriteRestaurant(uid, idFavoriteRestaurant);
-
     }
 
     public LiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurantData(){ return favorites; }

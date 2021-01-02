@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.detailled_restaurant;
+package com.greg.go4lunch.ui.activities;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -293,7 +293,7 @@ public class DetailedRestaurant extends AppCompatActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 LikedRestaurant currentLikedRestaurant = documentSnapshot.toObject(LikedRestaurant.class);
                 if(currentLikedRestaurant != null){
-                    WorkmateHelper.upDateFavoriteRestaurant(currentLikedRestaurant.getWorkmateId(), null, false);
+                    WorkmateHelper.upDateFavoriteRestaurant(currentLikedRestaurant.getUid(), null, false);
                 }
             }
         });

@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.workmates;
+package com.greg.go4lunch.ui.fragments;
 
 import android.os.Bundle;
 

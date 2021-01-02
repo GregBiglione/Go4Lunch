@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.main_activity;
+package com.greg.go4lunch.ui.activities;
 
 import android.Manifest;
 import android.content.Context;
@@ -29,6 +29,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -46,9 +47,6 @@ import com.greg.go4lunch.api.WorkmateHelper;
 import com.greg.go4lunch.event.SearchRestaurantEvent;
 import com.greg.go4lunch.model.Restaurant;
 import com.greg.go4lunch.model.Workmate;
-import com.greg.go4lunch.ui.detailled_restaurant.DetailedRestaurant;
-import com.greg.go4lunch.ui.login.LoginRegisterActivity;
-import com.greg.go4lunch.ui.settings.SettingActivity;
 import com.greg.go4lunch.viewmodel.SharedViewModel;
 
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -122,17 +120,11 @@ public class MainActivity extends AppCompatActivity{
         navigationBottomMenu();
         initPlaces();
 
-        //  Twitter ok
-        getCurrentUserFromFireBase();  //  Email pics not shown
-        //getUserFromFireStore();     //   Google ok
-        //   Fb pics not shown
+        getCurrentUserFromFireBase();
         navigationViewMenu();
         setUpFireBaseListener();
-        //configureAutocompleteRecyclerView();
         createLocationService();
         locationAccuracy();
-        //configureSearchBar();
-        //searchBarAction();
     }
 
     @Override
@@ -191,7 +183,6 @@ public class MainActivity extends AppCompatActivity{
             String uid = user.getUid();
             String name = user.getDisplayName();
             String email = user.getEmail();
-            //String photoEmail = user.getPhotoUrl().toString();
             Uri photo = Uri.parse(String.valueOf(user.getPhotoUrl()));
             Uri anonymous = Uri.parse("https://avante.biz/wp-content/uploads/Imagenes-De-Anonymous-Wallpapers/Imagenes-De-Anonymous-Wallpapers-001.jpg");
 
@@ -399,7 +390,7 @@ public class MainActivity extends AppCompatActivity{
             public boolean onQueryTextChange(String s) {
                 if (!s.equals("")){
                     if (s.length() >= 3){
-                        //mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
+                        mAutocompleteRecyclerView.setVisibility(View.VISIBLE);
                         mAutoCompleteAdapter.getFilter().filter(s);
                         mAutocompleteRecyclerView.setAdapter(mAutoCompleteAdapter);
                     }
@@ -407,6 +398,19 @@ public class MainActivity extends AppCompatActivity{
                         mAutocompleteRecyclerView.setAdapter(null);
                     }
                 }
+                return true;
+            }
+        });
+
+        searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                mAutocompleteRecyclerView.setVisibility(View.INVISIBLE);
                 return true;
             }
         });

@@ -1,8 +1,6 @@
 package com.greg.go4lunch.api;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.model.PhotoMetadata;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -36,7 +34,7 @@ public class WorkmateHelper {
         return WorkmateHelper.getWorkmatesCollection().document(uid).get();
     }
 
-    public static Task<Void> updatePickedRestaurantAndIsJoining(String uid,  String idPickedRestaurant, String pickedRestaurant,
+    public static Task<Void> updatePickedRestaurantAndIsJoining(String uid, String idPickedRestaurant, String pickedRestaurant,
                                                                 String addressRestaurant, boolean joining){
         return WorkmateHelper.getWorkmatesCollection().document(uid).update("idPickedRestaurant", idPickedRestaurant,
                 "pickedRestaurant", pickedRestaurant,"addressRestaurant", addressRestaurant, "joining", joining);
@@ -61,8 +59,9 @@ public class WorkmateHelper {
         return WorkmateHelper.getLikedRestaurantsCollection().document(uid).get();
     }
 
-    //----------------------------- update favorite ------------------------------------------------
+    //----------------------------- Update favorite ------------------------------------------------
     public static Task<Void> upDateFavoriteRestaurant(String uid, String idPickedRestaurant, boolean favorite){
-        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).update("restaurantId", idPickedRestaurant,"isFavorite", favorite);
+        return WorkmateHelper.getLikedRestaurantsCollection().document(uid).update("restaurantId", idPickedRestaurant,
+                "isFavorite", favorite);
     }
 }

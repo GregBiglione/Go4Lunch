@@ -1,4 +1,4 @@
-package com.greg.go4lunch.ui.login;
+package com.greg.go4lunch.ui.activities;
 
 
 import androidx.annotation.NonNull;
@@ -29,7 +29,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.greg.go4lunch.ui.main_activity.MainActivity;
 import com.greg.go4lunch.R;
 import com.twitter.sdk.android.core.Twitter;
 import com.twitter.sdk.android.core.TwitterAuthConfig;

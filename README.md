@@ -17,12 +17,12 @@ Re-center the map on your position.</br>
 
 <h4>Connection, list fragment, restaurant details & workmates fragment</h4></br>
 
-<img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_connection.gif" title = "Connection" alt = "Connection" width="334" height="550"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_list_fragment.gif" title = "List" alt = "List" width="334" height="550"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_workmates_fragment.gif" title = "Workmates" alt = "Workmates" width="334" height="550">
+<img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_connection.gif" title = "Connection" alt = "Connection" width="243" height="400"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_list_fragment.gif" title = "List" alt = "List" width="243" height="400"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_workmates_fragment.gif" title = "Workmates" alt = "Workmates" width="243" height="400">
 
 <h4>Notification, search & languages</h4></br>
 
 
-<img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_notifications.gif" title = "Notification" alt = "Notification" width="334" height="550"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_search.gif" title = "Search" alt = "Search" width="334" height="550"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_lang.gif" title = "Languages" alt = "Languages" width="334" height="550"> 
+<img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_notifications.gif" title = "Notification" alt = "Notification" width="243" height="400"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_search.gif" title = "Search" alt = "Search" width="243" height="400"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_lang.gif" title = "Languages" alt = "Languages" width="243" height="400"> 
 
 
 

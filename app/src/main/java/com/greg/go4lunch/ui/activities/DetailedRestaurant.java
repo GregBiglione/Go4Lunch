@@ -91,7 +91,6 @@ public class DetailedRestaurant extends AppCompatActivity {
 
         recoverIntent();
 
-        //configureJoiningWorkmatesRecyclerView();
         getFavorite();
         getSelectedRestaurant();
     }

@@ -98,9 +98,9 @@ public class Repository {
     public MutableLiveData<ArrayList<LikedRestaurant>> getFavoriteRestaurant(String uid, String idLikedRestaurant){
         MutableLiveData<ArrayList<LikedRestaurant>> allFavorites = new MutableLiveData<>();
         db.collection("likedRestaurants")
-                .whereEqualTo("workmateId", uid)
-                .whereEqualTo("restaurantId", idLikedRestaurant)
-                .whereEqualTo("isFavorite", true)
+                .whereEqualTo("uid", uid)
+                .whereEqualTo("idPickedRestaurant", idLikedRestaurant)
+                .whereEqualTo("favorite", true)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

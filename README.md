@@ -15,7 +15,7 @@ Re-center the map on your position.</br>
 
 <h2>Application demo</h2></br>
 
-<h4>Connection, list fragment, restaurant details & workmates fragment</h4></br>
+<h4>Connection, home (map) fragment, list fragment, restaurant details & workmates fragment</h4></br>
 
 <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_connection.gif" title = "Connection" alt = "Connection" width="273" height="450"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_list_fragment.gif" title = "List" alt = "List" width="273" height="450"> <img src = "https://github.com/GregBiglione/Projet_7/blob/master/app/src/main/res/drawable/p7_workmates_fragment.gif" title = "Workmates" alt = "Workmates" width="273" height="450">
 

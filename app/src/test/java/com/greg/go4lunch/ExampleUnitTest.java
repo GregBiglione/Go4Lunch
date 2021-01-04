@@ -62,15 +62,15 @@ public class ExampleUnitTest {
     @Test
     public void notLikedRestaurant(){
         LikedRestaurant notLikedRestaurant = new LikedRestaurant(uid, null, false);
-        assertEquals(notLikedRestaurant.getRestaurantId(), null);
-        assertThat(notLikedRestaurant.getIsFavorite(), is(false));
+        assertEquals(notLikedRestaurant.getIdPickedRestaurant(), null);
+        assertThat(notLikedRestaurant.isFavorite(), is(false));
     }
 
     @Test
     public void likedRestaurant(){
         LikedRestaurant likedRestaurant = new LikedRestaurant(uid, idPickedRestaurant, favorite);
-        assertThat(likedRestaurant.getRestaurantId(), is(idPickedRestaurant));
-        assertTrue(String.valueOf(likedRestaurant.getIsFavorite()), favorite);
+        assertThat(likedRestaurant.getIdPickedRestaurant(), is(idPickedRestaurant));
+        assertTrue(String.valueOf(likedRestaurant.isFavorite()), favorite);
     }
 
     @Test
